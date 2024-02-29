@@ -1,3 +1,5 @@
+"use client";
+
 import { giscusConfigs } from "@/config/giscusConfigs";
 import Giscus from "@giscus/react";
 
@@ -13,7 +15,7 @@ export const Comment = () => {
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="top"
-        theme="light"
+        theme="dark_dimmed"
         loading="lazy"
       />
     </div>

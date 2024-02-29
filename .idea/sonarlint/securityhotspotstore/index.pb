@@ -44,3 +44,6 @@ K
 src/config/giscusConfigs.ts,1\0\10d0fc30526c9df4aa3e1e5820ffb0915449ab12
 J
 src/components/Comment.tsx,f\9\f952b3a60fb8bddeffad0f13125708d097ec19ea
+:
+
+.env.local,1\f\1fa30fea3e9ae270a3c38a6113a3689d8987d108
