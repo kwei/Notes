@@ -38,3 +38,9 @@ S
 tsconfig.json,6\1\61ebb9fd6e8cf9082658121d5d81e297791dacd0
 w
 G.idea/sonarlint/issuestore/8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d,b\4\b4a0b63ce8560bbc5de0f9995c20cc861dc2adb3
+4
+.env,3\c\3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
+K
+src/config/giscusConfigs.ts,1\0\10d0fc30526c9df4aa3e1e5820ffb0915449ab12
+J
+src/components/Comment.tsx,f\9\f952b3a60fb8bddeffad0f13125708d097ec19ea
