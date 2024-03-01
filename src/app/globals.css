@@ -6,3 +6,39 @@ body {
     color: #D0D0D0;
     background: linear-gradient(to bottom, #403F44, #1E1B32);
 }
+
+.scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+    background-color: darkgray;
+}
+
+.scrollbar::-webkit-scrollbar-track-piece:end {
+    background: darkgray;
+    margin-bottom: 16px;
+}
+
+.scrollbar::-webkit-scrollbar-track-piece:start {
+    background: darkgray;
+    margin-top: 16px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background-color: gray;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: dimgray;
+}
+
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #D3D3D3 darkgray;
+}
+
+.scrollbar:hover {
+    scrollbar-color: #C0C0C0 darkgray;
+}

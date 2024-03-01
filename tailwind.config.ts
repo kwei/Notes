@@ -34,6 +34,15 @@ const config: Config = {
           "90-500": '#90B8F8',
           "5F-500": '#5F85DB',
         }
+      },
+      keyframes: {
+        slideIn: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0%)' }
+        }
+      },
+      animation: {
+        'slideIn': 'slideIn 0.3s ease-in-out'
       }
     },
   },
