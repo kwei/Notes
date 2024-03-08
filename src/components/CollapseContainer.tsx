@@ -17,12 +17,18 @@ export const CollapseContainer = (props: Props) => {
   }
 
   return (
-    <details className={`${props.className} hover:cursor-pointer`} title={props.label} onClick={handleTriggerDetail}>
-      <summary className='flex items-center justify-between select-none hover:text-blue-5F-500 transition-all break-words'>
+    <details
+      className={`${props.className} hover:cursor-pointer`}
+      title={props.label}
+      onClick={handleTriggerDetail}
+    >
+      <summary className="flex items-center justify-between select-none hover:text-blue-5F-500 transition-all break-words">
         {props.label}
-        <MdNavigateNext className={`size-4 transition-all ${open ? 'rotate-90' : 'rotate-0'}`} />
+        <MdNavigateNext
+          className={`size-4 transition-all ${open ? "rotate-90" : "rotate-0"}`}
+        />
       </summary>
-      {props.children}
+      <ul className="w-full flex flex-col gap-4 px-4 pt-2">{props.children}</ul>
     </details>
   );
 };

@@ -1,11 +1,6 @@
 const showdown = require("showdown");
-import { promises as fs } from "fs";
 
-export async function markdownConverter(fileName) {
-  const file = await fs.readFile(
-    `${process.cwd()}/src/articles/${fileName}.md`,
-    "utf8",
-  );
+export function markdownConverter(file) {
   const converter = new showdown.Converter();
   return converter.makeHtml(file);
 }
