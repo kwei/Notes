@@ -1,5 +1,3 @@
-"use client";
-
 import { giscusConfigs } from "@/config/giscusConfigs";
 import Giscus from "@giscus/react";
 

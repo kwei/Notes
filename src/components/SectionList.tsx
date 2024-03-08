@@ -11,7 +11,7 @@ interface Props {
 export const SectionList = (props: Props) => {
   return (
     <aside
-      className={`flex flex-col flex-1 w-1/5 gap-4 p-4 ${props.className}`}
+      className={`flex flex-col gap-4 p-4 ${props.className}`}
     >
       <label>SECTIONS</label>
       <Section label="Title 1" />
