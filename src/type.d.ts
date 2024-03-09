@@ -12,3 +12,12 @@ interface GitTreeExtracted {
 	fileUrl: string;
 	path: string[];
 }
+
+interface GitTree {
+	[category: string]: {
+		[topic: string]: {
+			fileName: string;
+			fileUrl: string;
+		}[]
+	};
+}

@@ -4,19 +4,19 @@ import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 
 interface Props {
-  articleId: number;
+  articleName: string;
 }
 
 export const ArticleContainer = (props: Props) => {
   const [article, setArticle] = useState<string>();
 
   useEffect(() => {
-    fetch(`/api/article?id=${props.articleId}`)
+    fetch(`/api/article?fileName=${props.articleName}`)
       .then((res) => res.json())
       .then((data: string) => {
         setArticle(data);
       });
-  }, [props.articleId]);
+  }, [props.articleName]);
 
   if (!article) return null;
   return (
