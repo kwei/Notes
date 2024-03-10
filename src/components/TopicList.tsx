@@ -21,22 +21,26 @@ export const TopicList = (props: Props) => {
 
 	return (
 		<aside
-			className={`flex flex-col h-full scrollbar gap-4 overflow-hidden overflow-y-scroll p-4 ${props.className}`}
+			className={`flex flex-col h-full scrollbar overflow-hidden overflow-y-scroll ${props.className}`}
 		>
-			<label>TOPICS</label>
 			{Object.entries(articles).map(([category, topics]) => (
-				<>
-					<label key={category}>{category}</label>
+				<div key={category} className='w-full flex flex-col border-b border-solid border-gray-500 p-4'>
+					<label className='pb-2'>{category.toUpperCase()}</label>
 					{Object.entries(topics).map(([topic, files]) => (
-						<CollapseContainer key={topic} label={topic}>
+						<CollapseContainer key={topic} label={topic} className='pl-4'>
 							{files.map(file => (
 								<CollapseItem key={file.fileName}>
-									<ArticleButton file={file} category={category} topic={topic} setArticleLink={props.setArticleName}/>
+									<ArticleButton
+										file={file}
+										category={category}
+										topic={topic}
+										setArticleLink={props.setArticleName}
+									/>
 								</CollapseItem>
 							))}
 						</CollapseContainer>
 					))}
-				</>
+				</div>
 			))}
 		</aside>
 	);
@@ -57,7 +61,7 @@ const ArticleButton = memo(({file, setArticleLink, category, topic}: {
 	}
 
 	return (
-		<button className="" onClick={handleOnSelectArticle}>{file.fileName}</button>
+		<button className="rounded-lg hover:bg-gray-500/70 w-full py-2 text-left pl-4 transition-all" onClick={handleOnSelectArticle} title={file.fileName}>{file.fileName}</button>
 	);
 });
 ArticleButton.displayName = "ArticleButton";
