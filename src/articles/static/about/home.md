@@ -1,4 +1,5 @@
 # Hello! Welcome to KW's personal page.
+
 I will document here the technologies I have researched and found interesting, which could range from tutorials to organized knowledge. This is to facilitate easy reference for myself in the future, allowing me to review previously studied content and share it more effectively with engineers around me.
 
 > Self-introduction again:
