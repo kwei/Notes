@@ -80,7 +80,7 @@ ol {
 }
 
 li {
-    @apply ml-6
+    @apply ml-6 pb-2
 }
 
 a {
@@ -92,7 +92,7 @@ img {
 }
 
 blockquote {
-    @apply my-2 rounded-r-lg bg-gray-600 px-4 py-2 border-l-4 border-solid border-green-50-500
+    @apply my-6 rounded-r-lg bg-gray-600 px-4 py-2 border-l-4 border-solid border-green-50-500
 }
 
 p > code {
@@ -105,4 +105,8 @@ p:has(code) {
 
 pre:has(code) {
     @apply my-2 py-2 rounded-lg bg-gray-600 px-4
+}
+
+hr {
+    @apply my-4
 }

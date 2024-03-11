@@ -18,9 +18,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <title>KW Notes</title>
-      </head>
       <body
         className={`w-full min-h-screen text-base flex flex-col ${inter.className}`}
       >
