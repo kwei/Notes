@@ -4,7 +4,7 @@
 > Headless UI 是一種開發元件的概念，核心在於將元件的**功能**與**樣式**徹底分離。
 
 比如一個有客製化需求的下拉式選單(Dropdown)，直覺地我們可能會這樣寫
-```javascript
+```js
 function MyDropdown(props) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
@@ -50,7 +50,7 @@ function MyDropdown(props) {
 3. 選項
 
 針對功能，我們可以這樣寫
-```javascript
+```js
 function MyDropdown(props) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
@@ -69,7 +69,7 @@ function MyDropdown(props) {
 }
 ```
 透過`render props`的方式將我們會用到的功能回傳出來使用
-```javascript
+```js
 <MyDropdown>
   {(isOpenMenu, handleOnOpenMenu, handleOnSelectOption) => (
     {/* 開啟選單的按鈕 */}
