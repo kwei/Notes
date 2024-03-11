@@ -23,5 +23,5 @@ Here are the topics I'm interested in:
 ### About Me
 You can also reach me through the following information:
 - My Email: *kaiweiyeh2018@gmail.com*
-- My [Github](https://github.com/kwei)
-- My [LinkedIn](https://www.linkedin.com/in/kaiwei-yeh-bios/)
+- My Github: [https://github.com/kwei](https://github.com/kwei)
+- My LinkedIn: [https://www.linkedin.com/in/kaiwei-yeh-bios/](https://www.linkedin.com/in/kaiwei-yeh-bios/)
