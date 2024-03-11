@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { FaGithub } from "react-icons/fa6";
+import Prism from "prismjs";
 
 interface Props {
   articleName: string;
@@ -19,6 +20,10 @@ export const ArticleContainer = (props: Props) => {
       });
   }, [props.articleName]);
 
+  useEffect(() => {
+    if (article) Prism.highlightAll();
+  }, [article]);
+
   if (!article) return null;
   return (
     <div className="w-full h-auto flex flex-col py-4 px-6">
@@ -29,7 +34,7 @@ export const ArticleContainer = (props: Props) => {
           target="_blank"
           rel="noreferrer noopener"
         >
-          <span className='underline'>Source</span>
+          <span className="underline">Source</span>
         </a>
       </div>
       {parse(article)}

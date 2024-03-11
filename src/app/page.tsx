@@ -6,7 +6,7 @@ import { TopicList } from "@/components/TopicList";
 import { useState } from "react";
 
 export default function Home() {
-	const [articleName, setArticleName] = useState<string>("static/about/home");
+	const [articleName, setArticleName] = useState<string>("static/about/home.md");
 	return (
 		<main className="grid w-full flex-1 grid-cols-5">
 			<TopicList className="max-lg:hidden col-span-1" setArticleName={setArticleName}/>

@@ -96,7 +96,7 @@ blockquote {
 }
 
 p > code {
-    @apply bg-gray-600 px-1
+    @apply bg-gray-600 px-1 rounded mx-0.5
 }
 
 p:has(code) {
@@ -104,7 +104,7 @@ p:has(code) {
 }
 
 pre:has(code) {
-    @apply my-2 py-2 rounded-lg bg-gray-600 px-4
+    @apply my-4 py-2 rounded-lg bg-gray-600 px-4
 }
 
 hr {

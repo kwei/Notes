@@ -12,6 +12,7 @@
     "@giscus/react": "^3.0.0",
     "html-react-parser": "^5.1.8",
     "next": "14.1.0",
+    "prismjs": "^1.29.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/prismjs": "^1.26.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",

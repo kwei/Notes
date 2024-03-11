@@ -41,7 +41,8 @@ export async function GET(req: Request) {
 			});
 		return NextResponse.json(result);
 	} else if (fileName) {
-		const result = await fetch(`https://raw.githubusercontent.com/kwei/Notes/main/src/articles/${fileName}.md`)
+		console.log('fetch markdown: ', `https://raw.githubusercontent.com/kwei/Notes/main/src/articles/${fileName}`);
+		const result = await fetch(`https://raw.githubusercontent.com/kwei/Notes/main/src/articles/${fileName}`)
 			.then((res) => res.text())
 			.catch((e) => {
 				console.log("fetch article error: ", e);
