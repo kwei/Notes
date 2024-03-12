@@ -16,12 +16,16 @@ export const TopicList = (props: Props) => {
   const [error, setError] = useState<string>();
 
   const articleName = useMemo(
-    () => searchParams.get("articleName")?.split("/").pop(),
+    () => searchParams.get("article"),
     [searchParams],
   );
 
-  function handleOnSelectArticle(articleName: string) {
-    router.push(`?articleName=${articleName}`);
+  function handleOnSelectArticle(
+    category: string,
+    topic: string,
+    article: string,
+  ) {
+    router.push(`?category=${category}&topic=${topic}&article=${article}`);
   }
 
   useEffect(() => {
@@ -97,13 +101,13 @@ const ArticleButton = memo(
     selected,
   }: {
     file: { fileName: string; fileUrl: string };
-    onClick: (articleLink: string) => void;
+    onClick: (category: string, topic: string, article: string) => void;
     category: string;
     topic: string;
     selected: boolean;
   }) => {
     function handleOnSelectArticle() {
-      onClick(`${category}/${topic}/${file.fileName}`);
+      onClick(category, topic, file.fileName);
     }
 
     return (

@@ -12,7 +12,7 @@ export const ArticleContainer = () => {
   const [loading, setLoading] = useState(false);
 
   const articleName = useMemo(
-    () => searchParams.get("articleName"),
+    () => `${searchParams.get("category")}/${searchParams.get("topic")}/${searchParams.get("article")}`,
     [searchParams],
   );
 

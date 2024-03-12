@@ -11,8 +11,8 @@ export default function Home() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!searchParams.get("articleName")) {
-      router.push("?articleName=static/about/home.md");
+    if (!searchParams.has("article")) {
+      router.push("?category=Static&topic=About&article=Home.md");
     }
   }, [router, searchParams]);
 
