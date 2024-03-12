@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./prism.css";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +23,7 @@ export default function RootLayout({
         className={`w-full min-h-screen text-base flex flex-col ${inter.className}`}
       >
         <Header />
-        {children}
+        <Suspense>{children}</Suspense>
       </body>
     </html>
   );
