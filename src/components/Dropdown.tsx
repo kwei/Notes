@@ -26,6 +26,19 @@ export const Dropdown = (props: Props) => {
     setOpen(false);
   });
 
+  function calculateDropdownHeight(element: HTMLElement | null) {
+    const marginValue = 8;
+    const paddingValue = 20;
+    if (typeof window === "undefined") return 200;
+    if (!element) return window.innerHeight * (2 / 5);
+    return (
+      window.innerHeight -
+      element.getBoundingClientRect().bottom -
+      marginValue -
+      paddingValue
+    );
+  }
+
   const handleTriggerMenu = useCallback(() => {
     setOpen((prevState) => !prevState);
   }, []);
@@ -91,18 +104,6 @@ const Option = (props: OptionProps) => {
 };
 
 Dropdown.Option = Option;
-
-function calculateDropdownHeight(element: HTMLElement | null) {
-  const marginValue = 8;
-  const paddingValue = 20;
-  if (!element) return window.innerHeight * (2 / 5);
-  return (
-    window.innerHeight -
-    element.getBoundingClientRect().bottom -
-    marginValue -
-    paddingValue
-  );
-}
 
 const DropdownContext = createContext<{
   value?: string;
