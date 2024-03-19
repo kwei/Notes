@@ -25,10 +25,10 @@ export const Header = () => {
         </button>
         <MyInfo />
         <nav className="max-lg:hidden flex items-center ml-4 pl-8 gap-4 border-l-2 border-solid border-gray-500">
-          <Link href="/" className="hover:text-green-50-500 hover:underline underline-offset-4 transition-all">
+          <Link href="/" className="hover:text-green-50-500 no-underline text-gray-d0-500 transition-colors">
             NOTES
           </Link>
-          <Link href="/" className="hover:text-green-50-500 hover:underline underline-offset-4 transition-all">
+          <Link href="/" className="hover:text-green-50-500 no-underline text-gray-d0-500 transition-colors">
             PROFILE
           </Link>
         </nav>

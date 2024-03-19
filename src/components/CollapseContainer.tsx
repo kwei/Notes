@@ -7,6 +7,7 @@ interface Props {
 	label: string;
 	children: ReactNode;
 	className?: string;
+	open: boolean;
 }
 
 export const CollapseContainer = (props: Props) => {
@@ -20,6 +21,7 @@ export const CollapseContainer = (props: Props) => {
 		<details
 			className={`${props.className} hover:cursor-pointer`}
 			title={props.label}
+			open={props.open}
 			onToggle={handleOnToggle}
 		>
 			<summary

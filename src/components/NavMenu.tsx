@@ -1,10 +1,12 @@
 "use client";
 
+import { ArticleButton } from "@/components/ArticleButton";
 import { CollapseContainer } from "@/components/CollapseContainer";
 import { MyInfo } from "@/components/MyInfo";
 import { useFocusRef } from "@/hooks/useFocusRef";
-import Link from "next/link";
-import { ReactNode } from "react";
+import { useGetArticleList } from "@/hooks/useGetArticleList";
+import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 import { MdOutlineArrowBack } from "react-icons/md";
 
 interface Props {
@@ -13,6 +15,17 @@ interface Props {
 
 export const NavMenu = (props: Props) => {
   const ref = useFocusRef(props.onClose);
+  const { articles, loading, error, handleOnSelectArticle } =
+    useGetArticleList();
+  const searchParams = useSearchParams();
+
+  const articleName = useMemo(
+    () => searchParams.get("article"),
+    [searchParams],
+  );
+
+  const articleTopic = useMemo(() => searchParams.get("topic"), [searchParams]);
+
   return (
     <div
       ref={ref}
@@ -28,36 +41,46 @@ export const NavMenu = (props: Props) => {
         </button>
       </div>
 
-      <div className="w-full border-t border-solid border-gray-2c-500 p-4">
-        <CollapseContainer label="Pages">
-          <ul className="w-full flex flex-col gap-4 px-4 pt-2">
-            <CollapseItem>
-              <Link href="/">Notes</Link>
-            </CollapseItem>
-          </ul>
-        </CollapseContainer>
-      </div>
-
-      <div className="w-full border-t border-solid border-gray-2c-500 p-4">
-        <CollapseContainer label="Topics">
-          <ul className="w-full flex flex-col gap-1 px-4 pt-2">
-            <CollapseItem>
-              <a href="#">Article 1</a>
-            </CollapseItem>
-            <CollapseItem>
-              <a href="#">Article 2</a>
-            </CollapseItem>
-          </ul>
-        </CollapseContainer>
-      </div>
+      {error && (
+        <div className="flex flex-col p-4">
+          <span className="text-red-500 mb-4 font-normal">
+            Something Wrong :(
+          </span>
+          <span>{error}</span>
+        </div>
+      )}
+      {loading && (
+        <div className="w-full flex flex-col items-center p-4">
+          <span className="animate-spin size-6 rounded-full border-2 border-t-0 border-l-0 border-solid border-gray-400"></span>
+        </div>
+      )}
+      {Object.entries(articles).map(([category, topics]) => (
+        <div
+          key={category}
+          className="w-full flex flex-col border-b border-solid border-gray-500 p-4"
+        >
+          <label className="pb-2">{category.toUpperCase()}</label>
+          {Object.entries(topics).map(([topic, files]) => (
+            <CollapseContainer
+              key={topic}
+              label={topic}
+              className="pl-4"
+              open={articleTopic === topic}
+            >
+              {files.map((file) => (
+                <ArticleButton
+                  key={file.fileName}
+                  file={file}
+                  category={category}
+                  topic={topic}
+                  selected={articleName === file.fileName}
+                  onClick={handleOnSelectArticle}
+                />
+              ))}
+            </CollapseContainer>
+          ))}
+        </div>
+      ))}
     </div>
-  );
-};
-
-const CollapseItem = ({ children }: { children: ReactNode }) => {
-  return (
-    <li className="w-full px-4 py-2 rounded-lg hover:bg-gray-2c-500 transition-all">
-      {children}
-    </li>
   );
 };
