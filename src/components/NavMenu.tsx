@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const NavMenu = (props: Props) => {
-  const ref = useFocusRef(props.onClose);
+  const ref = useFocusRef<HTMLDivElement>(props.onClose);
   const { articles, loading, error, handleOnSelectArticle } =
     useGetArticleList();
   const searchParams = useSearchParams();

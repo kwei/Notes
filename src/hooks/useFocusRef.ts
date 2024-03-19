@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-export const useFocusRef = (callback: () => void) => {
-  const ref = useRef<HTMLDivElement>(null);
+export const useFocusRef = <T extends HTMLElement>(callback: () => void) => {
+  const ref = useRef<T>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
