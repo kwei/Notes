@@ -95,7 +95,7 @@ Dropdown.Option = Option;
 function calculateDropdownHeight(element: HTMLElement | null) {
   const marginValue = 8;
   const paddingValue = 20;
-  if (typeof window === "undefined") return 200;
+  if (typeof window === "undefined") return 500;
   if (!element) return window.innerHeight * (2 / 5);
   return (
     window.innerHeight -
