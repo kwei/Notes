@@ -25,7 +25,7 @@ export const ArticleButton = memo(
 
     return (
       <button
-        className={`rounded-lg w-full py-2 text-left pl-4 transition-all ${selected ? "bg-gray-500/70" : "hover:bg-gray-500/70"}`}
+        className={`rounded-lg w-full py-2 text-left px-4 transition-all ${selected ? "bg-gray-500/70" : "hover:bg-gray-500/70"}`}
         onClick={handleOnSelectArticle}
         title={file.name}
       >

@@ -34,14 +34,14 @@ export const ArticleTree = ({
       {Object.entries(articleTable).map(([category, topics]) => (
         <div
           key={category}
-          className="w-full flex flex-col border-b border-solid border-gray-500 p-4"
+          className="w-full flex flex-col gap-4 border-b border-solid border-gray-500 p-4"
         >
-          <label className="pb-2">{category}</label>
+          <label>{category}</label>
           {Object.entries(topics).map(([topic, files]) => (
             <CollapseContainer
               key={topic}
               label={topic}
-              className="pl-4"
+              className="ml-2"
               open={articleTopic === topic}
             >
               {files.map((file) => (

@@ -1,23 +1,14 @@
+"use client";
+
 import { ArticleTree } from "@/components/ArticleTree";
-import { formatArticleList } from "@/utils/formatArticleList";
-import { getArticleList } from "@/utils/getArticleList";
+import { useGetArticleList } from "@/hooks/useGetArticleList";
 
 interface Props {
   className?: string;
 }
 
 export const TopicList = async (props: Props) => {
-  let loading = true;
-  let error: string | undefined = undefined;
-  const articleTable = await getArticleList()
-    .then(formatArticleList)
-    .catch((e) => {
-      error = e.toString();
-      return {};
-    })
-    .finally(() => {
-      loading = false;
-    });
+  const { loading, error, articleTable } = useGetArticleList();
 
   return (
     <aside
