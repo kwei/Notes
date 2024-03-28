@@ -2,7 +2,6 @@ import { getArticleList } from "@/utils/getArticleList";
 import { getQueryString } from "@/utils/getQueryString";
 import { markdownConverter } from "@/utils/markdownConverter";
 import { Client } from "@notionhq/client";
-import { DatabaseObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { NextResponse } from "next/server";
 import { NotionToMarkdown } from "notion-to-md";
 
