@@ -6,7 +6,9 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { IoTriangle } from "react-icons/io5";
@@ -22,6 +24,7 @@ interface Props {
 export const Dropdown = (props: Props) => {
   const { value, onChange, placeHolder, className = "", children } = props;
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const ref = useFocusRef<HTMLDivElement>(() => {
     setOpen(false);
   });
@@ -46,6 +49,13 @@ export const Dropdown = (props: Props) => {
     [handleOnChange, value],
   );
 
+  useEffect(() => {
+    if (ref.current && menuRef.current) {
+      menuRef.current.style.maxHeight =
+        calculateDropdownHeight(ref.current) + "px";
+    }
+  }, [ref]);
+
   return (
     <div ref={ref} className="relative">
       <button
@@ -57,10 +67,8 @@ export const Dropdown = (props: Props) => {
       </button>
       <DropdownContext.Provider value={contextValue}>
         <div
+          ref={menuRef}
           className={`rounded-lg z-50 absolute top-full origin-top left-0 right-0 flex flex-col gap-2.5 mt-2 bg-gray-800 overflow-x-hidden overflow-y-auto p-2.5 transition-all ${open ? "scale-y-100" : "scale-y-0"}`}
-          style={{
-            maxHeight: calculateDropdownHeight(ref.current) + "px",
-          }}
         >
           {children}
         </div>

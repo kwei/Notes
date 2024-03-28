@@ -75,8 +75,6 @@ Q
 !src/articles/Static/About/Home.md,b\d\bdb278b534966a0ae9d4b55ab710a5769b79d72f
 P
  src/components/ArticleButton.tsx,c\3\c366a8c0eb5579c10b9fe3e588bdcbf86dfc4793
-K
-src/hooks/getArticleList.ts,5\6\56a0294cf4824be3709774cdf905a42c358863a4
 N
 src/hooks/useGetArticleList.ts,3\7\37fb0c00b522c1b2b94553dc1425acad35dfd043
 K
@@ -87,3 +85,17 @@ F
 src/utils/constants.ts,8\c\8c30e5a28faa3509a17e40c61ac02e5a01c5b70c
 G
 src/components/Card.tsx,2\7\279ae86fd703bfa37c0ecc22510e95c4e6e4bdd7
+@
+src/app/Home.tsx,e\5\e5edcaa91218c75bc3dae5f7599705e99623157e
+A
+src/app/Entry.tsx,3\b\3b4add328d5ca08ccb88e8c8a75c678ffb649e13
+K
+src/app/api/notion/route.ts,c\9\c90bc8a852b4198663897aff150e64de1f3b95f0
+K
+src/utils/getQueryString.ts,e\2\e21ecd0379aa0781313e067e539e7bc2c193422d
+G
+src/utils/getBaseUrl.ts,1\1\11e407809b5f5f7697d866f679cbc9659d788f3e
+K
+src/utils/getArticleList.ts,8\8\8800f2beff52cab5b53f3b16d3d5801920e69a09
+[
++src/articles/React/Component/Headless UI.md,f\e\fea0e12e5faff6f944845acc95f8e5350bb2c060

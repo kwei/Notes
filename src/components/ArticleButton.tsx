@@ -8,23 +8,28 @@ export const ArticleButton = memo(
     topic,
     selected,
   }: {
-    file: { fileName: string; fileUrl: string };
-    onClick: (category: string, topic: string, article: string) => void;
+    file: { name: string; id: string };
+    onClick: (
+      category: string,
+      topic: string,
+      article: string,
+      id: string,
+    ) => void;
     category: string;
     topic: string;
     selected: boolean;
   }) => {
     function handleOnSelectArticle() {
-      onClick(category, topic, file.fileName);
+      onClick(category, topic, file.name, file.id);
     }
 
     return (
       <button
         className={`rounded-lg w-full py-2 text-left pl-4 transition-all ${selected ? "bg-gray-500/70" : "hover:bg-gray-500/70"}`}
         onClick={handleOnSelectArticle}
-        title={file.fileName}
+        title={file.name}
       >
-        {file.fileName}
+        {file.name}
       </button>
     );
   },

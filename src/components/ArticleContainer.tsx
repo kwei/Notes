@@ -3,33 +3,32 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import parse from "html-react-parser";
-import { FaGithub } from "react-icons/fa6";
 import Prism from "prismjs";
+import { RiNotionFill } from "react-icons/ri";
 
 export const ArticleContainer = () => {
   const searchParams = useSearchParams();
   const [article, setArticle] = useState<string>();
   const [loading, setLoading] = useState(false);
 
-  const articleName = useMemo(
-    () => `${searchParams.get("category")}/${searchParams.get("topic")}/${searchParams.get("article")}`,
-    [searchParams],
-  );
+  const articleId = useMemo(() => searchParams.get("id"), [searchParams]);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`/api/article?fileName=${articleName}`)
-      .then((res) => res.json())
-      .then((data: string) => {
-        setArticle(data);
-      })
-      .catch((e) => {
-        console.log("Fetch Article Failed: ", e);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [articleName]);
+    if (articleId) {
+      setLoading(true);
+      fetch(`/api/notion?id=${articleId}`)
+        .then((res) => res.json())
+        .then((data: string) => {
+          setArticle(data);
+        })
+        .catch((e) => {
+          console.log("Fetch Article Failed: ", e);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [articleId]);
 
   useEffect(() => {
     if (article) Prism.highlightAll();
@@ -46,9 +45,9 @@ export const ArticleContainer = () => {
   return (
     <div className="w-full h-auto flex flex-col p-8">
       <div className="text-sm w-full justify-end flex items-center gap-2">
-        <FaGithub className="size-4" />
+        <RiNotionFill className="size-6" />
         <a
-          href={`https://github.com/kwei/Notes/tree/main/src/articles/${articleName}`}
+          href={`https://www.notion.so/${process.env.NEXT_PUBLIC_NOTION_TABLE_ID}?p=${articleId}`}
           target="_blank"
           rel="noreferrer noopener"
         >

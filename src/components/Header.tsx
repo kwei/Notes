@@ -6,13 +6,14 @@ import { NavMenu } from "@/components/NavMenu";
 import { ROUTES } from "@/utils/constants";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdLaunch, MdMenu } from "react-icons/md";
 
 export const Header = () => {
   const router = useRouter();
   const [openNav, setOpenNav] = useState(false);
   const [route, setRoute] = useState("NOTES");
+  const [articleList, setArticleList] = useState<ArticleList[]>([]);
 
   function handleOnChangeRoute(_route: string) {
     setRoute(_route);
@@ -26,6 +27,18 @@ export const Header = () => {
   function handleCloseNav() {
     setOpenNav(false);
   }
+
+  useEffect(() => {
+    fetch("/api/notion")
+      .then((res) => res.json())
+      .then((data: ArticleList[]) => {
+        setArticleList(data);
+      })
+      .catch((e) => {
+        console.log("Fetch Article List Failed: ", e);
+        return [];
+      });
+  }, []);
 
   return (
     <header className="w-full bg-gray-800/50 flex items-center justify-between px-4 py-4">
@@ -78,7 +91,9 @@ export const Header = () => {
         </a>
       </div>
 
-      {openNav && <NavMenu onClose={handleCloseNav} />}
+      {openNav && (
+        <NavMenu articleList={articleList} onClose={handleCloseNav} />
+      )}
     </header>
   );
 };
