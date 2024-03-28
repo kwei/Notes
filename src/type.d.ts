@@ -52,3 +52,7 @@ interface ArticleList {
   name: string;
   id: string;
 }
+
+type ArticleTable = Record<string, ArticleTopics>;
+type ArticleTopics = Record<string, Article[]>;
+type Article = { name: string; id: string };
