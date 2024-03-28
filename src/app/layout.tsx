@@ -8,8 +8,9 @@ import { ReactNode, Suspense } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "KW Notes",
-  description: "For doing notes",
+  title: "This is KW.",
+  description:
+    "I'm KW (Kai-Wei Yeh, 葉鎧瑋). I will summarize and share my knowledge points and life experiences here.",
 };
 
 export default function RootLayout({
