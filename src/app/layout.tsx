@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`w-full min-h-screen text-base flex flex-col ${inter.className}`}
+        className={`relative w-full h-full min-h-screen text-base flex flex-col ${inter.className}`}
       >
         <Header />
         <Suspense>{children}</Suspense>

@@ -17,7 +17,7 @@ export const NavMenu = (props: Props) => {
   return (
     <div
       ref={ref}
-      className="fixed flex flex-col left-0 top-0 bottom-0 w-[350px] bg-gray-900 animate-slideIn"
+      className="fixed z-10 flex flex-col left-0 top-0 bottom-0 w-[350px] bg-gray-900 animate-slideIn"
     >
       <div className="relative w-full flex items-center gap-4 px-4 py-4">
         <MyInfo />

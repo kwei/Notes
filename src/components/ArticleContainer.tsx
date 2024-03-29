@@ -43,7 +43,7 @@ export const ArticleContainer = () => {
   } else if (!article) return null;
 
   return (
-    <div className="w-full h-auto flex flex-col p-8">
+    <div className="w-full h-auto flex flex-col p-8 md:p-12">
       <div className="text-sm w-full justify-end flex items-center gap-2">
         <RiNotionFill className="size-6" />
         <a
@@ -54,7 +54,7 @@ export const ArticleContainer = () => {
           <span className="underline">Source</span>
         </a>
       </div>
-      <div className="mx-4 flex flex-col">{parse(article)}</div>
+      <div className="flex flex-col">{parse(article)}</div>
     </div>
   );
 };
