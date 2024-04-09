@@ -14,6 +14,6 @@ Then, add the env file `.env` with following values:
 ```dotenv
 NEXT_PUBLIC_DATA_REPO_ID=<Repository_ID_for_using_Giscus>
 NEXT_PUBLIC_DATA_CATEGORY_ID=<Category_ID_for_using_Giscus>
-NOTION_SECRET=<Notion_Access_Token>
-NEXT_PUBLIC_NOTION_TABLE_ID=<Notion_Database_ID>
+NOTION_NOTE_SECRET=<Notion_Access_Token>
+NEXT_PUBLIC_NOTION_NOTE_TABLE_ID=<Notion_Database_ID>
 ```

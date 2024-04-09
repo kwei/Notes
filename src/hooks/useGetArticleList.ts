@@ -1,5 +1,6 @@
 "use client";
 
+import { ArticleList } from "@/type";
 import { formatArticleList } from "@/utils/formatArticleList";
 import { useEffect, useMemo, useState } from "react";
 
@@ -14,7 +15,7 @@ export const useGetArticleList = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/notion")
+    fetch("/api/notion/note")
       .then((res) => res.json())
       .then((data: ArticleList[]) => {
         setArticleList(data);

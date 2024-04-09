@@ -16,7 +16,7 @@ export const ArticleContainer = () => {
   useEffect(() => {
     if (articleId) {
       setLoading(true);
-      fetch(`/api/notion?id=${articleId}`)
+      fetch(`/api/notion/note?id=${articleId}`)
         .then((res) => res.json())
         .then((data: string) => {
           setArticle(data);
@@ -47,7 +47,7 @@ export const ArticleContainer = () => {
       <div className="text-sm w-full justify-end flex items-center gap-2">
         <RiNotionFill className="size-6" />
         <a
-          href={`https://www.notion.so/${process.env.NEXT_PUBLIC_NOTION_TABLE_ID}?p=${articleId}`}
+          href={`https://www.notion.so/${process.env.NEXT_PUBLIC_NOTION_NOTE_TABLE_ID}?p=${articleId}`}
           target="_blank"
           rel="noreferrer noopener"
         >

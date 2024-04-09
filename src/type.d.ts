@@ -1,3 +1,5 @@
+import { TASK_COLOR, TASK_STATUS } from "@/utils/constants";
+
 interface GitTreeObj {
   path: string;
   mode: string;
@@ -16,36 +18,6 @@ interface GitTree {
   };
 }
 
-interface NotionObject {
-  category: string;
-  topic: string;
-  name: string;
-  id: string;
-}
-
-interface NotionProperty {
-  Topic: {
-    rich_text: {
-      plain_text: string;
-    }[];
-  };
-  Category: {
-    rich_text: {
-      plain_text: string;
-    }[];
-  };
-  ID: {
-    rich_text: {
-      plain_text: string;
-    }[];
-  };
-  Name: {
-    title: {
-      plain_text: string;
-    }[];
-  };
-}
-
 interface ArticleList {
   category: string;
   topic: string;
@@ -56,3 +28,19 @@ interface ArticleList {
 type ArticleTable = Record<string, ArticleTopics>;
 type ArticleTopics = Record<string, Article[]>;
 type Article = { name: string; id: string };
+
+interface Task {
+  id: string;
+  title: string;
+  tags: {
+    name: string;
+    color: TASK_COLOR;
+  }[];
+  status: {
+    id: string;
+    name: TASK_STATUS;
+    color: TASK_COLOR;
+  }
+  iat?: Date;
+  expiry?: Date;
+}

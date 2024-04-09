@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   console.log("req url: ", req.url);
   const queryList = req.url.split("?")[1]?.split("&") ?? [];
   const pageId = getQueryString(queryList, "id");
-  const notion = new Client({ auth: process.env.NOTION_SECRET });
+  const notion = new Client({ auth: process.env.NOTION_NOTE_SECRET });
   if (pageId) {
     const n2m = new NotionToMarkdown({ notionClient: notion });
     const md = n2m.toMarkdownString(await n2m.pageToMarkdown(pageId)).parent;
