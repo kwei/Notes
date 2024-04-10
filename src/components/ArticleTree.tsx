@@ -2,6 +2,7 @@
 
 import { ArticleButton } from "@/components/ArticleButton";
 import { CollapseContainer } from "@/components/CollapseContainer";
+import { ArticleTable } from "@/type";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useCallback, useMemo } from "react";
 

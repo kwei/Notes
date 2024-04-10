@@ -1,12 +1,13 @@
 "use client";
 
+import { TagBlock } from "@/app/task/TagBlock";
+import { useDraggableTask } from "@/app/task/DraggableTask";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { Task } from "@/type";
-import { TASK_COLOR } from "@/utils/constants";
-import { format } from "date-fns";
+import { formatPeriod } from "@/utils/formatPeriod";
 import parse from "html-react-parser";
 import Prism from "prismjs";
-import { DragEvent, useEffect, useState } from "react";
+import { DragEvent, useCallback, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { RiNotionFill } from "react-icons/ri";
 
@@ -16,27 +17,35 @@ interface Props {
 
 export const TaskCard = (props: Props) => {
   const { task } = props;
+  const { setDragged } = useDraggableTask();
   const [openContent, setOpenContent] = useState(false);
+  const [isDragged, setIsDragged] = useState(false);
 
-  const handleOpenContent = () => {
+  function handleOpenContent() {
     setOpenContent(true);
-  };
+  }
 
-  const handleCloseContent = () => {
+  function handleCloseContent() {
     setOpenContent(false);
-  };
+  }
 
-  const handleOnDragStart = (event: DragEvent<HTMLButtonElement>) => {
-    event.dataTransfer.setData("task", JSON.stringify(task));
-  };
+  const handleOnDragStart = useCallback(() => {
+    setDragged(task);
+    setIsDragged(true);
+  }, [setDragged, task]);
+
+  function handleOnDragEnd() {
+    setIsDragged(false);
+  }
 
   return (
     <>
       <button
         draggable={true}
         onDragStart={handleOnDragStart}
-        className="relative flex flex-col rounded-2xl md:p-4 p-2 border border-solid border-gray-d0-500/50 transition-colors hover:border-gray-d0-500"
+        onDragEnd={handleOnDragEnd}
         onClick={handleOpenContent}
+        className={`relative flex flex-col rounded-2xl md:p-4 p-2 border border-solid transition-colors ${isDragged ? "border-gray-d0-500/10" : "border-gray-d0-500/50 hover:border-gray-d0-500"}`}
       >
         <span className="font-semibold">{task.title}</span>
         <div className="text-xs text-gray-d0-500/50">
@@ -52,20 +61,6 @@ export const TaskCard = (props: Props) => {
         <ContentModal id={task.id} onClose={handleCloseContent} />
       )}
     </>
-  );
-};
-
-const TagBlock = ({ tag }: { tag: { name: string; color: TASK_COLOR } }) => {
-  return (
-    <span
-      className="text-sm rounded-md text-black px-2 py-px select-none"
-      style={{
-        backgroundColor: tag.color,
-      }}
-      key={tag.name}
-    >
-      {tag.name}
-    </span>
   );
 };
 
@@ -123,11 +118,3 @@ const ContentModal = ({ id, onClose }: { id: string; onClose: () => void }) => {
     </div>
   );
 };
-
-function formatPeriod(iat?: Date, expiry?: Date) {
-  let startDate = "";
-  let endDate = "";
-  if (iat) startDate = format(new Date(iat), "yyyy/MM/dd");
-  if (expiry) endDate = format(new Date(expiry), "yyyy/MM/dd");
-  return `${startDate} ~ ${endDate}`;
-}

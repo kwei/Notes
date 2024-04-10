@@ -22,21 +22,25 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   console.log("[POST] req url: ", req.url);
-  const task = (await req.json()) as Task;
+  const tasks = (await req.json()) as Task[];
   const notion = new Client({ auth: process.env.NOTION_TASK_SECRET });
-  const newProp = {
-    Status: {
-      select: {
-        id: task.status.id,
-        name: task.status.name,
-        color: "default",
+  const result = [];
+  for (const task of tasks) {
+    const newProp = {
+      Status: {
+        select: {
+          id: task.status.id,
+          name: task.status.name,
+          color: "default",
+        },
       },
-    },
-  };
-  console.log(newProp);
-  const res = await notion.pages.update({
-    page_id: task.id,
-    properties: newProp as any,
-  });
-  return NextResponse.json(res);
+    };
+    console.log(newProp);
+    const res = await notion.pages.update({
+      page_id: task.id,
+      properties: newProp as any,
+    });
+    result.push(res);
+  }
+  return NextResponse.json(result);
 }

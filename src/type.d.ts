@@ -40,7 +40,30 @@ interface Task {
     id: string;
     name: TASK_STATUS;
     color: TASK_COLOR;
-  }
+  };
   iat?: Date;
   expiry?: Date;
+}
+
+interface ITaskContextValue {
+  list: Record<TASK_STATUS, Task[]>;
+  set2List: (status: TASK_STATUS, task: Task) => void;
+  removeFromList: (status: TASK_STATUS, task: Task) => void;
+}
+
+interface IUser {
+  name: string;
+  email: string;
+  image: string;
+}
+
+interface IMongoQuery {
+  method: "get" | "set";
+  filter: Partial<IUser>;
+  data: IUser;
+}
+
+interface IMongoQueryRes {
+  status: boolean;
+  message: string;
 }

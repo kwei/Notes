@@ -55,7 +55,7 @@ export const getTaskList = async () => {
     )
     .then((list) => {
       list.forEach((data) => {
-        // console.log(data.Status);
+        // console.log("Task List Data: ", data);
       });
       return list;
     })

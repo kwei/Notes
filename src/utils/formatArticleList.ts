@@ -1,3 +1,5 @@
+import { ArticleList, ArticleTable } from "@/type";
+
 export const formatArticleList = (articleList: ArticleList[]) => {
   if (articleList.length === 0) return {};
   const result: ArticleTable = {};
