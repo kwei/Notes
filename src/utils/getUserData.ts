@@ -6,7 +6,7 @@ export async function getUserData(filter: Partial<IUser>) {
     body: JSON.stringify({
       method: "get",
       filter: filter,
-    } as IMongoQuery),
+    } as IMongoQuery<IUser>),
   });
   return await res.json();
 }

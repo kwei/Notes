@@ -14,7 +14,9 @@ export const Board = () => {
           className="col-span-1"
         >
           {(taskList) =>
-            taskList.map((task) => <TaskCard key={task.id} task={task} />)
+            taskList.map((task) => (
+              <TaskCard key={`label-${task.id}`} task={task} />
+            ))
           }
         </TaskContainer>
       ))}

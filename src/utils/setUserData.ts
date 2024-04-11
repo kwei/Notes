@@ -6,7 +6,7 @@ export async function setUserData(data: IUser) {
     body: JSON.stringify({
       method: "set",
       data: data,
-    } as IMongoQuery),
+    } as IMongoQuery<IUser>),
   });
   return await res.json();
 }

@@ -1,10 +1,10 @@
 "use client";
 
 import { createDraggableCtx } from "@/hooks/createDraggableCtx";
-import { Task } from "@/type";
+import { ITodo } from "@/type";
 import { ReactNode, useContext } from "react";
 
-const { Ctx, CtxProvider } = createDraggableCtx<Task>();
+const { Ctx, CtxProvider } = createDraggableCtx<ITodo>();
 
 interface Props {
   children: ReactNode;

@@ -12,10 +12,10 @@ export enum TASK_STATUS {
 }
 
 export const TASK_TABLE: Record<string, TASK_STATUS> = {
-  Complete: TASK_STATUS.COMPLETE,
-  "In Progress": TASK_STATUS.IN_PROGRESS,
-  "New Request": TASK_STATUS.NEW_REQUEST,
   Backlog: TASK_STATUS.BACKLOG,
+  "New Request": TASK_STATUS.NEW_REQUEST,
+  "In Progress": TASK_STATUS.IN_PROGRESS,
+  Complete: TASK_STATUS.COMPLETE,
 };
 
 export enum TASK_COLOR {

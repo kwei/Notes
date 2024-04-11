@@ -1,6 +1,6 @@
 "use client";
 
-import { ITaskContextValue, Task } from "@/type";
+import { ITaskContextValue, ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
 import {
   createContext,
@@ -13,16 +13,16 @@ import {
 
 interface Props {
   children: ReactNode;
-  contextValue: Record<TASK_STATUS, Task[]>;
+  contextValue: Record<TASK_STATUS, ITodo[]>;
 }
 
 export const CtxTask = (props: Props) => {
-  const [list, setList] = useState({} as Record<TASK_STATUS, Task[]>);
+  const [list, setList] = useState({} as Record<TASK_STATUS, ITodo[]>);
 
   const contextValue = useMemo(
     () => ({
       list,
-      set2List: (status: TASK_STATUS, task: Task) => {
+      set2List: (status: TASK_STATUS, task: ITodo) => {
         setList((prevState) => {
           const newState = { ...prevState };
           const i = newState[status].findIndex(
@@ -33,7 +33,7 @@ export const CtxTask = (props: Props) => {
           return newState;
         });
       },
-      removeFromList: (status: TASK_STATUS, task: Task) => {
+      removeFromList: (status: TASK_STATUS, task: ITodo) => {
         setList((prevState) => {
           const newState = { ...prevState };
           const i = newState[status].findIndex(
@@ -49,7 +49,7 @@ export const CtxTask = (props: Props) => {
 
   useEffect(() => {
     if (Object.keys(props.contextValue).length > 0) {
-      const sorted = {} as Record<TASK_STATUS, Task[]>;
+      const sorted = {} as Record<TASK_STATUS, ITodo[]>;
       Object.entries(props.contextValue).forEach(([key, list]) => {
         sorted[key as TASK_STATUS] = sortTask(list);
       });
@@ -61,7 +61,7 @@ export const CtxTask = (props: Props) => {
 };
 
 const Ctx = createContext({
-  list: {} as Record<TASK_STATUS, Task[]>,
+  list: {} as Record<TASK_STATUS, ITodo[]>,
   set2List: () => {},
   removeFromList: () => {},
 } as ITaskContextValue);
@@ -70,7 +70,7 @@ export const useTaskCtx = () => {
   return useContext(Ctx);
 };
 
-function sortTask(list: Task[]) {
+function sortTask(list: ITodo[]) {
   return list.sort((a, b) => {
     if (!a.iat && b.iat) {
       return 1;

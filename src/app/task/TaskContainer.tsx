@@ -3,7 +3,7 @@
 import { useTaskCtx } from "@/app/task/CtxTask";
 import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
-import { Task } from "@/type";
+import { ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
 import { formatPeriod } from "@/utils/formatPeriod";
 import { DragEvent, ReactNode, useCallback, useState } from "react";
@@ -11,13 +11,13 @@ import { DragEvent, ReactNode, useCallback, useState } from "react";
 interface Props {
   className?: string;
   label: TASK_STATUS;
-  children: (taskList: Task[]) => ReactNode;
+  children: (taskList: ITodo[]) => ReactNode;
 }
 
 export const TaskContainer = (props: Props) => {
   const { className = "", label, children } = props;
   const { removeFromList, set2List, list } = useTaskCtx();
-  const { dragged, setDragged } = useDraggableTask();
+  const { dragged, setUpdated } = useDraggableTask();
   const [isDragOver, setIsDragOver] = useState(false);
 
   function handleOnDragEnter() {
@@ -31,18 +31,18 @@ export const TaskContainer = (props: Props) => {
   const handleOnDrop = useCallback(() => {
     if (dragged) {
       removeFromList(dragged.status.name, dragged);
-      const updatedTask: Task = {
+      const updatedTask: ITodo = {
         ...dragged,
         status: {
           ...dragged.status,
           name: label,
         },
       };
+      setUpdated(updatedTask);
       set2List(label, updatedTask);
-      setDragged();
     }
     setIsDragOver(false);
-  }, [dragged, label, removeFromList, set2List, setDragged]);
+  }, [dragged, label, removeFromList, set2List, setUpdated]);
 
   function handlePreventDefault(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();

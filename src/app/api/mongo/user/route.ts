@@ -1,20 +1,18 @@
+import { MONGODB_LINE_USER_CLIENT } from "@/app/api/mongo/constants";
 import { IUser, IMongoQuery, IMongoQueryRes } from "@/type";
 import { NextResponse } from "next/server";
 import { Collection, MongoClient } from "mongodb";
 
-const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@lineuser.xn8zlvq.mongodb.net/?retryWrites=true&w=majority&appName=LineUser`;
-const client = new MongoClient(uri);
-
 export async function POST(req: Request) {
   console.log("[POST] req url: ", req.url);
-  const doc = (await req.json()) as IMongoQuery;
+  const doc = (await req.json()) as IMongoQuery<IUser>;
   let res: IMongoQueryRes = {
     status: true,
     message: "",
   };
   try {
-    await client.connect();
-    const db = client.db("LineUser");
+    await MONGODB_LINE_USER_CLIENT.connect();
+    const db = MONGODB_LINE_USER_CLIENT.db("LineUser");
     const collections = db.collection("BasicInfo");
     const method = doc.method;
     if (method === "get") {
@@ -33,7 +31,7 @@ export async function POST(req: Request) {
       message: e as string,
     };
   } finally {
-    await client.close();
+    await MONGODB_LINE_USER_CLIENT.close();
   }
 
   return NextResponse.json(res);
@@ -64,23 +62,5 @@ async function insertData(collections: Collection, data: IUser) {
   return {
     status: true,
     message: JSON.stringify(res),
-  };
-}
-
-async function updateData(
-  collections: Collection,
-  filter: Partial<IUser>,
-  data: IUser,
-) {
-  return {
-    status: true,
-    message: "",
-  };
-}
-
-async function deleteData(collections: Collection, filter: Partial<IUser>) {
-  return {
-    status: true,
-    message: "",
   };
 }

@@ -17,7 +17,7 @@ export default async function Home() {
     <main className="flex w-full flex-1 flex-col md:p-4 p-8">
       <UserInfo user={userInfo} />
       {userInfo && (
-        <TaskBoard />
+        <TaskBoard user={userInfo} />
       )}
     </main>
   );

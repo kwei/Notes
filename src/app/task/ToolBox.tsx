@@ -1,8 +1,11 @@
 "use client";
 
-import { useTaskCtx } from "@/app/task/CtxTask";
+import { useDraggableTask } from "@/app/task/DraggableTask";
+import { IMongoQueryRes } from "@/type";
 import { ROUTES } from "@/utils/constants";
+import { updateTodo } from "@/utils/updateTodo";
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 interface Props {
   className?: string;
@@ -10,31 +13,42 @@ interface Props {
 
 export const ToolBox = ({ className = "" }: Props) => {
   const router = useRouter();
-  const { list } = useTaskCtx();
+  const { dragged, updated, setUpdated, setDragged } = useDraggableTask();
 
-  function reFresh() {
+  const reFresh = useCallback(() => {
     router.push(ROUTES["Task"]);
-  }
+  }, [router]);
 
-  function update() {
-    fetch("/api/notion/task", {
-      method: "POST",
-      body: JSON.stringify(Object.values(list).flat()),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("update task: ", res);
-      })
-      .finally(() => {
-        reFresh();
-      });
-  }
+  const update = useCallback(() => {
+    if (dragged && updated) {
+      updateTodo(dragged, updated)
+        .then((res: IMongoQueryRes) => {
+          console.log(res.status, JSON.parse(res.message));
+        })
+        .finally(() => {
+          setUpdated();
+          setDragged();
+        });
+    }
+  }, [dragged, setDragged, setUpdated, updated]);
 
   return (
     <div className={`w-full flex items-center justify-end gap-4 ${className}`}>
-      <button onClick={update}>Update</button>
-      <button>export</button>
-      <button onClick={reFresh}>Sync</button>
+      <button
+        className="transition-colors rounded-md px-2 py-1 border border-solid border-gray-d0-500 hover:bg-blue-5F-500/70 font-semibold"
+        onClick={update}
+      >
+        Save Change
+      </button>
+      <button className="transition-colors rounded-md px-2 py-1 border border-solid border-gray-d0-500 hover:bg-red-ff-500/70 font-semibold">
+        Export
+      </button>
+      <button
+        className="transition-colors rounded-md px-2 py-1 border border-solid border-gray-d0-500 hover:bg-green-50-500/70 font-semibold"
+        onClick={reFresh}
+      >
+        Sync
+      </button>
     </div>
   );
 };

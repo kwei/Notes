@@ -2,14 +2,19 @@ import { CtxTask } from "@/app/task/CtxTask";
 import { Board } from "@/app/task/Board";
 import { ToolBox } from "@/app/task/ToolBox";
 import { DraggableTask } from "@/app/task/DraggableTask";
-import { Task } from "@/type";
+import { IMongoQueryRes, ITodo, IUser } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
-import { getTaskList } from "@/utils/getTaskList";
+import { getTodoList } from "@/utils/getTodoList";
 
-export const TaskBoard = async () => {
-  const allTaskList = await getTaskList();
+export const TaskBoard = async ({ user }: { user: IUser }) => {
+  const allTaskList = await getTodoList({
+    userEmail: user.email,
+  }).then((res: IMongoQueryRes) => {
+    if (res.status) return JSON.parse(res.message) as ITodo[];
+    return [];
+  });
 
-  const taskTable: Record<TASK_STATUS, Task[]> = {
+  const taskTable: Record<TASK_STATUS, ITodo[]> = {
     [TASK_STATUS.BACKLOG]: [],
     [TASK_STATUS.NEW_REQUEST]: [],
     [TASK_STATUS.IN_PROGRESS]: [],
@@ -22,8 +27,8 @@ export const TaskBoard = async () => {
 
   return (
     <CtxTask contextValue={taskTable}>
-      <ToolBox />
       <DraggableTask>
+        <ToolBox />
         <Board />
       </DraggableTask>
     </CtxTask>

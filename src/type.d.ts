@@ -46,9 +46,26 @@ interface Task {
 }
 
 interface ITaskContextValue {
-  list: Record<TASK_STATUS, Task[]>;
-  set2List: (status: TASK_STATUS, task: Task) => void;
-  removeFromList: (status: TASK_STATUS, task: Task) => void;
+  list: Record<TASK_STATUS, ITodo[]>;
+  set2List: (status: TASK_STATUS, task: ITodo) => void;
+  removeFromList: (status: TASK_STATUS, task: ITodo) => void;
+}
+
+interface ITodo {
+  id?: string;
+  title: string;
+  tags: {
+    name: string;
+    color: TASK_COLOR;
+  }[];
+  status: {
+    name: TASK_STATUS;
+    color: TASK_COLOR;
+  };
+  iat?: Date;
+  expiry?: date;
+  userEmail: string;
+  detail: string;
 }
 
 interface IUser {
@@ -57,10 +74,10 @@ interface IUser {
   image: string;
 }
 
-interface IMongoQuery {
-  method: "get" | "set";
-  filter: Partial<IUser>;
-  data: IUser;
+interface IMongoQuery<D> {
+  method: "get" | "set" | "update" | "delete";
+  filter: Partial<D>;
+  data: D;
 }
 
 interface IMongoQueryRes {
