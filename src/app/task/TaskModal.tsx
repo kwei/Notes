@@ -4,7 +4,12 @@ import { useTaskCtx } from "@/app/task/CtxTask";
 import { Dropdown } from "@/components/Dropdown";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { IMongoQueryRes, ITodo } from "@/type";
-import { COLOR_TABLE, TASK_COLOR, TASK_STATUS } from "@/utils/constants";
+import {
+  COLOR_TABLE,
+  TASK_COLOR,
+  TASK_STATUS,
+  TASK_TABLE,
+} from "@/utils/constants";
 import { setTodo } from "@/utils/setTodo";
 import { updateTodo } from "@/utils/updateTodo";
 import { useSession } from "next-auth/react";
@@ -45,7 +50,7 @@ export const TaskModal = (props: Props) => {
     const formData = new FormData(event.target as HTMLFormElement);
     const title = (formData.get("title") ?? task.title) as string;
     const status = {
-      name: (formData.get("Status-text") ?? task.status.name) as TASK_STATUS,
+      name: (formData.get("status") ?? task.status.name) as TASK_STATUS,
     };
     const tags = JSON.parse(newTags) as { name: string; color: TASK_COLOR }[];
     const iat = formData.get("iat")
@@ -180,7 +185,7 @@ export const TaskModal = (props: Props) => {
           />
         </div>
         <div className="pb-4 flex items-end gap-4 flex-wrap">
-          <TagPicker label="Status" value={task.status.name} />
+          <StatusPicker label="Status" value={task.status.name} />
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-4">
               <span className="w-10">From</span>
@@ -301,21 +306,14 @@ const TagPicker = (props: TagPickerProps) => {
     <div className="rounded-lg flex flex-col gap-2 w-full md:w-fit">
       <span>{label}</span>
       <div className="flex items-center flex-wrap gap-4">
-        {color && (
-          <>
-            <ColorSelector
-              onChange={handleOnChangeColor}
-              color={selectedColor}
-            />
-            <input
-              name={`${label}-color`}
-              className="invisible w-0 h-0"
-              type="text"
-              value={selectedColor ?? ""}
-              readOnly
-            />
-          </>
-        )}
+        <ColorSelector onChange={handleOnChangeColor} color={selectedColor} />
+        <input
+          name={`${label}-color`}
+          className="invisible w-0 h-0"
+          type="text"
+          value={selectedColor ?? ""}
+          readOnly
+        />
         <input
           name={`${label}-text`}
           type="text"
@@ -332,6 +330,36 @@ const TagPicker = (props: TagPickerProps) => {
             Add Tag
           </button>
         )}
+      </div>
+    </div>
+  );
+};
+
+interface StatusPickerProps {
+  label: string;
+  value: TASK_STATUS;
+}
+
+const StatusPicker = (props: StatusPickerProps) => {
+  const { label, value } = props;
+  const [text, setText] = useState(value);
+
+  function handleOnChange(option: string) {
+    setText(option as TASK_STATUS);
+  }
+
+  return (
+    <div className="rounded-lg flex flex-col gap-2 w-full md:w-fit">
+      <span>{label}</span>
+      <div className="flex items-center flex-wrap gap-4">
+        <StatusSelector status={text} onChange={handleOnChange} />
+        <input
+          name="status"
+          className="invisible w-0 h-0"
+          type="text"
+          value={text ?? ""}
+          readOnly
+        />
       </div>
     </div>
   );
@@ -368,6 +396,26 @@ const ColorSelector = ({
             ></span>
           }
         />
+      ))}
+    </Dropdown>
+  );
+};
+
+const StatusSelector = ({
+  onChange,
+  status,
+}: {
+  onChange: (option: string) => void;
+  status: TASK_STATUS;
+}) => {
+  return (
+    <Dropdown
+      onChange={onChange}
+      value={status}
+      className="rounded-lg p-3 shadow-sm shadow-black border border-solid border-gray-d0-500"
+    >
+      {Object.entries(TASK_TABLE).map(([label, value]) => (
+        <Dropdown.Option key={label} label={label} value={value} />
       ))}
     </Dropdown>
   );
