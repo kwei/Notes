@@ -22,19 +22,16 @@ export const TaskContainer = (props: Props) => {
   const { dragged, setUpdated } = useDraggableTask();
   const [isDragOver, setIsDragOver] = useState(false);
   const [openContent, setOpenContent] = useState(false);
-
-  const EMPTY_TASK: ITodo = useMemo(
-    () => ({
-      detail: "Take some notes.",
-      userEmail: "",
-      title: "New Task",
-      status: {
-        name: label,
-      },
-      tags: [],
-    }),
-    [label],
-  );
+  const [loading, setLoading] = useState(false);
+  const [newTask, setNewTask] = useState<ITodo>({
+    detail: "Take some notes.",
+    userEmail: "",
+    title: "New Task",
+    status: {
+      name: label,
+    },
+    tags: [],
+  });
 
   function handleOnDragEnter() {
     setIsDragOver(true);
@@ -65,11 +62,24 @@ export const TaskContainer = (props: Props) => {
   }
 
   function handleOpenContent() {
+    setNewTask({
+      detail: "Take some notes.",
+      userEmail: "",
+      title: "New Task",
+      status: {
+        name: label,
+      },
+      tags: [],
+    });
     setOpenContent(true);
   }
 
   function handleCloseContent() {
     setOpenContent(false);
+  }
+
+  function handleSetLoading(status: boolean) {
+    setLoading(status);
   }
 
   return (
@@ -78,7 +88,7 @@ export const TaskContainer = (props: Props) => {
       onDragLeave={handleOnDragLeave}
       onDragOver={handlePreventDefault}
       onDrop={handleOnDrop}
-      className={`flex flex-col py-3 px-4 gap-4 h-full w-full transition-colors rounded-xl ${className} ${isDragOver ? "bg-gray-d0-500/20" : "bg-gray-d0-500/10"}`}
+      className={`flex flex-col py-3 px-4 gap-4 h-full w-full transition-colors rounded-xl ${className} ${isDragOver ? "bg-gray-d0-500/20" : "bg-gray-d0-500/10"} ${loading ? "animate-pulse" : ""}`}
     >
       <div className="pl-4 flex justify-between items-center">
         <span className="text-lg font-bold">{label}</span>
@@ -107,7 +117,8 @@ export const TaskContainer = (props: Props) => {
       <TaskModal
         action="add"
         open={openContent}
-        task={EMPTY_TASK}
+        task={newTask}
+        handleLoading={handleSetLoading}
         onClose={handleCloseContent}
       />
     </div>

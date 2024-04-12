@@ -1,5 +1,6 @@
 "use client";
 
+import { useTaskCtx } from "@/app/task/CtxTask";
 import { Dropdown } from "@/components/Dropdown";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { IMongoQueryRes, ITodo } from "@/type";
@@ -22,17 +23,22 @@ interface Props {
   open: boolean;
   action: "update" | "add";
   onClose: () => void;
+  handleLoading: (status: boolean) => void;
 }
 
 export const TaskModal = (props: Props) => {
-  const { task, open, action, onClose } = props;
+  const { task, open, action, onClose, handleLoading } = props;
   const { data: session } = useSession();
   const ref = useFocusRef<HTMLFormElement>(() => {
     onClose();
   });
+  const { reFetch } = useTaskCtx();
   const initRef = useRef(false);
   const [newTags, setNewTags] = useState(JSON.stringify(task.tags));
-  const [saving, setSaving] = useState(false);
+
+  function resetFormData() {
+    (ref.current as HTMLFormElement).reset();
+  }
 
   function handleOnSubmit(event: FormEvent) {
     event.preventDefault();
@@ -49,7 +55,7 @@ export const TaskModal = (props: Props) => {
       ? new Date(formData.get("expiry") as string)
       : undefined;
     const detail = formData.get("detail") as string;
-    setSaving(true);
+    handleLoading(true);
     if (action === "update") {
       updateTodo(task, {
         ...task,
@@ -64,8 +70,8 @@ export const TaskModal = (props: Props) => {
           console.log(res.status, JSON.parse(res.message));
         })
         .finally(() => {
-          setSaving(false);
-          onClose();
+          handleLoading(false);
+          reFetch().finally();
         });
     } else if (action === "add") {
       setTodo({
@@ -82,13 +88,14 @@ export const TaskModal = (props: Props) => {
           console.log(res.status, JSON.parse(res.message));
         })
         .finally(() => {
-          setSaving(false);
-          onClose();
+          handleLoading(false);
+          reFetch().finally();
         });
     } else {
-      setSaving(false);
-      onClose();
+      handleLoading(false);
     }
+    resetFormData();
+    onClose();
   }
 
   function handleOnAddTag(data: { name: string; color: string }) {
@@ -150,16 +157,13 @@ export const TaskModal = (props: Props) => {
 
   return (
     <div
-      className={`fixed z-30 left-0 right-0 top-0 bottom-0 bg-black/50 md:items-center flex justify-center items-end transition-opacity duration-0 ${open ? "opacity-100 pointer-events-auto" : "delay-300 opacity-0 pointer-events-none"}`}
+      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-black/50 md:items-center flex justify-center items-end transition-opacity duration-0 ${open ? "opacity-100 pointer-events-auto" : "delay-300 opacity-0 pointer-events-none"}`}
     >
       <form
         ref={ref}
         onSubmit={handleOnSubmit}
         className="relative flex flex-col bg-[#403F44] p-5 max-w-[800px] md:py-8 md:px-10 rounded-t-2xl md:rounded-2xl w-full md:w-2/3 md:max-h-5/6"
       >
-        {saving && (
-          <div className="absolute top-0 left-0 right-0 rounded-t-2xl h-3"></div>
-        )}
         <button
           type="button"
           className="size-6 absolute top-4 right-4"
@@ -178,28 +182,24 @@ export const TaskModal = (props: Props) => {
         <div className="pb-4 flex items-end gap-4 flex-wrap">
           <TagPicker label="Status" value={task.status.name} />
           <div className="flex items-center gap-4 flex-wrap">
-            {task.iat && (
-              <div className="flex items-center gap-4">
-                <span className="w-10">From</span>
-                <input
-                  type="date"
-                  name="iat"
-                  className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
-                  defaultValue={formatDateString(task.iat)}
-                />
-              </div>
-            )}
-            {task.expiry && (
-              <div className="flex items-center gap-4">
-                <span className="w-10 md:w-fit">To</span>
-                <input
-                  type="date"
-                  name="expiry"
-                  className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
-                  defaultValue={formatDateString(task.expiry)}
-                />
-              </div>
-            )}
+            <div className="flex items-center gap-4">
+              <span className="w-10">From</span>
+              <input
+                type="date"
+                name="iat"
+                className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
+                defaultValue={formatDateString(task.iat ?? new Date())}
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="w-10 md:w-fit">To</span>
+              <input
+                type="date"
+                name="expiry"
+                className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
+                defaultValue={formatDateString(task.expiry ?? new Date())}
+              />
+            </div>
           </div>
         </div>
         <div className="pb-4 flex items-center">

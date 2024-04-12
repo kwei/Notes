@@ -75,7 +75,7 @@ const Ctx = createContext({
   list: {} as Record<TASK_STATUS, ITodo[]>,
   set2List: () => {},
   removeFromList: () => {},
-  reFetch: () => {},
+  reFetch: async () => {},
 } as ITaskContextValue);
 
 export const useTaskCtx = () => {
@@ -90,17 +90,17 @@ function findTaskIndex(list: ITodo[], item: ITodo) {
 
 function sortTask(list: ITodo[]) {
   return list.sort((a, b) => {
-    if (!a.iat && b.iat) {
+    if (!a.expiry && b.expiry) {
       return 1;
-    } else if (a.iat && !b.iat) {
+    } else if (a.expiry && !b.expiry) {
       return -1;
-    } else if (a.iat && b.iat) {
+    } else if (a.expiry && b.expiry) {
       console.log(
-        new Date(a.iat).getTime(),
-        new Date(b.iat).getTime(),
-        new Date(a.iat).getTime() - new Date(b.iat).getTime(),
+        new Date(a.expiry).getTime(),
+        new Date(b.expiry).getTime(),
+        new Date(a.expiry).getTime() - new Date(b.expiry).getTime(),
       );
-      return new Date(a.iat).getTime() - new Date(b.iat).getTime();
+      return new Date(a.expiry).getTime() - new Date(b.expiry).getTime();
     }
     return 0;
   });

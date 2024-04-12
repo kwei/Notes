@@ -44,15 +44,10 @@ export async function POST(req: Request) {
 
 async function retrieveData(collections: Collection, filter: Partial<ITodo>) {
   const res = await collections.find(filter).toArray();
-  if (res.length === 1) {
+  if (res.length > 0) {
     return {
       status: true,
       message: JSON.stringify(res),
-    };
-  } else if (res.length > 1) {
-    return {
-      status: false,
-      message: "More than one data",
     };
   } else {
     return {
