@@ -1,10 +1,11 @@
-import { MONGODB_LINE_USER_CLIENT } from "@/app/api/mongo/constants";
+import { MONGODB_LINE_USER_URI } from "@/app/api/mongo/constants";
 import { IUser, IMongoQuery, IMongoQueryRes } from "@/type";
 import { NextResponse } from "next/server";
 import { Collection, MongoClient } from "mongodb";
 
 export async function POST(req: Request) {
   console.log("[POST] req url: ", req.url);
+  const MONGODB_LINE_USER_CLIENT = new MongoClient(MONGODB_LINE_USER_URI);
   const doc = (await req.json()) as IMongoQuery<IUser>;
   let res: IMongoQueryRes = {
     status: true,
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
   } catch (e) {
     res = {
       status: false,
-      message: e as string,
+      message: JSON.stringify(e),
     };
   } finally {
     await MONGODB_LINE_USER_CLIENT.close();

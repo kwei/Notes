@@ -49,6 +49,7 @@ interface ITaskContextValue {
   list: Record<TASK_STATUS, ITodo[]>;
   set2List: (status: TASK_STATUS, task: ITodo) => void;
   removeFromList: (status: TASK_STATUS, task: ITodo) => void;
+  reFetch: () => void;
 }
 
 interface ITodo {
@@ -60,10 +61,9 @@ interface ITodo {
   }[];
   status: {
     name: TASK_STATUS;
-    color: TASK_COLOR;
   };
   iat?: Date;
-  expiry?: date;
+  expiry?: Date;
   userEmail: string;
   detail: string;
 }

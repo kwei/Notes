@@ -79,7 +79,7 @@ export const Header = () => {
           </a>
         </div>
       </header>
-      {openNav && <NavMenu onClose={handleCloseNav} />}
+      <NavMenu open={openNav} onClose={handleCloseNav} />
     </>
   );
 };

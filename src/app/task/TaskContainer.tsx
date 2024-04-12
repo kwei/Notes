@@ -3,10 +3,12 @@
 import { useTaskCtx } from "@/app/task/CtxTask";
 import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
+import { TaskModal } from "@/app/task/TaskModal";
 import { ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
 import { formatPeriod } from "@/utils/formatPeriod";
-import { DragEvent, ReactNode, useCallback, useState } from "react";
+import { DragEvent, ReactNode, useCallback, useMemo, useState } from "react";
+import { IoIosAdd } from "react-icons/io";
 
 interface Props {
   className?: string;
@@ -19,6 +21,20 @@ export const TaskContainer = (props: Props) => {
   const { removeFromList, set2List, list } = useTaskCtx();
   const { dragged, setUpdated } = useDraggableTask();
   const [isDragOver, setIsDragOver] = useState(false);
+  const [openContent, setOpenContent] = useState(false);
+
+  const EMPTY_TASK: ITodo = useMemo(
+    () => ({
+      detail: "Take some notes.",
+      userEmail: "",
+      title: "New Task",
+      status: {
+        name: label,
+      },
+      tags: [],
+    }),
+    [label],
+  );
 
   function handleOnDragEnter() {
     setIsDragOver(true);
@@ -48,17 +64,32 @@ export const TaskContainer = (props: Props) => {
     event.preventDefault();
   }
 
+  function handleOpenContent() {
+    setOpenContent(true);
+  }
+
+  function handleCloseContent() {
+    setOpenContent(false);
+  }
+
   return (
     <div
-      role="presentation"
       onDragEnter={handleOnDragEnter}
       onDragLeave={handleOnDragLeave}
       onDragOver={handlePreventDefault}
       onDrop={handleOnDrop}
-      tabIndex={-1}
-      className={`flex flex-col py-2 px-4 gap-4 h-full rounded-3xl transition-colors ${className} ${isDragOver ? "bg-gray-500/30" : "bg-transparent"}`}
+      className={`flex flex-col py-3 px-4 gap-4 h-full w-full transition-colors rounded-xl ${className} ${isDragOver ? "bg-gray-d0-500/20" : "bg-gray-d0-500/10"}`}
     >
-      <span className="pl-4 text-lg font-bold">{label}</span>
+      <div className="pl-4 flex justify-between items-center">
+        <span className="text-lg font-bold">{label}</span>
+        <button
+          type="button"
+          onClick={handleOpenContent}
+          className="transition-colors hover:text-blue-5F-500"
+        >
+          <IoIosAdd className="size-6" />
+        </button>
+      </div>
       {list[label] && children(list[label])}
       {isDragOver && dragged && dragged.status.name !== label && (
         <div className="flex flex-col rounded-2xl md:p-4 p-2 border border-solid border-gray-d0-500/50 pointer-events-none">
@@ -73,6 +104,12 @@ export const TaskContainer = (props: Props) => {
           </div>
         </div>
       )}
+      <TaskModal
+        action="add"
+        open={openContent}
+        task={EMPTY_TASK}
+        onClose={handleCloseContent}
+      />
     </div>
   );
 };

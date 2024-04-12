@@ -1,10 +1,11 @@
-import { MONGODB_LINE_USER_CLIENT } from "@/app/api/mongo/constants";
+import { MONGODB_LINE_USER_URI } from "@/app/api/mongo/constants";
 import { IMongoQuery, IMongoQueryRes, ITodo, IUser } from "@/type";
-import { Collection } from "mongodb";
+import { Collection, MongoClient } from "mongodb";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   console.log("[POST] req url: ", req.url);
+  const MONGODB_LINE_USER_CLIENT = new MongoClient(MONGODB_LINE_USER_URI);
   const doc = (await req.json()) as IMongoQuery<ITodo>;
   let res: IMongoQueryRes = {
     status: true,

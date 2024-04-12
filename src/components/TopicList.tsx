@@ -7,7 +7,7 @@ interface Props {
   className?: string;
 }
 
-export const TopicList = async (props: Props) => {
+export const TopicList = (props: Props) => {
   const { loading, error, articleTable } = useGetArticleList();
 
   return (

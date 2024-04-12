@@ -4,20 +4,45 @@ import { ArticleTree } from "@/components/ArticleTree";
 import { MyInfo } from "@/components/MyInfo";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { useGetArticleList } from "@/hooks/useGetArticleList";
+import { useEffect, useRef } from "react";
 import { MdOutlineArrowBack } from "react-icons/md";
 
 interface Props {
+  open: boolean;
   onClose: () => void;
 }
 
 export const NavMenu = (props: Props) => {
   const ref = useFocusRef<HTMLDivElement>(props.onClose);
   const { loading, error, articleTable } = useGetArticleList();
+  const initRef = useRef(false);
+
+  useEffect(() => {
+    if (props.open) {
+      initRef.current = true;
+      ref.current?.classList.remove("opacity-0");
+      ref.current?.classList.add("opacity-100");
+      setTimeout(
+        () => {
+          ref.current?.classList.remove("animate-slideOut-to-left");
+          ref.current?.classList.add("animate-slideIn-from-left");
+        },
+        initRef.current ? 0 : 150,
+      );
+    } else {
+      ref.current?.classList.remove("animate-slideIn-from-left");
+      ref.current?.classList.add("animate-slideOut-to-left");
+      setTimeout(() => {
+        ref.current?.classList.remove("opacity-100");
+        ref.current?.classList.add("opacity-0");
+      }, 150);
+    }
+  }, [props.open, ref]);
 
   return (
     <div
       ref={ref}
-      className="fixed z-10 flex flex-col left-0 top-0 bottom-0 w-[350px] bg-gray-900 animate-slideIn"
+      className="fixed z-10 flex flex-col left-0 top-0 bottom-0 w-[350px] bg-gray-900 transition-opacity opacity-0"
     >
       <div className="relative w-full flex items-center gap-4 px-4 py-4">
         <MyInfo />

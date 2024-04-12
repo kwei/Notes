@@ -23,8 +23,10 @@ export default function RootLayout({
       <body
         className={`relative w-full h-full min-h-screen text-base flex flex-col ${inter.className}`}
       >
-        <Header />
-        <Suspense>{children}</Suspense>
+        <Suspense>
+          <Header />
+          {children}
+        </Suspense>
       </body>
     </html>
   );

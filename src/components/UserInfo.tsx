@@ -27,17 +27,18 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
   }, [user]);
 
   return (
-    <div className="w-full flex items-center justify-end">
+    <div className="w-full flex items-center justify-end pb-4">
       {user && (
-        <div className="relative group">
+        <div className="relative group flex items-center gap-3">
           <Image
-            className="size-12 rounded-full"
+            className="size-12 rounded-full m-0"
             src={user.image}
             alt="user image"
             title={user.name}
             width={48}
             height={48}
           />
+          <span>Hi, {user.name}</span>
           <button
             className="absolute right-full top-2 mr-2 invisible group-hover:visible transition-all hover:bg-gray-d0-500 hover:text-black whitespace-nowrap rounded-full border border-solid border-gray-d0-500 px-3 py-1"
             onClick={handleSignOut}

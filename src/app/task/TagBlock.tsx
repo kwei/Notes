@@ -11,7 +11,6 @@ export const TagBlock = ({
       style={{
         backgroundColor: tag.color,
       }}
-      key={tag.name}
     >
       {tag.name}
     </span>

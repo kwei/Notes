@@ -1,10 +1,13 @@
 "use client";
 
-import { ITaskContextValue, ITodo } from "@/type";
+import { IMongoQueryRes, ITaskContextValue, ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
+import { getTodoList } from "@/utils/getTodoList";
+import { SessionProvider } from "next-auth/react";
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -13,11 +16,22 @@ import {
 
 interface Props {
   children: ReactNode;
-  contextValue: Record<TASK_STATUS, ITodo[]>;
+  email: string;
 }
 
 export const CtxTask = (props: Props) => {
   const [list, setList] = useState({} as Record<TASK_STATUS, ITodo[]>);
+
+  const fetchList = useCallback(async () => {
+    const taskTable = await fetchTodoList(props.email);
+    if (Object.keys(taskTable).length > 0) {
+      const sorted = {} as Record<TASK_STATUS, ITodo[]>;
+      Object.entries(taskTable).forEach(([key, list]) => {
+        sorted[key as TASK_STATUS] = sortTask(list);
+      });
+      setList(taskTable);
+    }
+  }, [props.email]);
 
   const contextValue = useMemo(
     () => ({
@@ -25,9 +39,7 @@ export const CtxTask = (props: Props) => {
       set2List: (status: TASK_STATUS, task: ITodo) => {
         setList((prevState) => {
           const newState = { ...prevState };
-          const i = newState[status].findIndex(
-            (data) => JSON.stringify(data) === JSON.stringify(task),
-          );
+          const i = findTaskIndex(newState[status], task);
           if (i === -1) newState[status].push(task);
           newState[status] = sortTask(newState[status]);
           return newState;
@@ -36,39 +48,45 @@ export const CtxTask = (props: Props) => {
       removeFromList: (status: TASK_STATUS, task: ITodo) => {
         setList((prevState) => {
           const newState = { ...prevState };
-          const i = newState[status].findIndex(
-            (data) => JSON.stringify(data) === JSON.stringify(task),
-          );
-          if (i !== -1) delete newState[status][i];
+          const i = findTaskIndex(newState[status], task);
+          if (i !== -1) {
+            newState[status].splice(i, 1);
+          }
           return newState;
         });
       },
+      reFetch: fetchList,
     }),
-    [list],
+    [fetchList, list],
   );
 
   useEffect(() => {
-    if (Object.keys(props.contextValue).length > 0) {
-      const sorted = {} as Record<TASK_STATUS, ITodo[]>;
-      Object.entries(props.contextValue).forEach(([key, list]) => {
-        sorted[key as TASK_STATUS] = sortTask(list);
-      });
-      setList(props.contextValue);
-    }
-  }, [props.contextValue]);
+    fetchList().finally();
+  }, [fetchList]);
 
-  return <Ctx.Provider value={contextValue}>{props.children}</Ctx.Provider>;
+  return (
+    <Ctx.Provider value={contextValue}>
+      <SessionProvider>{props.children}</SessionProvider>
+    </Ctx.Provider>
+  );
 };
 
 const Ctx = createContext({
   list: {} as Record<TASK_STATUS, ITodo[]>,
   set2List: () => {},
   removeFromList: () => {},
+  reFetch: () => {},
 } as ITaskContextValue);
 
 export const useTaskCtx = () => {
   return useContext(Ctx);
 };
+
+function findTaskIndex(list: ITodo[], item: ITodo) {
+  return list.findIndex(
+    (data) => JSON.stringify(data) === JSON.stringify(item),
+  );
+}
 
 function sortTask(list: ITodo[]) {
   return list.sort((a, b) => {
@@ -86,4 +104,26 @@ function sortTask(list: ITodo[]) {
     }
     return 0;
   });
+}
+
+async function fetchTodoList(email: string) {
+  return getTodoList({
+    userEmail: email,
+  })
+    .then((res: IMongoQueryRes) => {
+      if (res.status) return JSON.parse(res.message) as ITodo[];
+      return [];
+    })
+    .then((res) => {
+      const _taskTable: Record<TASK_STATUS, ITodo[]> = {
+        [TASK_STATUS.BACKLOG]: [],
+        [TASK_STATUS.NEW_REQUEST]: [],
+        [TASK_STATUS.IN_PROGRESS]: [],
+        [TASK_STATUS.COMPLETE]: [],
+      };
+      res.forEach((task) => {
+        _taskTable[task.status.name].push(task);
+      });
+      return _taskTable;
+    });
 }
