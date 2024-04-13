@@ -36,25 +36,6 @@ export const CtxTask = (props: Props) => {
   const contextValue = useMemo(
     () => ({
       list,
-      set2List: (status: TASK_STATUS, task: ITodo) => {
-        setList((prevState) => {
-          const newState = { ...prevState };
-          const i = findTaskIndex(newState[status], task);
-          if (i === -1) newState[status].push(task);
-          newState[status] = sortTask(newState[status]);
-          return newState;
-        });
-      },
-      removeFromList: (status: TASK_STATUS, task: ITodo) => {
-        setList((prevState) => {
-          const newState = { ...prevState };
-          const i = findTaskIndex(newState[status], task);
-          if (i !== -1) {
-            newState[status].splice(i, 1);
-          }
-          return newState;
-        });
-      },
       reFetch: fetchList,
     }),
     [fetchList, list],
@@ -73,8 +54,6 @@ export const CtxTask = (props: Props) => {
 
 const Ctx = createContext({
   list: {} as Record<TASK_STATUS, ITodo[]>,
-  set2List: () => {},
-  removeFromList: () => {},
   reFetch: async () => {},
 } as ITaskContextValue);
 
@@ -95,11 +74,6 @@ function sortTask(list: ITodo[]) {
     } else if (a.expiry && !b.expiry) {
       return -1;
     } else if (a.expiry && b.expiry) {
-      console.log(
-        new Date(a.expiry).getTime(),
-        new Date(b.expiry).getTime(),
-        new Date(a.expiry).getTime() - new Date(b.expiry).getTime(),
-      );
       return new Date(a.expiry).getTime() - new Date(b.expiry).getTime();
     }
     return 0;

@@ -14,7 +14,7 @@ export default async function Home() {
     : null;
 
   return (
-    <main className="flex w-full flex-1 flex-col p-4">
+    <main className="flex w-full flex-1 flex-col md:p-4">
       <UserInfo user={userInfo} />
       <TaskBoard />
     </main>

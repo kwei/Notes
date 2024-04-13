@@ -4,9 +4,10 @@ import { useTaskCtx } from "@/app/task/CtxTask";
 import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
 import { TaskModal } from "@/app/task/TaskModal";
-import { ITodo } from "@/type";
+import { IMongoQueryRes, ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
 import { formatPeriod } from "@/utils/formatPeriod";
+import { updateTodo } from "@/utils/updateTodo";
 import { DragEvent, ReactNode, useCallback, useMemo, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 
@@ -18,8 +19,8 @@ interface Props {
 
 export const TaskContainer = (props: Props) => {
   const { className = "", label, children } = props;
-  const { removeFromList, set2List, list } = useTaskCtx();
-  const { dragged, setUpdated } = useDraggableTask();
+  const { list, reFetch } = useTaskCtx();
+  const { dragged, setDragged } = useDraggableTask();
   const [isDragOver, setIsDragOver] = useState(false);
   const [openContent, setOpenContent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,8 +43,7 @@ export const TaskContainer = (props: Props) => {
   }
 
   const handleOnDrop = useCallback(() => {
-    if (dragged) {
-      removeFromList(dragged.status.name, dragged);
+    if (dragged && dragged.status.name !== label) {
       const updatedTask: ITodo = {
         ...dragged,
         status: {
@@ -51,11 +51,19 @@ export const TaskContainer = (props: Props) => {
           name: label,
         },
       };
-      setUpdated(updatedTask);
-      set2List(label, updatedTask);
+      setLoading(true);
+      updateTodo(dragged, updatedTask)
+        .then((res: IMongoQueryRes) => {
+          console.log(res.status, JSON.parse(res.message));
+        })
+        .finally(() => {
+          setLoading(false);
+          reFetch().finally();
+          setDragged();
+        });
     }
     setIsDragOver(false);
-  }, [dragged, label, removeFromList, set2List, setUpdated]);
+  }, [dragged, label, reFetch, setDragged]);
 
   function handlePreventDefault(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
