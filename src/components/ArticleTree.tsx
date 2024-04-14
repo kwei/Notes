@@ -6,11 +6,13 @@ import { ArticleTable } from "@/type";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useCallback, useMemo } from "react";
 
-export const ArticleTree = ({
-  articleTable,
-}: {
+interface Props {
   articleTable: ArticleTable;
-}) => {
+  onClose: () => void;
+}
+
+export const ArticleTree = (props: Props) => {
+  const { articleTable, onClose } = props;
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -24,10 +26,11 @@ export const ArticleTree = ({
   const handleOnSelectArticle = useCallback(
     (category: string, topic: string, article: string, id: string) => {
       router.push(
-        `?category=${category}&topic=${topic}&article=${article}&id=${id}`,
+        `/?category=${category}&topic=${topic}&article=${article}&id=${id}`,
       );
+      onClose();
     },
-    [router],
+    [onClose, router],
   );
 
   return (

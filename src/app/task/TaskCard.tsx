@@ -7,9 +7,7 @@ import { TaskModal } from "@/app/task/TaskModal";
 import { IMongoQueryRes, ITodo } from "@/type";
 import { deleteTodo } from "@/utils/deleteTodo";
 import { formatPeriod } from "@/utils/formatPeriod";
-import html2canvas from "html2canvas";
-import Image from "next/image";
-import { useCallback, useState, MouseEvent, DragEvent, createElement } from "react";
+import { useCallback, useState, MouseEvent } from "react";
 import { IoClose, IoTimeOutline } from "react-icons/io5";
 
 interface Props {
@@ -39,7 +37,7 @@ export const TaskCard = (props: Props) => {
   }
 
   const handleOnDragStart = useCallback(
-    (event: DragEvent<HTMLDivElement>) => {
+    (/*event: DragEvent<HTMLDivElement>*/) => {
       // const element = document.getElementById(`task-card-${task.id}`);
       // if (element) {
       //   html2canvas(element).then((canvas) => {
@@ -86,7 +84,7 @@ export const TaskCard = (props: Props) => {
           <button
             disabled={loading}
             onClick={handleOpenContent}
-            className="flex flex-col md:p-4 p-2 w-full z-20 bg-gray-800 rounded-2xl"
+            className="flex flex-col md:p-4 p-3 w-full z-20 bg-gray-800 rounded-2xl"
           >
             <span className="font-semibold">{task.title}</span>
             <div className="flex items-center gap-1 py-1">

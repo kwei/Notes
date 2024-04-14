@@ -42,7 +42,7 @@ export const NavMenu = (props: Props) => {
   return (
     <div
       ref={ref}
-      className="fixed z-10 flex flex-col left-0 top-0 bottom-0 w-[350px] bg-gray-900 transition-opacity opacity-0"
+      className="fixed z-50 flex flex-col left-0 top-0 bottom-0 w-[350px] bg-gray-900 transition-opacity opacity-0"
     >
       <div className="relative w-full flex items-center gap-4 px-4 py-4">
         <MyInfo />
@@ -67,7 +67,7 @@ export const NavMenu = (props: Props) => {
           <span className="animate-spin size-6 rounded-full border-2 border-t-0 border-l-0 border-solid border-gray-400"></span>
         </div>
       )}
-      <ArticleTree articleTable={articleTable} />
+      <ArticleTree articleTable={articleTable} onClose={props.onClose} />
     </div>
   );
 };
