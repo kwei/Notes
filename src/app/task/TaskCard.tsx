@@ -63,8 +63,9 @@ export const TaskCard = (props: Props) => {
         console.log(res.status, JSON.parse(res.message));
       })
       .finally(() => {
-        setLoading(false);
-        reFetch().finally();
+        reFetch().finally(() => {
+          setLoading(false);
+        });
       });
   }
 
