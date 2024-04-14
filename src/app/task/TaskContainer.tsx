@@ -8,7 +8,7 @@ import { IMongoQueryRes, ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
 import { formatPeriod } from "@/utils/formatPeriod";
 import { updateTodo } from "@/utils/updateTodo";
-import { DragEvent, ReactNode, useCallback, useMemo, useState } from "react";
+import { DragEvent, ReactNode, useCallback, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 
 interface Props {
@@ -57,8 +57,9 @@ export const TaskContainer = (props: Props) => {
           console.log(res.status, JSON.parse(res.message));
         })
         .finally(() => {
-          setLoading(false);
-          reFetch().finally();
+          reFetch().finally(() => {
+            setLoading(false);
+          });
           setDragged();
         });
     }
