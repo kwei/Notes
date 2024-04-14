@@ -8,7 +8,7 @@ import { Fragment, useCallback, useMemo } from "react";
 
 interface Props {
   articleTable: ArticleTable;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export const ArticleTree = (props: Props) => {
@@ -28,7 +28,7 @@ export const ArticleTree = (props: Props) => {
       router.push(
         `/?category=${category}&topic=${topic}&article=${article}&id=${id}`,
       );
-      onClose();
+      if (onClose) onClose();
     },
     [onClose, router],
   );
