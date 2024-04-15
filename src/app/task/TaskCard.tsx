@@ -88,7 +88,7 @@ export const TaskCard = (props: Props) => {
       >
         <div className="relative flex items-center justify-center p-px">
           <div
-            className={`absolute size-[300px] from-blue-90-500 via-green-50-500 to-red-ff-300 ${loading ? "animate-spin bg-gradient-conic" : "bg-gray-800"}`}
+            className={`absolute w-screen h-screen from-blue-90-500 via-green-50-500 to-red-ff-300 ${loading ? "animate-spin bg-gradient-conic" : "bg-gray-800"}`}
           ></div>
           <button
             disabled={loading}
