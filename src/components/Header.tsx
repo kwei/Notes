@@ -3,19 +3,19 @@
 import { Dropdown } from "@/components/Dropdown";
 import { MyInfo } from "@/components/MyInfo";
 import { NavMenu } from "@/components/NavMenu";
-import { ROUTES } from "@/utils/constants";
+import { ROUTE_TABLE, ROUTES } from "@/utils/constants";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { MdLaunch, MdMenu } from "react-icons/md";
 
 export const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [openNav, setOpenNav] = useState(false);
   const [route, setRoute] = useState("NOTES");
 
   function handleOnChangeRoute(_route: string) {
-    setRoute(_route);
     router.push(ROUTES[_route]);
   }
 
@@ -26,6 +26,10 @@ export const Header = () => {
   function handleCloseNav() {
     setOpenNav(false);
   }
+
+  useEffect(() => {
+    setRoute(ROUTE_TABLE[pathname]);
+  }, [pathname]);
 
   return (
     <>

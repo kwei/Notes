@@ -4,6 +4,12 @@ export const ROUTES: Record<string, string> = {
   Task: "/task",
 };
 
+export const ROUTE_TABLE: Record<string, string> = {
+  "/": "Notes",
+  "/profile": "Profile",
+  "/task": "Task"
+}
+
 export enum TASK_STATUS {
   COMPLETE = "Complete",
   IN_PROGRESS = "In Progress",
