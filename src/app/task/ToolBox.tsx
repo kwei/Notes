@@ -1,25 +1,13 @@
 "use client";
 
-import { useTaskCtx } from "@/app/task/CtxTask";
-import { useDraggableTask } from "@/app/task/DraggableTask";
-import { IMongoQueryRes } from "@/type";
-import { updateTodo } from "@/utils/updateTodo";
 import { HTMLAttributes, ReactNode, useCallback } from "react";
 import { IoMdDownload } from "react-icons/io";
-import { IoSaveOutline, IoSyncOutline } from "react-icons/io5";
 
 interface Props {
   className?: string;
 }
 
 export const ToolBox = ({ className = "" }: Props) => {
-  const { dragged, updated, setUpdated, setDragged } = useDraggableTask();
-  const { reFetch } = useTaskCtx();
-
-  const reFresh = useCallback(() => {
-    reFetch().finally();
-  }, [reFetch]);
-
   const save = useCallback(() => {}, []);
 
   return (
@@ -28,9 +16,6 @@ export const ToolBox = ({ className = "" }: Props) => {
     >
       <ActionBtn onClick={save} title="Save">
         <IoMdDownload className="size-5" />
-      </ActionBtn>
-      <ActionBtn onClick={reFresh} title="Sync">
-        <IoSyncOutline className="size-5" />
       </ActionBtn>
     </div>
   );

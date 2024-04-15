@@ -82,3 +82,7 @@ interface IMongoQueryRes {
   status: boolean;
   message: string;
 }
+
+interface MetaConfig {
+
+}

@@ -180,7 +180,7 @@ export const TaskModal = (props: Props) => {
           <input
             type="text"
             name="title"
-            className="text-2xl border border-solid bg-transparent border-transparent transition-all hover:border-gray-d0-500"
+            className="text-2xl border pr-6 border-solid bg-transparent border-transparent transition-all hover:border-gray-d0-500"
             defaultValue={task.title}
           />
         </div>

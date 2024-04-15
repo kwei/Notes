@@ -7,7 +7,7 @@ import { TaskModal } from "@/app/task/TaskModal";
 import { IMongoQueryRes, ITodo } from "@/type";
 import { deleteTodo } from "@/utils/deleteTodo";
 import { formatPeriod } from "@/utils/formatPeriod";
-import { useCallback, useState, MouseEvent } from "react";
+import { useCallback, useState, MouseEvent, DragEvent, useRef } from "react";
 import { IoClose, IoTimeOutline } from "react-icons/io5";
 
 interface Props {
@@ -20,6 +20,7 @@ export const TaskCard = (props: Props) => {
   const { task } = props;
   const { setDragged } = useDraggableTask();
   const { reFetch } = useTaskCtx();
+  const ghostImageRef = useRef<HTMLDivElement>();
   const [openContent, setOpenContent] = useState(false);
   const [isDragged, setIsDragged] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,14 +38,19 @@ export const TaskCard = (props: Props) => {
   }
 
   const handleOnDragStart = useCallback(
-    (/*event: DragEvent<HTMLDivElement>*/) => {
-      // const element = document.getElementById(`task-card-${task.id}`);
-      // if (element) {
-      //   html2canvas(element).then((canvas) => {
-      //     const img = createElement('img')
-      //     event.dataTransfer.setDragImage(canvas.toDataURL('image/png'), 0, 0);
-      //   });
-      // }
+    (event: DragEvent<HTMLDivElement>) => {
+      const element = event.target as HTMLDivElement;
+      const ghostElement = element.cloneNode(true) as HTMLDivElement;
+      ghostImageRef.current = ghostElement;
+      ghostElement.classList.add("!fixed", "-left-full");
+      ghostElement.style.width = element.getBoundingClientRect().width + "px";
+      ghostElement.style.height = element.getBoundingClientRect().height + "px";
+      document.body.appendChild(ghostElement);
+      event.dataTransfer.setDragImage(
+        ghostElement,
+        event.clientX - element.getBoundingClientRect().left,
+        event.clientY - element.getBoundingClientRect().top,
+      );
       setDragged(task);
       setIsDragged(true);
     },
@@ -52,6 +58,9 @@ export const TaskCard = (props: Props) => {
   );
 
   function handleOnDragEnd() {
+    if (ghostImageRef.current) {
+      ghostImageRef.current.remove();
+    }
     setIsDragged(false);
   }
 
@@ -72,7 +81,6 @@ export const TaskCard = (props: Props) => {
   return (
     <>
       <div
-        id={`task-card-${task.id}`}
         draggable={true}
         onDragStart={handleOnDragStart}
         onDragEnd={handleOnDragEnd}

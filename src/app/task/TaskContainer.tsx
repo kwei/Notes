@@ -10,12 +10,15 @@ import { formatPeriod } from "@/utils/formatPeriod";
 import { updateTodo } from "@/utils/updateTodo";
 import { DragEvent, ReactNode, useCallback, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
+import { IoTimeOutline } from "react-icons/io5";
 
 interface Props {
   className?: string;
   label: TASK_STATUS;
   children: (taskList: ITodo[]) => ReactNode;
 }
+
+const TODAY = new Date().getTime();
 
 export const TaskContainer = (props: Props) => {
   const { className = "", label, children } = props;
@@ -113,8 +116,13 @@ export const TaskContainer = (props: Props) => {
       {isDragOver && dragged && dragged.status.name !== label && (
         <div className="flex flex-col rounded-2xl md:p-4 p-2 border border-solid border-gray-d0-500/50 pointer-events-none">
           <span className="font-semibold">{dragged.title}</span>
-          <div className="text-xs text-gray-d0-500/50">
-            {formatPeriod(dragged.iat, dragged.expiry)}
+          <div className="flex items-center gap-1 py-1">
+            <IoTimeOutline
+              className={`size-4 ${new Date(dragged.expiry ?? new Date()).getTime() < TODAY ? "text-red-ff-500" : "text-gray-500"}`}
+            />
+            <span className="text-xs text-gray-d0-500/50 text-start break-words">
+              {formatPeriod(dragged.iat, dragged.expiry)}
+            </span>
           </div>
           <div className="flex items-center flex-wrap mt-2 gap-2">
             {dragged.tags.map((tag) => (
