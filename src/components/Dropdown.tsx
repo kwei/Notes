@@ -7,7 +7,6 @@ import {
   ReactNode,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -41,6 +40,7 @@ export const Dropdown = (props: Props) => {
   } = props;
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
   const ref = useFocusRef<HTMLDivElement>(() => {
     setOpen(false);
   });
@@ -73,6 +73,7 @@ export const Dropdown = (props: Props) => {
     <div ref={ref} className="relative">
       <button
         {...legacy}
+        ref={btnRef}
         onClick={handleTriggerMenu}
         type="button"
         className={`flex items-center gap-3 transition-all ${className}`}
@@ -87,7 +88,10 @@ export const Dropdown = (props: Props) => {
       <DropdownContext.Provider value={contextValue}>
         <div
           ref={menuRef}
-          className={`rounded-lg z-50 absolute top-full origin-top left-0 whitespace-nowrap flex flex-col gap-2.5 mt-2 bg-gray-800 overflow-x-hidden overflow-y-auto p-2.5 transition-all ${open ? "scale-y-100" : "scale-y-0"}`}
+          className={`rounded-lg z-40 absolute top-full origin-top left-0 whitespace-nowrap flex flex-col gap-2.5 mt-2 bg-gray-800 overflow-x-hidden overflow-y-auto p-2.5 transition-all ${open ? "scale-y-100" : "scale-y-0"}`}
+          style={{
+            minWidth: btnRef?.current?.getBoundingClientRect().width + "px",
+          }}
         >
           {children}
         </div>

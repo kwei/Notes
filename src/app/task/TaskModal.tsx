@@ -4,7 +4,12 @@ import { useTaskCtx } from "@/app/task/CtxTask";
 import { Dropdown } from "@/components/Dropdown";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { IMongoQueryRes, ITodo } from "@/type";
-import { COLOR_TABLE, TASK_COLOR, TASK_STATUS } from "@/utils/constants";
+import {
+  COLOR_TABLE,
+  TASK_COLOR,
+  TASK_STATUS,
+  TASK_TABLE,
+} from "@/utils/constants";
 import { setTodo } from "@/utils/setTodo";
 import { updateTodo } from "@/utils/updateTodo";
 import { useSession } from "next-auth/react";
@@ -45,7 +50,7 @@ export const TaskModal = (props: Props) => {
     const formData = new FormData(event.target as HTMLFormElement);
     const title = (formData.get("title") ?? task.title) as string;
     const status = {
-      name: (formData.get("Status-text") ?? task.status.name) as TASK_STATUS,
+      name: (formData.get("status") ?? task.status.name) as TASK_STATUS,
     };
     const tags = JSON.parse(newTags) as { name: string; color: TASK_COLOR }[];
     const iat = formData.get("iat")
@@ -179,27 +184,22 @@ export const TaskModal = (props: Props) => {
             defaultValue={task.title}
           />
         </div>
-        <div className="pb-4 flex items-end gap-4 flex-wrap">
-          <TagPicker label="Status" value={task.status.name} />
+        <div className="pb-4 flex items-center gap-4 flex-wrap">
+          <StatusPicker value={task.status.name} />
           <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-4">
-              <span className="w-10">From</span>
-              <input
-                type="date"
-                name="iat"
-                className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
-                defaultValue={formatDateString(task.iat ?? new Date())}
-              />
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="w-10 md:w-fit">To</span>
-              <input
-                type="date"
-                name="expiry"
-                className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
-                defaultValue={formatDateString(task.expiry ?? new Date())}
-              />
-            </div>
+            <input
+              type="date"
+              name="iat"
+              className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
+              defaultValue={formatDateString(task.iat ?? new Date())}
+            />
+            <span>-</span>
+            <input
+              type="date"
+              name="expiry"
+              className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
+              defaultValue={formatDateString(task.expiry ?? new Date())}
+            />
           </div>
         </div>
         <div className="pb-4 flex items-center">
@@ -269,7 +269,7 @@ interface TagPickerProps {
   label: string;
   value?: string;
   color?: string;
-  addOne?: (data: { name: string; color: string }) => void;
+  addOne: (data: { name: string; color: string }) => void;
 }
 
 const TagPicker = (props: TagPickerProps) => {
@@ -300,38 +300,64 @@ const TagPicker = (props: TagPickerProps) => {
   return (
     <div className="rounded-lg flex flex-col gap-2 w-full md:w-fit">
       <span>{label}</span>
-      <div className="flex items-center flex-wrap gap-4">
-        {color && (
-          <>
+      <div className="flex items-center flex-wrap gap-2">
+        <div className="relative">
+          <input
+            name={`${label}-text`}
+            type="text"
+            className="p-2 px-10 bg-transparent border border-solid border-gray-d0-500 rounded-md"
+            value={text}
+            onChange={handleOnChangeText}
+          />
+          <div className="absolute left-3 top-0 bottom-0 flex items-center justify-center">
             <ColorSelector
               onChange={handleOnChangeColor}
               color={selectedColor}
             />
-            <input
-              name={`${label}-color`}
-              className="invisible w-0 h-0"
-              type="text"
-              value={selectedColor ?? ""}
-              readOnly
-            />
-          </>
-        )}
+          </div>
+        </div>
         <input
-          name={`${label}-text`}
+          name={`${label}-color`}
+          className="invisible w-0 h-0"
           type="text"
-          className="p-2 bg-transparent border border-solid border-gray-d0-500 rounded-md"
-          value={text}
-          onChange={handleOnChangeText}
+          value={selectedColor ?? ""}
+          readOnly
         />
-        {addOne && (
-          <button
-            type="button"
-            onClick={handleAddOne}
-            className="border border-solid border-gray-d0-500 rounded-md px-6 py-2 w-full md:w-fit transition-colors hover:bg-gray-d0-500 hover:text-black active:bg-transparent active:text-gray-d0-500"
-          >
-            Add Tag
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={handleAddOne}
+          className="border border-solid border-gray-d0-500 rounded-md size-10 transition-colors hover:bg-gray-d0-500 hover:text-black active:bg-transparent active:text-gray-d0-500"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+};
+
+interface StatusPickerProps {
+  value: TASK_STATUS;
+}
+
+const StatusPicker = (props: StatusPickerProps) => {
+  const { value } = props;
+  const [text, setText] = useState(value);
+
+  function handleOnChange(option: string) {
+    setText(option as TASK_STATUS);
+  }
+
+  return (
+    <div className="rounded-lg flex items-center gap-2 w-full md:w-fit">
+      <div className="flex items-center flex-wrap gap-4">
+        <StatusSelector status={text} onChange={handleOnChange} />
+        <input
+          name="status"
+          className="invisible w-0 h-0"
+          type="text"
+          value={text ?? ""}
+          readOnly
+        />
       </div>
     </div>
   );
@@ -349,7 +375,7 @@ const ColorSelector = ({
       onChange={onChange}
       value={color}
       option={{ showTriangle: false, showValue: false }}
-      className="rounded-lg p-3 shadow-sm shadow-black border border-solid border-gray-d0-500"
+      className="rounded-md p-2 shadow-sm border border-solid border-gray-d0-500"
       style={{
         backgroundColor: color ?? "#D0D0D0",
       }}
@@ -368,6 +394,26 @@ const ColorSelector = ({
             ></span>
           }
         />
+      ))}
+    </Dropdown>
+  );
+};
+
+const StatusSelector = ({
+  onChange,
+  status,
+}: {
+  onChange: (option: string) => void;
+  status: TASK_STATUS;
+}) => {
+  return (
+    <Dropdown
+      onChange={onChange}
+      value={status}
+      className="rounded-lg p-3 shadow-sm shadow-black border border-solid border-gray-d0-500"
+    >
+      {Object.entries(TASK_TABLE).map(([label, value]) => (
+        <Dropdown.Option key={label} label={label} value={value} />
       ))}
     </Dropdown>
   );

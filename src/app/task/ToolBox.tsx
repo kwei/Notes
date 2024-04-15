@@ -17,31 +17,15 @@ export const ToolBox = ({ className = "" }: Props) => {
   const { reFetch } = useTaskCtx();
 
   const reFresh = useCallback(() => {
-    reFetch();
+    reFetch().finally();
   }, [reFetch]);
-
-  const update = useCallback(() => {
-    if (dragged && updated) {
-      updateTodo(dragged, updated)
-        .then((res: IMongoQueryRes) => {
-          console.log(res.status, JSON.parse(res.message));
-        })
-        .finally(() => {
-          setUpdated();
-          setDragged();
-        });
-    }
-  }, [dragged, setDragged, setUpdated, updated]);
 
   const save = useCallback(() => {}, []);
 
   return (
     <div
-      className={`w-full flex items-center justify-end gap-5 bg-gray-800 p-3 pr-5 rounded-t-3xl ${className}`}
+      className={`w-full flex items-center justify-end gap-5 bg-gray-800 p-3 pr-5 md:rounded-t-3xl ${className}`}
     >
-      <ActionBtn onClick={update} title="Update">
-        <IoSaveOutline className="size-5" />
-      </ActionBtn>
       <ActionBtn onClick={save} title="Save">
         <IoMdDownload className="size-5" />
       </ActionBtn>

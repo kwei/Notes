@@ -36,10 +36,20 @@ export const TaskCard = (props: Props) => {
     setLoading(status);
   }
 
-  const handleOnDragStart = useCallback(() => {
-    setDragged(task);
-    setIsDragged(true);
-  }, [setDragged, task]);
+  const handleOnDragStart = useCallback(
+    (/*event: DragEvent<HTMLDivElement>*/) => {
+      // const element = document.getElementById(`task-card-${task.id}`);
+      // if (element) {
+      //   html2canvas(element).then((canvas) => {
+      //     const img = createElement('img')
+      //     event.dataTransfer.setDragImage(canvas.toDataURL('image/png'), 0, 0);
+      //   });
+      // }
+      setDragged(task);
+      setIsDragged(true);
+    },
+    [setDragged, task],
+  );
 
   function handleOnDragEnd() {
     setIsDragged(false);
@@ -53,14 +63,16 @@ export const TaskCard = (props: Props) => {
         console.log(res.status, JSON.parse(res.message));
       })
       .finally(() => {
-        setLoading(false);
-        reFetch().finally();
+        reFetch().finally(() => {
+          setLoading(false);
+        });
       });
   }
 
   return (
     <>
       <div
+        id={`task-card-${task.id}`}
         draggable={true}
         onDragStart={handleOnDragStart}
         onDragEnd={handleOnDragEnd}
@@ -68,19 +80,19 @@ export const TaskCard = (props: Props) => {
       >
         <div className="relative flex items-center justify-center p-px">
           <div
-            className={`absolute size-[300px] animate-spin from-blue-90-500 via-green-50-500 to-red-ff-300 ${loading ? "bg-gradient-conic" : "bg-gray-800"}`}
+            className={`absolute size-[300px] from-blue-90-500 via-green-50-500 to-red-ff-300 ${loading ? "animate-spin bg-gradient-conic" : "bg-gray-800"}`}
           ></div>
           <button
             disabled={loading}
             onClick={handleOpenContent}
-            className="flex flex-col md:p-4 p-2 w-full z-20 bg-gray-800 rounded-2xl"
+            className="flex flex-col md:p-4 p-3 w-full z-20 bg-gray-800 rounded-2xl"
           >
             <span className="font-semibold">{task.title}</span>
             <div className="flex items-center gap-1 py-1">
               <IoTimeOutline
                 className={`size-4 ${new Date(task.expiry ?? new Date()).getTime() < TODAY ? "text-red-ff-500" : "text-gray-500"}`}
               />
-              <span className="text-xs text-gray-d0-500/50">
+              <span className="text-xs text-gray-d0-500/50 text-start break-words">
                 {formatPeriod(task.iat, task.expiry)}
               </span>
             </div>

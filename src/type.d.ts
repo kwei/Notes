@@ -47,8 +47,6 @@ interface Task {
 
 interface ITaskContextValue {
   list: Record<TASK_STATUS, ITodo[]>;
-  set2List: (status: TASK_STATUS, task: ITodo) => void;
-  removeFromList: (status: TASK_STATUS, task: ITodo) => void;
   reFetch: () => Promise<void>;
 }
 
