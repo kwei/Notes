@@ -1,14 +1,14 @@
 export const ROUTES: Record<string, string> = {
-  Notes: "/",
-  Profile: "/profile",
-  Task: "/task",
+  "My Notes": "/",
+  // "My Profile": "/profile",
+  "Task Manager": "/task",
 };
 
 export const ROUTE_TABLE: Record<string, string> = {
-  "/": "Notes",
-  "/profile": "Profile",
-  "/task": "Task"
-}
+  "/": "My Notes",
+  // "/profile": "My Profile",
+  "/task": "Task Manager",
+};
 
 export enum TASK_STATUS {
   COMPLETE = "Complete",

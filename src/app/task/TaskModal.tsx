@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import {
   ChangeEvent,
   FormEvent,
+  KeyboardEvent,
   useCallback,
   useEffect,
   useRef,
@@ -297,6 +298,16 @@ const TagPicker = (props: TagPickerProps) => {
     }
   }, [addOne, selectedColor, text]);
 
+  const handleOnEnterText = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleAddOne();
+      }
+    },
+    [handleAddOne],
+  );
+
   return (
     <div className="rounded-lg flex flex-col gap-2 w-full md:w-fit">
       <span>{label}</span>
@@ -307,6 +318,7 @@ const TagPicker = (props: TagPickerProps) => {
             type="text"
             className="p-2 px-10 bg-transparent border border-solid border-gray-d0-500 rounded-md"
             value={text}
+            onKeyDown={handleOnEnterText}
             onChange={handleOnChangeText}
           />
           <div className="absolute left-3 top-0 bottom-0 flex items-center justify-center">
@@ -375,7 +387,7 @@ const ColorSelector = ({
       onChange={onChange}
       value={color}
       option={{ showTriangle: false, showValue: false }}
-      className="rounded-md p-2 shadow-sm border border-solid border-gray-d0-500"
+      className="rounded-md p-2 border border-solid border-gray-d0-500"
       style={{
         backgroundColor: color ?? "#D0D0D0",
       }}
@@ -410,7 +422,7 @@ const StatusSelector = ({
     <Dropdown
       onChange={onChange}
       value={status}
-      className="rounded-lg p-3 shadow-sm shadow-black border border-solid border-gray-d0-500"
+      className="rounded-lg p-3 shadow-sm border border-solid border-gray-d0-500"
     >
       {Object.entries(TASK_TABLE).map(([label, value]) => (
         <Dropdown.Option key={label} label={label} value={value} />

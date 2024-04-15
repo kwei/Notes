@@ -39,7 +39,7 @@ export const Header = () => {
             <MdMenu className="w-full h-full group-hover:text-blue-5F-500 transition-all" />
           </button>
           <MyInfo />
-          <nav className="max-lg:hidden flex items-center ml-4 pl-8 gap-4 border-l-2 border-solid border-gray-500">
+          <nav className="max-lg:hidden flex items-center ml-4 pl-8 gap-6 border-l-2 border-solid border-gray-500">
             {Object.entries(ROUTES).map(([label, path]) => (
               <Link
                 key={label}
@@ -55,7 +55,7 @@ export const Header = () => {
           <Dropdown
             onChange={handleOnChangeRoute}
             value={route}
-            className="rounded-lg border border-solid border-gray-d0-500 text-center w-[150px] py-2 hover:border-green-50-500 hover:text-green-50-500"
+            className="rounded-lg border border-solid border-gray-d0-500 text-center w-fit p-2 hover:border-green-50-500 hover:text-green-50-500"
           >
             {Object.entries(ROUTES).map(([label]) => (
               <Dropdown.Option key={label} value={label} />
