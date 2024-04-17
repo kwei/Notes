@@ -145,13 +145,8 @@ export const TaskModal = (props: Props) => {
       initRef.current = true;
       ref.current?.classList.remove("opacity-0");
       ref.current?.classList.add("opacity-100");
-      setTimeout(
-        () => {
-          ref.current?.classList.remove("animate-slideOut-to-bottom");
-          ref.current?.classList.add("animate-slideIn-from-bottom");
-        },
-        initRef.current ? 0 : 150,
-      );
+      ref.current?.classList.remove("animate-slideOut-to-bottom");
+      ref.current?.classList.add("animate-slideIn-from-bottom");
     } else {
       ref.current?.classList.remove("animate-slideIn-from-bottom");
       ref.current?.classList.add("animate-slideOut-to-bottom");
@@ -159,6 +154,7 @@ export const TaskModal = (props: Props) => {
         ref.current?.classList.remove("opacity-100");
         ref.current?.classList.add("opacity-0");
       }, 150);
+      setNewTags(JSON.stringify(task.tags));
     }
   }, [props.open, ref]);
 
