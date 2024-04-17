@@ -193,14 +193,14 @@ export const TaskModal = (props: Props) => {
               type="date"
               name="iat"
               className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
-              defaultValue={formatDateString(task.iat ?? new Date())}
+              defaultValue={task.iat ? formatDateString(task.iat) : ""}
             />
             <span>-</span>
             <input
               type="date"
               name="expiry"
               className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
-              defaultValue={formatDateString(task.expiry ?? new Date())}
+              defaultValue={task.expiry ? formatDateString(task.expiry) : ""}
             />
           </div>
         </div>
