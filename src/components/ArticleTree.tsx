@@ -33,15 +33,14 @@ export const ArticleTree = (props: Props) => {
     [onClose, router],
   );
 
+  const topCategory = useMemo(() => articleTable["Static"], [articleTable]);
+
   return (
     <Fragment>
-      {Object.entries(articleTable).map(([category, topics]) => (
-        <div
-          key={category}
-          className="w-full flex flex-col gap-4 border-b border-solid border-gray-500 p-4"
-        >
-          <label>{category}</label>
-          {Object.entries(topics).map(([topic, files]) => (
+      {topCategory && (
+        <div className="w-full flex flex-col gap-4 border-b border-solid border-gray-500 p-4">
+          <label>Static</label>
+          {Object.entries(topCategory).map(([topic, files]) => (
             <CollapseContainer
               key={topic}
               label={topic}
@@ -52,7 +51,7 @@ export const ArticleTree = (props: Props) => {
                 <ArticleButton
                   key={file.name}
                   file={file}
-                  category={category}
+                  category="Static"
                   topic={topic}
                   selected={articleName === file.name}
                   onClick={handleOnSelectArticle}
@@ -61,7 +60,38 @@ export const ArticleTree = (props: Props) => {
             </CollapseContainer>
           ))}
         </div>
-      ))}
+      )}
+
+      {Object.entries(articleTable).map(([category, topics]) => {
+        if (category === "Static") return null;
+        return (
+          <div
+            key={category}
+            className="w-full flex flex-col gap-4 border-b border-solid border-gray-500 p-4"
+          >
+            <label>{category}</label>
+            {Object.entries(topics).map(([topic, files]) => (
+              <CollapseContainer
+                key={topic}
+                label={topic}
+                className="ml-2"
+                open={articleTopic === topic}
+              >
+                {files.map((file) => (
+                  <ArticleButton
+                    key={file.name}
+                    file={file}
+                    category={category}
+                    topic={topic}
+                    selected={articleName === file.name}
+                    onClick={handleOnSelectArticle}
+                  />
+                ))}
+              </CollapseContainer>
+            ))}
+          </div>
+        );
+      })}
     </Fragment>
   );
 };
