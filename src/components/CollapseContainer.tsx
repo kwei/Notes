@@ -29,7 +29,7 @@ export const CollapseContainer = (props: Props) => {
       >
         {props.label}
         <MdNavigateNext
-          className={`size-4 transition-all ${open ? "rotate-90" : "rotate-0"}`}
+          className={`size-4 transition-all ${props.open ? "rotate-90" : "rotate-0"}`}
         />
       </summary>
       <ul className="w-full flex flex-col pl-2 mt-2 gap-2 m-0">
