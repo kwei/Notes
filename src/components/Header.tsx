@@ -44,7 +44,7 @@ export const Header = () => {
               <Link
                 key={label}
                 href={path}
-                className="hover:text-green-50-500 no-underline text-gray-d0-500 transition-colors"
+                className={`no-underline text-gray-d0-500 transition-colors ${route === label ? 'text-green-50-500' : 'hover:text-green-50-500'}`}
               >
                 {label}
               </Link>
