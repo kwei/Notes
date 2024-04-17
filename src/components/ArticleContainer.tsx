@@ -1,5 +1,6 @@
 "use client";
 
+import { Loading } from "@/components/Loading";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import parse from "html-react-parser";
@@ -35,11 +36,7 @@ export const ArticleContainer = () => {
   }, [article]);
 
   if (loading) {
-    return (
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        <span className="animate-spin size-6 rounded-full border-2 border-t-0 border-l-0 border-solid border-gray-400"></span>
-      </div>
-    );
+    return <Loading />;
   } else if (!article) return null;
 
   return (

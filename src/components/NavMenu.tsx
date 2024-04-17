@@ -1,6 +1,7 @@
 "use client";
 
 import { ArticleTree } from "@/components/ArticleTree";
+import { Loading } from "@/components/Loading";
 import { MyInfo } from "@/components/MyInfo";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { useGetArticleList } from "@/hooks/useGetArticleList";
@@ -62,11 +63,7 @@ export const NavMenu = (props: Props) => {
           <span>{error}</span>
         </div>
       )}
-      {loading && (
-        <div className="w-full flex flex-col items-center p-4">
-          <span className="animate-spin size-6 rounded-full border-2 border-t-0 border-l-0 border-solid border-gray-400"></span>
-        </div>
-      )}
+      {loading && <Loading />}
       <ArticleTree articleTable={articleTable} onClose={props.onClose} />
     </div>
   );
