@@ -2,6 +2,7 @@ import { CtxTask } from "@/app/task/CtxTask";
 import { TaskBoard } from "@/app/task/TaskBoard";
 import { ToolBox } from "@/app/task/ToolBox";
 import { DraggableTask } from "@/app/task/DraggableTask";
+import { ToolCtxProvider } from "@/app/task/ToolCtxProvider";
 import { getServerSession } from "next-auth";
 
 export const TaskBoardContainer = async () => {
@@ -12,8 +13,10 @@ export const TaskBoardContainer = async () => {
   return (
     <CtxTask email={email}>
       <DraggableTask>
-        <ToolBox />
-        <TaskBoard />
+        <ToolCtxProvider>
+          <ToolBox />
+          <TaskBoard />
+        </ToolCtxProvider>
       </DraggableTask>
     </CtxTask>
   );

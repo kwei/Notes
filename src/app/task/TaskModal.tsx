@@ -10,6 +10,7 @@ import {
   TASK_STATUS,
   TASK_TABLE,
 } from "@/utils/constants";
+import { formatDateString } from "@/utils/formatDateString";
 import { setTodo } from "@/utils/setTodo";
 import { updateTodo } from "@/utils/updateTodo";
 import { useSession } from "next-auth/react";
@@ -430,9 +431,3 @@ const StatusSelector = ({
     </Dropdown>
   );
 };
-
-function formatDateString(date: Date) {
-  const day = ("0" + new Date(date).getDate()).slice(-2);
-  const month = ("0" + (new Date(date).getMonth() + 1)).slice(-2);
-  return `${new Date(date).getFullYear()}-${month}-${day}`;
-}

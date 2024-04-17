@@ -61,12 +61,6 @@ export const useTaskCtx = () => {
   return useContext(Ctx);
 };
 
-function findTaskIndex(list: ITodo[], item: ITodo) {
-  return list.findIndex(
-    (data) => JSON.stringify(data) === JSON.stringify(item),
-  );
-}
-
 function sortTask(list: ITodo[]) {
   return list.sort((a, b) => {
     if (!a.expiry && b.expiry) {

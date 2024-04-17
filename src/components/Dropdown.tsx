@@ -79,16 +79,20 @@ export const Dropdown = (props: Props) => {
         className={`flex items-center gap-3 transition-all ${className}`}
       >
         {option?.showValue && (
-          <span className="flex-1">{value ?? placeHolder ?? "Select One"}</span>
+          <span className="flex-1 pr-5 pl-2 whitespace-nowrap overflow-hidden text-ellipsis text-left">
+            {value ?? placeHolder ?? "Select One"}
+          </span>
         )}
         {option?.showTriangle && (
-          <IoTriangle className="size-3 rotate-180 mx-2.5" />
+          <div className="absolute top-0 bottom-0 right-0 flex items-center justify-center">
+            <IoTriangle className="size-3 rotate-180 mx-2.5" />
+          </div>
         )}
       </button>
       <DropdownContext.Provider value={contextValue}>
         <div
           ref={menuRef}
-          className={`rounded-lg z-40 absolute top-full origin-top left-0 whitespace-nowrap flex flex-col gap-2.5 mt-2 bg-gray-800 overflow-x-hidden overflow-y-auto p-2.5 transition-all ${open ? "scale-y-100" : "scale-y-0"}`}
+          className={`rounded-lg z-40 absolute top-full origin-top left-0 whitespace-nowrap flex flex-col gap-2.5 mt-2 bg-gray-800 overflow-x-hidden overflow-y-auto p-2.5 transition-all shadow-md border border-solid border-gray-900 ${open ? "scale-y-100" : "scale-y-0"}`}
           style={{
             minWidth: btnRef?.current?.getBoundingClientRect().width + "px",
           }}
@@ -112,6 +116,11 @@ const Option = (props: OptionProps) => {
   const { label, value, prefix, postfix, ...legacy } = props;
   const { value: selected, onChange } = useContext(DropdownContext);
 
+  const isSelected = useMemo(() => {
+    const selectedList = (selected ?? "").split("; ");
+    return selectedList.includes(value);
+  }, [selected, value]);
+
   const handleOnClick = useCallback(() => {
     onChange(value);
   }, [onChange, value]);
@@ -121,7 +130,7 @@ const Option = (props: OptionProps) => {
       {...legacy}
       onClick={handleOnClick}
       type="button"
-      className={`flex items-center gap-3 py-2 px-2 rounded-md transition-all ${value === selected ? "text-green-50-500 bg-gray-600" : "hover:bg-gray-600 hover:text-green-50-500"}`}
+      className={`flex items-center gap-3 py-2 px-2 rounded-md transition-all ${isSelected ? "text-green-50-500 bg-gray-600" : "hover:bg-gray-600 hover:text-green-50-500"}`}
     >
       {prefix}
       {label ?? value}
