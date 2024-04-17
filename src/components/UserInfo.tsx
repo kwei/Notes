@@ -1,14 +1,18 @@
 "use client";
 
+import { Loading } from "@/components/Loading";
 import { IMongoQueryRes, IUser } from "@/type";
 import { getUserData } from "@/utils/getUserData";
 import { setUserData } from "@/utils/setUserData";
 import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const UserInfo = ({ user }: { user: IUser | null }) => {
+  const [loading, setLoading] = useState(false);
+
   function handleSignIn() {
+    setLoading(true);
     signIn("line").finally();
   }
 
@@ -18,6 +22,7 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
 
   useEffect(() => {
     if (user) {
+      setLoading(false);
       getUserData(user).then((res1: IMongoQueryRes) => {
         if (!res1.status) {
           setUserData(user).finally();
@@ -25,6 +30,8 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
       });
     }
   }, [user]);
+
+  if (loading) return <Loading />;
 
   return (
     <div className="w-full flex items-center justify-end pb-4 max-md:p-4">
