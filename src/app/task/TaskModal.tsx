@@ -156,7 +156,7 @@ export const TaskModal = (props: Props) => {
       }, 150);
       setNewTags(JSON.stringify(task.tags));
     }
-  }, [props.open, ref]);
+  }, [props.open, ref, task.tags]);
 
   return (
     <div
@@ -214,11 +214,11 @@ export const TaskModal = (props: Props) => {
             readOnly
           />
         </div>
-        <div className="pb-4 flex items-center gap-4">
+        <div className="pb-4 flex items-center gap-4 flex-wrap">
           {JSON.parse(newTags).map((tag: { name: string; color: string }) => (
             <div key={`${tag.name}-${tag.color}`} className="relative group">
               <span
-                className="rounded-full px-2 py-1 text-black select-none"
+                className="rounded-full px-2 py-1 text-black select-none break-anywhere"
                 style={{ backgroundColor: tag.color }}
               >
                 {tag.name}

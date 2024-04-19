@@ -7,7 +7,7 @@ export const TagBlock = ({
 }) => {
   return (
     <span
-      className="text-sm rounded-md text-black px-2 py-px select-none"
+      className="text-sm rounded-md text-black px-2 py-px select-none break-anywhere text-left"
       style={{
         backgroundColor: tag.color,
       }}

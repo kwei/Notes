@@ -95,7 +95,7 @@ export const TaskCard = (props: Props) => {
             onClick={handleOpenContent}
             className="flex flex-col md:p-4 p-3 w-full z-20 bg-gray-800 rounded-2xl"
           >
-            <span className="font-semibold">{task.title}</span>
+            <span className="font-semibold text-left">{task.title}</span>
             <div className="flex items-center gap-1 py-1">
               <IoTimeOutline
                 className={`size-4 ${new Date(task.expiry ?? new Date()).getTime() < TODAY ? "text-red-ff-500" : "text-gray-500"}`}

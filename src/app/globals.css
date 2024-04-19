@@ -146,3 +146,16 @@ hr {
 @keyframes l15{
     100%{transform: rotate(1turn)}
 }
+
+@layer utilities {
+    @supports (overflow-wrap: anywhere) {
+        .break-anywhere {
+            overflow-wrap: anywhere;
+        }
+    }
+    @supports not (overflow-wrap: anywhere) {
+        .break-anywhere {
+            word-break: break-word;
+        }
+    }
+}
