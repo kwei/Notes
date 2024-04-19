@@ -104,7 +104,7 @@ export const TaskContainer = (props: Props) => {
       onDragLeave={handleOnDragLeave}
       onDragOver={handlePreventDefault}
       onDrop={handleOnDrop}
-      className={`flex flex-col py-3 px-4 gap-4 h-full w-full transition-colors rounded-xl ${className} ${isDragOver ? "bg-gray-d0-500/20" : "bg-gray-d0-500/10"} ${loading ? "animate-pulse" : ""}`}
+      className={`flex flex-col py-3 px-4 gap-4 h-full w-full transition-colors rounded-xl ${className} ${isDragOver ? "bg-gray-d0-500/20" : "bg-gray-d0-500/10"} ${loading ? "animate-pulse pointer-events-none" : "pointer-events-auto"}`}
     >
       <div className="pl-4 flex justify-between items-center">
         <span className="text-lg font-bold">{label}</span>

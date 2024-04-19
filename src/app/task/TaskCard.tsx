@@ -25,13 +25,13 @@ export const TaskCard = (props: Props) => {
   const [isDragged, setIsDragged] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  function handleOpenContent() {
-    setOpenContent(true);
-  }
+  const handleOpenContent = useCallback(() => {
+    if (!loading) setOpenContent(true);
+  }, [loading]);
 
-  function handleCloseContent() {
-    setOpenContent(false);
-  }
+  const handleCloseContent = useCallback(() => {
+    if (!loading) setOpenContent(false);
+  }, [loading]);
 
   function handleSetLoading(status: boolean) {
     setLoading(status);
@@ -39,6 +39,7 @@ export const TaskCard = (props: Props) => {
 
   const handleOnDragStart = useCallback(
     (event: DragEvent<HTMLDivElement>) => {
+      if (loading) return false;
       const element = event.target as HTMLDivElement;
       const ghostElement = element.cloneNode(true) as HTMLDivElement;
       ghostImageRef.current = ghostElement;
@@ -54,7 +55,7 @@ export const TaskCard = (props: Props) => {
       setDragged(task);
       setIsDragged(true);
     },
-    [setDragged, task],
+    [loading, setDragged, task],
   );
 
   function handleOnDragEnd() {
@@ -64,19 +65,23 @@ export const TaskCard = (props: Props) => {
     setIsDragged(false);
   }
 
-  function handleOnDeleteTask(event: MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
-    setLoading(true);
-    deleteTodo(task)
-      .then((res: IMongoQueryRes) => {
-        console.log(res.status, JSON.parse(res.message));
-      })
-      .finally(() => {
-        reFetch().finally(() => {
-          setLoading(false);
+  const handleOnDeleteTask = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      if (loading) return false;
+      setLoading(true);
+      deleteTodo(task)
+        .then((res: IMongoQueryRes) => {
+          console.log(res.status, JSON.parse(res.message));
+        })
+        .finally(() => {
+          reFetch().finally(() => {
+            setLoading(false);
+          });
         });
-      });
-  }
+    },
+    [loading, reFetch, task],
+  );
 
   return (
     <>
