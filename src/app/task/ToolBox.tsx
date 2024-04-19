@@ -131,7 +131,7 @@ const TimeFilter = () => {
   }, [endTime, setSelectedPeriod, startTime]);
 
   return (
-    <div className="flex items-center gap-3 flex-wrap justify-end max-md:hidden">
+    <div className="flex items-center gap-3 flex-wrap justify-end max-lg:hidden">
       <div className="flex items-center gap-2">
         <input
           type="date"
@@ -180,7 +180,7 @@ const SaveBtn = () => {
   return (
     <button
       title="Save"
-      className="transition-colors hover:text-blue-5F-500 max-md:hidden"
+      className="transition-colors hover:text-blue-5F-500 max-lg:hidden"
       onClick={save}
     >
       <IoMdDownload className="size-5" />
