@@ -31,7 +31,7 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
     }
   }, [user]);
 
-  if (loading) return <Loading />;
+  if (loading && !user) return <Loading />;
 
   return (
     <div className="w-full flex items-center justify-end pb-4 max-md:p-4">
@@ -54,14 +54,31 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           </button>
         </div>
       )}
-      {!user && (
-        <button
-          onClick={handleSignIn}
-          className="rounded-md border border-solid border-gray-d0-500 px-6 py-2 hover:bg-gray-d0-500 hover:text-black transition-colors"
-        >
-          Login
-        </button>
-      )}
+      {!user && <LoginPopup handleSignIn={handleSignIn} />}
+    </div>
+  );
+};
+
+const LoginPopup = ({ handleSignIn }: { handleSignIn: () => void }) => {
+  return (
+    <div className="fixed left-0 right-0 top-0 bottom-0 flex items-center justify-center">
+      <div className="flex flex-col md:w-[400px] w-5/6 rounded-2xl p-6 bg-gray-800 border-b border-solid border-green-50-500">
+        <span className="w-full text-center text-2xl font-bold">
+          Please Login First
+        </span>
+        <span className="text-sm w-full text-center p-6">
+          We use LINE Login powered by next-auth provider. Your information is
+          collected only for identification.
+        </span>
+        <div className="w-full flex items-center justify-center px-6">
+          <button
+            onClick={handleSignIn}
+            className="rounded-md border border-solid border-green-600 text-green-600 w-full p-2 hover:bg-green-600 hover:text-white transition-colors"
+          >
+            Login with LINE
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
