@@ -2,6 +2,7 @@
 
 import { IMongoQueryRes, ITaskContextValue, ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
+import { useUserStoreCtx } from "@/utils/externalStores";
 import { getTodoList } from "@/utils/getTodoList";
 import { SessionProvider } from "next-auth/react";
 import {
@@ -14,16 +15,13 @@ import {
   useState,
 } from "react";
 
-interface Props {
-  children: ReactNode;
-  email: string;
-}
-
-export const CtxTask = (props: Props) => {
+export const CtxTask = ({ children }: { children: ReactNode }) => {
   const [list, setList] = useState({} as Record<TASK_STATUS, ITodo[]>);
+  const { useStore: useUserStore } = useUserStoreCtx();
+  const [email] = useUserStore((state) => state.email);
 
   const fetchList = useCallback(async () => {
-    const taskTable = await fetchTodoList(props.email);
+    const taskTable = await fetchTodoList(email);
     if (Object.keys(taskTable).length > 0) {
       const sorted = {} as Record<TASK_STATUS, ITodo[]>;
       Object.entries(taskTable).forEach(([key, list]) => {
@@ -31,7 +29,7 @@ export const CtxTask = (props: Props) => {
       });
       setList(taskTable);
     }
-  }, [props.email]);
+  }, [email]);
 
   const contextValue = useMemo(
     () => ({
@@ -47,7 +45,7 @@ export const CtxTask = (props: Props) => {
 
   return (
     <Ctx.Provider value={contextValue}>
-      <SessionProvider>{props.children}</SessionProvider>
+      <SessionProvider>{children}</SessionProvider>
     </Ctx.Provider>
   );
 };

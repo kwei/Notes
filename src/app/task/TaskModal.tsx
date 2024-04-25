@@ -13,7 +13,6 @@ import {
 import { formatDateString } from "@/utils/formatDateString";
 import { setTodo } from "@/utils/setTodo";
 import { updateTodo } from "@/utils/updateTodo";
-import { useSession } from "next-auth/react";
 import {
   ChangeEvent,
   FormEvent,
@@ -35,7 +34,6 @@ interface Props {
 
 export const TaskModal = (props: Props) => {
   const { task, open, action, onClose, handleLoading } = props;
-  const { data: session } = useSession();
   const ref = useFocusRef<HTMLFormElement>(() => {
     onClose();
   });
@@ -89,7 +87,6 @@ export const TaskModal = (props: Props) => {
         iat,
         expiry,
         detail,
-        userEmail: session?.user?.email ?? "",
       })
         .then((res: IMongoQueryRes) => {
           console.log(res.status, JSON.parse(res.message));

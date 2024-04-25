@@ -2,6 +2,7 @@
 
 import { Loading } from "@/components/Loading";
 import { IMongoQueryRes, IUser } from "@/type";
+import { useUserStoreCtx } from "@/utils/externalStores";
 import { getUserData } from "@/utils/getUserData";
 import { setUserData } from "@/utils/setUserData";
 import { signIn, signOut } from "next-auth/react";
@@ -10,6 +11,8 @@ import { useEffect, useState } from "react";
 
 export const UserInfo = ({ user }: { user: IUser | null }) => {
   const [loading, setLoading] = useState(false);
+  const { useStore: useUserStore } = useUserStoreCtx();
+  const [, setUser] = useUserStore((state) => state);
 
   function handleSignIn() {
     setLoading(true);
@@ -22,6 +25,7 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
 
   useEffect(() => {
     if (user) {
+      setUser(user);
       setLoading(false);
       getUserData(user).then((res1: IMongoQueryRes) => {
         if (!res1.status) {
@@ -29,7 +33,7 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
         }
       });
     }
-  }, [user]);
+  }, [setUser, user]);
 
   if (loading && !user) return <Loading />;
 

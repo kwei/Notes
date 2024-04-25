@@ -7,6 +7,7 @@ import { TaskModal } from "@/app/task/TaskModal";
 import { useTollCtx } from "@/app/task/ToolCtxProvider";
 import { IMongoQueryRes, ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
+import { useUserStoreCtx } from "@/utils/externalStores";
 import { filterPeriod } from "@/utils/filterPeriod";
 import { filterTag } from "@/utils/filterTag";
 import { formatPeriod } from "@/utils/formatPeriod";
@@ -28,12 +29,14 @@ export const TaskContainer = (props: Props) => {
   const { list, reFetch } = useTaskCtx();
   const { selectedTag, selectedPeriod } = useTollCtx();
   const { dragged, setDragged } = useDraggableTask();
+  const { useStore: useUserStore } = useUserStoreCtx();
+  const [email] = useUserStore((state) => state.email);
   const [isDragOver, setIsDragOver] = useState(false);
   const [openContent, setOpenContent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [newTask, setNewTask] = useState<ITodo>({
     detail: "Take some notes.",
-    userEmail: "",
+    userEmail: email,
     title: "New Task",
     status: {
       name: label,
@@ -80,7 +83,7 @@ export const TaskContainer = (props: Props) => {
   function handleOpenContent() {
     setNewTask({
       detail: "Take some notes.",
-      userEmail: "",
+      userEmail: email,
       title: "New Task",
       status: {
         name: label,
