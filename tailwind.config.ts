@@ -70,6 +70,11 @@ const config: Config = {
         "slideIn-from-top": "slideInFromTop 0.2s ease-in-out forwards",
         "slideOut-to-top": "slideOutToTop 0.2s ease-in-out forwards",
       },
+      grayscale: {
+        30: '30%',
+        50: '50%',
+        75: '75%',
+      }
     },
   },
   plugins: [],

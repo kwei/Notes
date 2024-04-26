@@ -12,7 +12,7 @@ export const TaskBoard = () => {
           <TaskContainer
             key={label}
             label={label as TASK_STATUS}
-            className="col-span-1"
+            className={`col-span-1 ${label === "Complete" ? "grayscale-75" : "grayscale-0"}`}
           >
             {(taskList) =>
               taskList.map((task, index) => (
