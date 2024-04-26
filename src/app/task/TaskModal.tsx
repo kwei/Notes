@@ -3,13 +3,14 @@
 import { useTaskCtx } from "@/app/task/CtxTask";
 import { Dropdown } from "@/components/Dropdown";
 import { useFocusRef } from "@/hooks/useFocusRef";
-import { IMongoQueryRes, ITodo } from "@/type";
+import { IMongoQueryRes } from "@/type";
 import {
   COLOR_TABLE,
   TASK_COLOR,
   TASK_STATUS,
   TASK_TABLE,
 } from "@/utils/constants";
+import { useTaskModalStoreCtx } from "@/utils/externalStores";
 import { formatDateString } from "@/utils/formatDateString";
 import { setTodo } from "@/utils/setTodo";
 import { updateTodo } from "@/utils/updateTodo";
@@ -19,88 +20,95 @@ import {
   KeyboardEvent,
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { IoClose } from "react-icons/io5";
 
-interface Props {
-  task: ITodo;
-  open: boolean;
-  action: "update" | "add";
-  onClose: () => void;
-  handleLoading: (status: boolean) => void;
-}
-
-export const TaskModal = (props: Props) => {
-  const { task, open, action, onClose, handleLoading } = props;
-  const ref = useFocusRef<HTMLFormElement>(() => {
+export const TaskModal = () => {
+  const { useStore: useTaskModalStore } = useTaskModalStoreCtx();
+  const [info] = useTaskModalStore((state) => state);
+  const { task, open, action, onClose, handleLoading } = info;
+  const [newTags, setNewTags] = useState(JSON.stringify(task.tags));
+  const handleOnClose = useCallback(() => {
+    setNewTags(JSON.stringify(task.tags));
     onClose();
+  }, [onClose, task.tags]);
+  const ref = useFocusRef<HTMLFormElement>(() => {
+    handleOnClose();
   });
   const { reFetch } = useTaskCtx();
-  const initRef = useRef(false);
-  const [newTags, setNewTags] = useState(JSON.stringify(task.tags));
 
-  function resetFormData() {
+  const resetFormData = useCallback(() => {
     (ref.current as HTMLFormElement).reset();
-  }
+  }, [ref]);
 
-  function handleOnSubmit(event: FormEvent) {
-    event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
-    const title = (formData.get("title") ?? task.title) as string;
-    const status = {
-      name: (formData.get("status") ?? task.status.name) as TASK_STATUS,
-    };
-    const tags = JSON.parse(newTags) as { name: string; color: TASK_COLOR }[];
-    const iat = formData.get("iat")
-      ? new Date(formData.get("iat") as string)
-      : undefined;
-    const expiry = formData.get("expiry")
-      ? new Date(formData.get("expiry") as string)
-      : undefined;
-    const detail = formData.get("detail") as string;
-    handleLoading(true);
-    if (action === "update") {
-      updateTodo(task, {
-        ...task,
-        title,
-        status,
-        tags,
-        iat,
-        expiry,
-        detail,
-      })
-        .then((res: IMongoQueryRes) => {
-          console.log(res.status, JSON.parse(res.message));
+  const handleOnSubmit = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault();
+      const formData = new FormData(event.target as HTMLFormElement);
+      const title = (formData.get("title") ?? task.title) as string;
+      const status = {
+        name: (formData.get("status") ?? task.status.name) as TASK_STATUS,
+      };
+      const tags = JSON.parse(newTags) as { name: string; color: TASK_COLOR }[];
+      const iat = formData.get("iat")
+        ? new Date(formData.get("iat") as string)
+        : undefined;
+      const expiry = formData.get("expiry")
+        ? new Date(formData.get("expiry") as string)
+        : undefined;
+      const detail = formData.get("detail") as string;
+      handleLoading(true);
+      if (action === "update") {
+        updateTodo(task, {
+          ...task,
+          title,
+          status,
+          tags,
+          iat,
+          expiry,
+          detail,
         })
-        .finally(() => {
-          handleLoading(false);
-          reFetch().finally();
-        });
-    } else if (action === "add") {
-      setTodo({
-        ...task,
-        title,
-        status,
-        tags,
-        iat,
-        expiry,
-        detail,
-      })
-        .then((res: IMongoQueryRes) => {
-          console.log(res.status, JSON.parse(res.message));
+          .then((res: IMongoQueryRes) => {
+            console.log(res.status, JSON.parse(res.message));
+          })
+          .finally(() => {
+            handleLoading(false);
+            reFetch().finally();
+          });
+      } else if (action === "add") {
+        setTodo({
+          ...task,
+          title,
+          status,
+          tags,
+          iat,
+          expiry,
+          detail,
         })
-        .finally(() => {
-          handleLoading(false);
-          reFetch().finally();
-        });
-    } else {
-      handleLoading(false);
-    }
-    resetFormData();
-    onClose();
-  }
+          .then((res: IMongoQueryRes) => {
+            console.log(res.status, JSON.parse(res.message));
+          })
+          .finally(() => {
+            handleLoading(false);
+            reFetch().finally();
+          });
+      } else {
+        handleLoading(false);
+      }
+      resetFormData();
+      handleOnClose();
+    },
+    [
+      action,
+      handleLoading,
+      handleOnClose,
+      newTags,
+      reFetch,
+      resetFormData,
+      task,
+    ],
+  );
 
   function handleOnAddTag(data: { name: string; color: string }) {
     setNewTags((prevState) => {
@@ -138,36 +146,21 @@ export const TaskModal = (props: Props) => {
   }
 
   useEffect(() => {
-    if (props.open) {
-      initRef.current = true;
-      ref.current?.classList.remove("opacity-0");
-      ref.current?.classList.add("opacity-100");
-      ref.current?.classList.remove("animate-slideOut-to-bottom");
-      ref.current?.classList.add("animate-slideIn-from-bottom");
-    } else {
-      ref.current?.classList.remove("animate-slideIn-from-bottom");
-      ref.current?.classList.add("animate-slideOut-to-bottom");
-      setTimeout(() => {
-        ref.current?.classList.remove("opacity-100");
-        ref.current?.classList.add("opacity-0");
-      }, 150);
-      setNewTags(JSON.stringify(task.tags));
-    }
-  }, [props.open, ref, task.tags]);
+    setNewTags(JSON.stringify(task.tags));
+  }, [task.tags]);
 
+  if (!open) return null;
   return (
-    <div
-      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-black/50 md:items-center flex justify-center items-end transition-opacity duration-0 ${open ? "opacity-100 pointer-events-auto" : "delay-300 opacity-0 pointer-events-none"}`}
-    >
+    <div className="fixed z-40 left-0 right-0 top-0 bottom-0 bg-black/50 md:items-center flex justify-center items-end">
       <form
         ref={ref}
         onSubmit={handleOnSubmit}
-        className="relative flex flex-col bg-[#403F44] p-5 max-w-[800px] md:py-8 md:px-10 rounded-t-2xl md:rounded-2xl w-full md:w-2/3 md:max-h-5/6"
+        className="relative flex flex-col bg-[#403F44] p-5 max-w-[800px] md:py-8 md:px-10 rounded-t-2xl md:rounded-2xl w-full md:w-2/3 md:max-h-5/6 animate-slideIn-from-bottom"
       >
         <button
           type="button"
           className="size-6 absolute top-4 right-4"
-          onClick={onClose}
+          onClick={handleOnClose}
         >
           <IoClose className="w-full h-full text-black/50 hover:text-black transition-all" />
         </button>
@@ -241,7 +234,7 @@ export const TaskModal = (props: Props) => {
         <div className="flex items-center justify-end gap-4">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleOnClose}
             className="px-6 py-2 text-gray-500 hover:text-red-ff-500 transition-colors"
           >
             Cancel

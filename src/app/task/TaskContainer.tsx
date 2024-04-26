@@ -3,11 +3,10 @@
 import { useTaskCtx } from "@/app/task/CtxTask";
 import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
-import { TaskModal } from "@/app/task/TaskModal";
 import { useToolCtx } from "@/app/task/ToolCtxProvider";
 import { IMongoQueryRes, ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
-import { useUserStoreCtx } from "@/utils/externalStores";
+import { useTaskModalStoreCtx, useUserStoreCtx } from "@/utils/externalStores";
 import { filterPeriod } from "@/utils/filterPeriod";
 import { filterTag } from "@/utils/filterTag";
 import { formatPeriod } from "@/utils/formatPeriod";
@@ -31,18 +30,10 @@ export const TaskContainer = (props: Props) => {
   const { dragged, setDragged } = useDraggableTask();
   const { useStore: useUserStore } = useUserStoreCtx();
   const [email] = useUserStore((state) => state.email);
+  const { useStore: useTaskModalStore } = useTaskModalStoreCtx();
+  const [, setTaskModal] = useTaskModalStore((state) => state);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [openContent, setOpenContent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [newTask, setNewTask] = useState<ITodo>({
-    detail: "Take some notes.",
-    userEmail: email,
-    title: "New Task",
-    status: {
-      name: label,
-    },
-    tags: [],
-  });
 
   function handleOnDragEnter() {
     setIsDragOver(true);
@@ -81,7 +72,7 @@ export const TaskContainer = (props: Props) => {
   }
 
   function handleOpenContent() {
-    setNewTask({
+    const newTask = {
       detail: "Take some notes.",
       userEmail: email,
       title: "New Task",
@@ -89,16 +80,18 @@ export const TaskContainer = (props: Props) => {
         name: label,
       },
       tags: [],
+    };
+    setTaskModal({
+      action: "add",
+      task: newTask,
+      onClose: handleCloseContent,
+      handleLoading: setLoading,
     });
-    setOpenContent(true);
+    setTaskModal({ open: true });
   }
 
   function handleCloseContent() {
-    setOpenContent(false);
-  }
-
-  function handleSetLoading(status: boolean) {
-    setLoading(status);
+    setTaskModal({ open: false });
   }
 
   return (
@@ -123,6 +116,7 @@ export const TaskContainer = (props: Props) => {
         children(
           filterPeriod(selectedPeriod, filterTag(selectedTag, list[label])),
         )}
+
       {isDragOver && dragged && dragged.status.name !== label && (
         <div className="flex flex-col rounded-2xl md:p-4 p-2 border border-solid border-gray-d0-500/50 pointer-events-none">
           <span className="font-semibold">{dragged.title}</span>
@@ -141,13 +135,6 @@ export const TaskContainer = (props: Props) => {
           </div>
         </div>
       )}
-      <TaskModal
-        action="add"
-        open={openContent}
-        task={newTask}
-        handleLoading={handleSetLoading}
-        onClose={handleCloseContent}
-      />
     </div>
   );
 };

@@ -1,8 +1,13 @@
 import { TaskBoardContainer } from "@/app/task/TaskBoardContainer";
+import { TaskModal } from "@/app/task/TaskModal";
 import { Toast } from "@/components/Toast";
 import { UserInfo } from "@/components/UserInfo";
 import { IUser } from "@/type";
-import { ToastProvider, UserProvider } from "@/utils/externalStores";
+import {
+  TaskModalProvider,
+  ToastProvider,
+  UserProvider,
+} from "@/utils/externalStores";
 import { getServerSession } from "next-auth";
 
 export default async function Home() {
@@ -19,8 +24,11 @@ export default async function Home() {
     <main className="flex w-full flex-1 flex-col md:p-4">
       <UserProvider>
         <ToastProvider>
-          <UserInfo user={userInfo} />
-          {userInfo && <TaskBoardContainer />}
+          <TaskModalProvider>
+            <UserInfo user={userInfo} />
+            {userInfo && <TaskBoardContainer />}
+            <TaskModal />
+          </TaskModalProvider>
           <Toast />
         </ToastProvider>
       </UserProvider>

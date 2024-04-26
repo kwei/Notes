@@ -1,7 +1,7 @@
 "use client";
 
-import { IToast, IUser } from "@/type";
-import { TOAST_TYPE } from "@/utils/constants";
+import { ITaskModal, IToast, ITodo, IUser } from "@/type";
+import { TASK_STATUS, TOAST_TYPE } from "@/utils/constants";
 import { createExternalStoreProvider } from "@/utils/createExternalStoreProvider";
 
 export const { Provider: UserProvider, useStoreCtx: useUserStoreCtx } =
@@ -17,3 +17,22 @@ export const { Provider: ToastProvider, useStoreCtx: useToastStoreCtx } =
     show: false,
     msg: "Some message...",
   });
+
+export const {
+  Provider: TaskModalProvider,
+  useStoreCtx: useTaskModalStoreCtx,
+} = createExternalStoreProvider<ITaskModal>({
+  task: {
+    detail: "Take some notes.",
+    userEmail: "",
+    title: "New Task",
+    status: {
+      name: TASK_STATUS.NEW_REQUEST,
+    },
+    tags: [],
+  } as ITodo,
+  open: false,
+  action: "add",
+  onClose: () => {},
+  handleLoading: () => {},
+});

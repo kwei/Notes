@@ -1,23 +1,4 @@
 import { TASK_COLOR, TASK_STATUS, TOAST_TYPE } from "@/utils/constants";
-import { ReactNode } from "react";
-
-interface GitTreeObj {
-  path: string;
-  mode: string;
-  type: string;
-  sha: string;
-  size: number;
-  url: string;
-}
-
-interface GitTree {
-  [category: string]: {
-    [topic: string]: {
-      fileName: string;
-      fileUrl: string;
-    }[];
-  };
-}
 
 interface ArticleList {
   category: string;
@@ -90,4 +71,12 @@ interface IToast {
   type: TOAST_TYPE;
   show: boolean;
   msg: string;
+}
+
+interface ITaskModal {
+  task: ITodo;
+  open: boolean;
+  action: "update" | "add";
+  onClose: () => void;
+  handleLoading: (status: boolean) => void;
 }
