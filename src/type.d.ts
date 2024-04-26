@@ -1,4 +1,5 @@
-import { TASK_COLOR, TASK_STATUS } from "@/utils/constants";
+import { TASK_COLOR, TASK_STATUS, TOAST_TYPE } from "@/utils/constants";
+import { ReactNode } from "react";
 
 interface GitTreeObj {
   path: string;
@@ -83,6 +84,10 @@ interface IMongoQueryRes {
   message: string;
 }
 
-interface MetaConfig {
+interface MetaConfig {}
 
+interface IToast {
+  type: TOAST_TYPE;
+  show: boolean;
+  msg: string;
 }

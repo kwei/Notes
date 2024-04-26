@@ -46,4 +46,4 @@ const ToolCtx = createContext({
   setSelectedPeriod: (period: string) => {},
 });
 
-export const useTollCtx = () => useContext(ToolCtx);
+export const useToolCtx = () => useContext(ToolCtx);

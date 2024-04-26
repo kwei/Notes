@@ -53,12 +53,22 @@ const config: Config = {
           "0%": { transform: "translateY(0%)" },
           "100%": { transform: "translateY(100%)" },
         },
+        slideInFromTop: {
+          "0%": { transform: "translateY(-200%)" },
+          "100%": { transform: "translateY(0%)" },
+        },
+        slideOutToTop: {
+          "0%": { transform: "translateY(0%)" },
+          "100%": { transform: "translateY(-200%)" },
+        },
       },
       animation: {
         "slideIn-from-left": "slideInFromLeft 0.3s ease-in-out forwards",
         "slideOut-to-left": "slideOutToLeft 0.3s ease-in-out forwards",
         "slideIn-from-bottom": "slideInFromBottom 0.3s ease-in-out forwards",
         "slideOut-to-bottom": "slideOutToBottom 0.3s ease-in-out forwards",
+        "slideIn-from-top": "slideInFromTop 0.2s ease-in-out forwards",
+        "slideOut-to-top": "slideOutToTop 0.2s ease-in-out forwards",
       },
     },
   },

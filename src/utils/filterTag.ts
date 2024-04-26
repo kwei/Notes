@@ -1,19 +1,16 @@
 import { ITodo } from "@/type";
 
-export function filterTag(tag: string, list: ITodo[]) {
-  const res: ITodo[] = [];
+export function filterTag(tag: string, list?: ITodo[]) {
+  const res = new Set<ITodo>([]);
+  if (!list) return [];
   if (tag === "") return list;
   const tagList = tag.split("; ");
   list.forEach((data) => {
-    const tagNames = data.tags.map((tag) => tag.name);
-    tagNames.forEach((tagName) => {
-      if (
-        tagList.includes(tagName) &&
-        !res.some((data) => data.tags.map((tag) => tag.name).includes(tagName))
-      ) {
-        res.push(data);
+    data.tags.forEach((tag) => {
+      if (tagList.includes(tag.name)) {
+        res.add(data);
       }
     });
   });
-  return res;
+  return Array.from(res);
 }

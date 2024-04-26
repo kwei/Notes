@@ -1,22 +1,22 @@
 import { ITodo } from "@/type";
 
 export const filterPeriod = (period: string, list: ITodo[]) => {
-  const res: ITodo[] = [];
+  const res = new Set<ITodo>([]);
+  if (!list) return [];
   if (period === "") return list;
   const [startDate, endDate] = period.split(",");
   list.forEach((data) => {
-    if (
-      (!data.iat ||
-        startDate === "" ||
-        new Date(data.iat).getTime() >= new Date(startDate).getTime()) &&
-      (!data.expiry ||
-        endDate === "" ||
-        new Date(data.expiry).getTime() <= new Date(endDate).getTime())
-    ) {
-      if (!res.some((d) => d.id === data.id)) {
-        res.push(data);
-      }
+    const left = data.iat ? new Date(data.iat).getTime() : -999999999999999;
+    const right = data.expiry
+      ? new Date(data.expiry).getTime()
+      : 999999999999999;
+
+    const start = startDate === "" ? 0 : new Date(startDate).getTime();
+    const end = endDate === "" ? 0 : new Date(endDate).getTime();
+
+    if ((start >= left && start <= right) || (end >= left && end <= right)) {
+      res.add(data);
     }
   });
-  return res;
+  return Array.from(res);
 };

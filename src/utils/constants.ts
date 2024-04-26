@@ -49,3 +49,17 @@ export const COLOR_TABLE: Record<string, TASK_COLOR> = {
   pink: TASK_COLOR.Pink,
   red: TASK_COLOR.Red,
 };
+
+export enum TOAST_TYPE {
+  success,
+  warning,
+  error,
+  info,
+}
+
+export const TOAST_TYPE_COLOR: Record<TOAST_TYPE, string> = {
+  [TOAST_TYPE.success]: TASK_COLOR.Green,
+  [TOAST_TYPE.warning]: TASK_COLOR.Orange,
+  [TOAST_TYPE.error]: TASK_COLOR.Red,
+  [TOAST_TYPE.info]: TASK_COLOR.Blue,
+};

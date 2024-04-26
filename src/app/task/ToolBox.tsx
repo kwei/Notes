@@ -1,10 +1,15 @@
 "use client";
 
 import { useTaskCtx } from "@/app/task/CtxTask";
-import { useTollCtx } from "@/app/task/ToolCtxProvider";
+import { ExportTaskModal } from "@/app/task/ExportTaskModal";
+import { useToolCtx } from "@/app/task/ToolCtxProvider";
 import { Dropdown } from "@/components/Dropdown";
+import { ITodo } from "@/type";
+import { TASK_STATUS, TASK_TABLE } from "@/utils/constants";
+import { filterPeriod } from "@/utils/filterPeriod";
+import { filterTag } from "@/utils/filterTag";
 import { formatDateString } from "@/utils/formatDateString";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 
 interface Props {
@@ -14,7 +19,7 @@ interface Props {
 export const ToolBox = ({ className = "" }: Props) => {
   return (
     <div
-      className={`w-full flex items-center justify-end gap-5 bg-gray-800 p-3 pr-5 md:rounded-t-3xl flex-wrap ${className}`}
+      className={`w-full flex items-center justify-end gap-5 bg-gray-800 p-3 md:pr-5 md:rounded-t-3xl flex-wrap ${className}`}
     >
       <TagFilter />
       <TimeFilter />
@@ -25,7 +30,7 @@ export const ToolBox = ({ className = "" }: Props) => {
 
 const TagFilter = () => {
   const { list } = useTaskCtx();
-  const { setSelectedTag } = useTollCtx();
+  const { setSelectedTag } = useToolCtx();
   const [tag, setTag] = useState<string>();
 
   const allTags = useMemo(() => {
@@ -50,6 +55,7 @@ const TagFilter = () => {
         } else {
           set.add(option);
         }
+        if (set.size === 0) return undefined;
         return Array.from(set).join("; ");
       });
     } else {
@@ -66,7 +72,7 @@ const TagFilter = () => {
       onChange={handleOnChange}
       placeHolder="Filter Tag"
       value={tag}
-      className="border border-solid border-gray-d0-500 rounded-lg py-1 w-[150px]"
+      className="border border-solid border-gray-d0-500 rounded-lg p-1 w-[150px]"
     >
       <Dropdown.Option label="Reset" value="" />
       {allTags.map((tag) => (
@@ -77,50 +83,54 @@ const TagFilter = () => {
 };
 
 const TimeFilter = () => {
-  const { setSelectedPeriod } = useTollCtx();
+  const { setSelectedPeriod } = useToolCtx();
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [checkWeek, setCheckWeek] = useState(false);
-  const [checkMonth, setCheckMonth] = useState(false);
+  const resetRef = useRef<HTMLInputElement>(null);
+  const weekRef = useRef<HTMLInputElement>(null);
+  const monthRef = useRef<HTMLInputElement>(null);
+  const [checkOther, setCheckOther] = useState(false);
 
-  useEffect(() => {
-    if (checkWeek) {
-      setCheckMonth(false);
-      const today = new Date();
-      const week = today.getDay();
-      const startDay = formatDateString(
-        new Date(new Date().setDate(today.getDate() - (week - 1))),
-      );
-      const endDay = formatDateString(
-        new Date(new Date().setDate(today.getDate() + (7 - week))),
-      );
-      setStartTime(startDay);
-      setEndTime(endDay);
-    }
-  }, [checkWeek]);
+  const handleCheckReset = useCallback(() => {
+    setStartTime("");
+    setEndTime("");
+    setSelectedPeriod("");
+    setCheckOther(false);
+  }, [setSelectedPeriod]);
 
-  useEffect(() => {
-    if (checkMonth) {
-      setCheckWeek(false);
-      const today = new Date();
-      const startDay = formatDateString(
-        new Date(today.getFullYear(), today.getMonth(), 1),
-      );
-      const endDay = formatDateString(
-        new Date(today.getFullYear(), today.getMonth() + 1, 0),
-      );
-      setStartTime(startDay);
-      setEndTime(endDay);
-    }
-  }, [checkMonth]);
+  const handleCheckWeek = useCallback(() => {
+    setCheckOther(false);
+    const today = new Date();
+    const week = today.getDay();
+    const startDay = formatDateString(
+      new Date(new Date().setDate(today.getDate() - (week - 1))),
+    );
+    const endDay = formatDateString(
+      new Date(new Date().setDate(today.getDate() + (7 - week))),
+    );
+    setStartTime(startDay);
+    setEndTime(endDay);
+  }, []);
 
-  useEffect(() => {
-    if (!checkWeek && !checkMonth) {
-      setStartTime("");
-      setEndTime("");
-      setSelectedPeriod("");
-    }
-  }, [checkMonth, checkWeek, setSelectedPeriod]);
+  const handleCheckMonth = useCallback(() => {
+    setCheckOther(false);
+    const today = new Date();
+    const startDay = formatDateString(
+      new Date(today.getFullYear(), today.getMonth(), 1),
+    );
+    const endDay = formatDateString(
+      new Date(today.getFullYear(), today.getMonth() + 1, 0),
+    );
+    setStartTime(startDay);
+    setEndTime(endDay);
+  }, []);
+
+  const handleCheckOther = useCallback(() => {
+    setStartTime("");
+    setEndTime("");
+    setSelectedPeriod("");
+    setCheckOther(true);
+  }, [setSelectedPeriod]);
 
   useEffect(() => {
     if (startTime !== "" || endTime !== "") {
@@ -131,59 +141,106 @@ const TimeFilter = () => {
   }, [endTime, setSelectedPeriod, startTime]);
 
   return (
-    <div className="flex items-center gap-3 flex-wrap justify-end max-lg:hidden">
-      <div className="flex items-center gap-2">
-        <input
-          type="date"
-          value={startTime !== "" ? formatDateString(new Date(startTime)) : ""}
-          className="bg-transparent border-b border-solid border-gray-d0-500 w-[140px]"
-          onChange={(e) => setStartTime(e.target.value)}
-        />
-        -
-        <input
-          type="date"
-          value={endTime !== "" ? formatDateString(new Date(endTime)) : ""}
-          className="bg-transparent border-b border-solid border-gray-d0-500 w-[140px]"
-          onChange={(e) => setEndTime(e.target.value)}
-        />
-      </div>
+    <fieldset className="flex items-center gap-3 flex-wrap justify-end">
       <span className="flex items-center gap-1">
         <input
-          type="checkbox"
-          id="week"
-          checked={checkWeek}
+          type="radio"
+          id="default"
+          name="time-filter"
           className="cursor-pointer"
-          onChange={(e) => setCheckWeek(e.target.checked)}
+          ref={resetRef}
+          defaultChecked={true}
+          onChange={handleCheckReset}
+        />
+        <label htmlFor="default" className="cursor-pointer">
+          預設
+        </label>
+      </span>
+
+      <span className="flex items-center gap-1">
+        <input
+          type="radio"
+          id="week"
+          name="time-filter"
+          className="cursor-pointer"
+          ref={weekRef}
+          defaultChecked={false}
+          onChange={handleCheckWeek}
         />
         <label htmlFor="week" className="cursor-pointer">
-          This Week
+          本周
         </label>
       </span>
+
       <span className="flex items-center gap-1">
         <input
-          type="checkbox"
+          type="radio"
           id="month"
-          checked={checkMonth}
+          name="time-filter"
           className="cursor-pointer"
-          onChange={(e) => setCheckMonth(e.target.checked)}
+          ref={monthRef}
+          defaultChecked={false}
+          onChange={handleCheckMonth}
         />
         <label htmlFor="month" className="cursor-pointer">
-          This Month
+          本月
         </label>
       </span>
-    </div>
+
+      <span className="flex items-center gap-1">
+        <input
+          type="radio"
+          id="other"
+          name="time-filter"
+          className="cursor-pointer"
+          defaultChecked={false}
+          onChange={handleCheckOther}
+        />
+        <label htmlFor="other" className="cursor-pointer pr-2">
+          其它
+        </label>
+        <div
+          className={`flex items-center gap-2 overflow-hidden transition-all origin-left ${checkOther ? "w-[304px]" : "w-0"}`}
+        >
+          <input
+            type="date"
+            value={
+              startTime !== "" ? formatDateString(new Date(startTime)) : ""
+            }
+            className="bg-transparent border-b border-solid border-gray-d0-500 w-[140px]"
+            onChange={(e) => setStartTime(e.target.value)}
+          />
+          <span className="w-2 text-center">-</span>
+          <input
+            type="date"
+            value={endTime !== "" ? formatDateString(new Date(endTime)) : ""}
+            className="bg-transparent border-b border-solid border-gray-d0-500 w-[140px]"
+            onChange={(e) => setEndTime(e.target.value)}
+          />
+        </div>
+      </span>
+    </fieldset>
   );
 };
 
 const SaveBtn = () => {
-  const save = useCallback(() => {}, []);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
-    <button
-      title="Save"
-      className="transition-colors hover:text-blue-5F-500 max-lg:hidden"
-      onClick={save}
-    >
-      <IoMdDownload className="size-5" />
-    </button>
+    <>
+      <button
+        title="Save"
+        className="transition-colors hover:text-blue-5F-500"
+        onClick={handleOpen}
+      >
+        <IoMdDownload className="size-5" />
+      </button>
+      {open && <ExportTaskModal onClose={handleClose} />}
+    </>
   );
 };

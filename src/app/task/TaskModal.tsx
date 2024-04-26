@@ -175,34 +175,32 @@ export const TaskModal = (props: Props) => {
           <input
             type="text"
             name="title"
-            className="text-2xl border pr-6 border-solid bg-transparent border-transparent transition-all hover:border-gray-d0-500"
+            className="text-2xl border pr-6 w-full border-solid bg-transparent border-transparent transition-all hover:border-gray-d0-500"
             defaultValue={task.title}
           />
         </div>
-        <div className="pb-4 flex items-center gap-4 flex-wrap">
+        <fieldset className="mb-2 py-2 flex items-end gap-4 flex-wrap">
+          <legend className="px-4 bg-gray-500 rounded-sm">任務狀態</legend>
           <StatusPicker value={task.status.name} />
-          <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
             <input
               type="date"
               name="iat"
-              className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
+              className="bg-transparent text-gray-d0-500 border-b border-solid border-gray-d0-500 px-2 py-1"
               defaultValue={task.iat ? formatDateString(task.iat) : ""}
             />
             <span>-</span>
             <input
               type="date"
               name="expiry"
-              className="bg-transparent text-gray-d0-500 border border-solid border-gray-d0-500 px-2 py-1 rounded-md"
+              className="bg-transparent text-gray-d0-500 border-b border-solid border-gray-d0-500 px-2 py-1"
               defaultValue={task.expiry ? formatDateString(task.expiry) : ""}
             />
           </div>
-        </div>
-        <div className="pb-4 flex items-center">
-          <TagPicker
-            label="Tag"
-            color={TASK_COLOR.LIGHT_GRAY}
-            addOne={handleOnAddTag}
-          />
+        </fieldset>
+        <fieldset className="mb-2 py-2 flex items-center flex-wrap">
+          <legend className="px-4 bg-gray-500 rounded-sm">標籤</legend>
+          <TagPicker color={TASK_COLOR.LIGHT_GRAY} addOne={handleOnAddTag} />
           <input
             name="tag-colors"
             className="invisible w-0 h-0"
@@ -210,8 +208,8 @@ export const TaskModal = (props: Props) => {
             value={newTags}
             readOnly
           />
-        </div>
-        <div className="pb-4 flex items-center gap-4 flex-wrap">
+        </fieldset>
+        <div className="mb-4 flex items-center gap-2 flex-wrap">
           {JSON.parse(newTags).map((tag: { name: string; color: string }) => (
             <div key={`${tag.name}-${tag.color}`} className="relative group">
               <span
@@ -231,15 +229,15 @@ export const TaskModal = (props: Props) => {
             </div>
           ))}
         </div>
-        <div className="pb-4 flex flex-col">
-          <span className="mb-2 select-none">Detail</span>
+        <fieldset className="mb-2 px-2 pb-2 flex flex-col border border-solid border-gray-d0-500 rounded-md">
+          <legend className="px-2 select-none">內容</legend>
           <textarea
             name="detail"
             rows={8}
-            className="w-full bg-transparent border border-solid border-gray-d0-500 rounded-md resize-none px-2 py-1"
+            className="w-full bg-transparent resize-none px-2 py-1"
             defaultValue={task.detail}
           />
-        </div>
+        </fieldset>
         <div className="flex items-center justify-end gap-4">
           <button
             type="button"
@@ -261,14 +259,13 @@ export const TaskModal = (props: Props) => {
 };
 
 interface TagPickerProps {
-  label: string;
   value?: string;
   color?: string;
   addOne: (data: { name: string; color: string }) => void;
 }
 
 const TagPicker = (props: TagPickerProps) => {
-  const { label, value, color, addOne } = props;
+  const { value, color, addOne } = props;
   const [selectedColor, setSelectedColor] = useState(color);
   const [text, setText] = useState(value ?? "");
 
@@ -304,11 +301,10 @@ const TagPicker = (props: TagPickerProps) => {
 
   return (
     <div className="rounded-lg flex flex-col gap-2 w-full md:w-fit">
-      <span>{label}</span>
       <div className="flex items-center flex-wrap gap-2">
         <div className="relative">
           <input
-            name={`${label}-text`}
+            name="tag-text"
             type="text"
             className="p-2 px-10 bg-transparent border border-solid border-gray-d0-500 rounded-md"
             value={text}
@@ -323,7 +319,7 @@ const TagPicker = (props: TagPickerProps) => {
           </div>
         </div>
         <input
-          name={`${label}-color`}
+          name="tag-color"
           className="invisible w-0 h-0"
           type="text"
           value={selectedColor ?? ""}
@@ -416,7 +412,7 @@ const StatusSelector = ({
     <Dropdown
       onChange={onChange}
       value={status}
-      className="rounded-lg p-3 shadow-sm border border-solid border-gray-d0-500"
+      className="rounded-md pr-4 p-2 border border-solid border-gray-d0-500"
     >
       {Object.entries(TASK_TABLE).map(([label, value]) => (
         <Dropdown.Option key={label} label={label} value={value} />
