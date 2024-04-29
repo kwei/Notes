@@ -22,6 +22,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { IoMdArrowRoundForward } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
 export const TaskModal = () => {
@@ -172,25 +173,30 @@ export const TaskModal = () => {
             defaultValue={task.title}
           />
         </div>
-        <fieldset className="mb-2 py-2 flex items-end gap-4 flex-wrap">
-          <legend className="px-4 bg-gray-500 rounded-sm">任務狀態</legend>
-          <StatusPicker value={task.status.name} />
-          <div className="flex items-center gap-2 flex-wrap">
+
+        <div className="mb-2 flex gap-4 flex-wrap">
+          <fieldset className="py-2">
+            <legend className="px-4 bg-gray-500 rounded-sm">任務狀態</legend>
+            <StatusPicker value={task.status.name} />
+          </fieldset>
+          <fieldset className="p-2 flex items-center gap-2">
+            <legend className="px-4 bg-gray-500 rounded-sm">起訖</legend>
             <input
               type="date"
               name="iat"
-              className="bg-transparent text-gray-d0-500 border-b border-solid border-gray-d0-500 px-2 py-1"
+              className="bg-transparent text-gray-d0-500 px-2 h-7 border-b border-solid border-gray-d0-500"
               defaultValue={task.iat ? formatDateString(task.iat) : ""}
             />
-            <span>-</span>
+            <IoMdArrowRoundForward className='size-4' />
             <input
               type="date"
               name="expiry"
-              className="bg-transparent text-gray-d0-500 border-b border-solid border-gray-d0-500 px-2 py-1"
+              className="bg-transparent text-gray-d0-500 px-2 h-7 border-b border-solid border-gray-d0-500"
               defaultValue={task.expiry ? formatDateString(task.expiry) : ""}
             />
-          </div>
-        </fieldset>
+          </fieldset>
+        </div>
+
         <fieldset className="mb-2 py-2 flex items-center flex-wrap">
           <legend className="px-4 bg-gray-500 rounded-sm">標籤</legend>
           <TagPicker color={TASK_COLOR.LIGHT_GRAY} addOne={handleOnAddTag} />
@@ -206,7 +212,7 @@ export const TaskModal = () => {
           {JSON.parse(newTags).map((tag: { name: string; color: string }) => (
             <div key={`${tag.name}-${tag.color}`} className="relative group">
               <span
-                className="rounded-full px-2 py-1 text-black select-none break-anywhere"
+                className="rounded-full px-2 py-1 text-black select-none break-anywhere text-sm"
                 style={{ backgroundColor: tag.color }}
               >
                 {tag.name}
@@ -222,7 +228,7 @@ export const TaskModal = () => {
             </div>
           ))}
         </div>
-        <fieldset className="mb-2 px-2 pb-2 flex flex-col border border-solid border-gray-d0-500 rounded-md">
+        <fieldset className="mb-4 px-2 pb-2 flex flex-col border border-solid border-gray-d0-500 rounded-md">
           <legend className="px-2 select-none">內容</legend>
           <textarea
             name="detail"
@@ -293,13 +299,13 @@ const TagPicker = (props: TagPickerProps) => {
   );
 
   return (
-    <div className="rounded-lg flex flex-col gap-2 w-full md:w-fit">
-      <div className="flex items-center flex-wrap gap-2">
-        <div className="relative">
+    <div className="rounded-lg flex flex-col gap-2 w-full">
+      <div className="flex w-full items-center flex-wrap">
+        <div className="relative w-full md:w-fit">
           <input
             name="tag-text"
             type="text"
-            className="p-2 px-10 bg-transparent border border-solid border-gray-d0-500 rounded-md"
+            className="w-full md:w-fit p-2 px-10 bg-transparent border border-solid border-gray-d0-500 rounded-md"
             value={text}
             onKeyDown={handleOnEnterText}
             onChange={handleOnChangeText}
@@ -310,6 +316,15 @@ const TagPicker = (props: TagPickerProps) => {
               color={selectedColor}
             />
           </div>
+          <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center border-l border-solid border-gray-d0-500">
+            <button
+              type="button"
+              onClick={handleAddOne}
+              className="rounded-r-md text-xl h-full px-3 transition-colors hover:bg-gray-d0-500 hover:text-black active:bg-transparent active:text-gray-d0-500"
+            >
+              +
+            </button>
+          </div>
         </div>
         <input
           name="tag-color"
@@ -318,13 +333,6 @@ const TagPicker = (props: TagPickerProps) => {
           value={selectedColor ?? ""}
           readOnly
         />
-        <button
-          type="button"
-          onClick={handleAddOne}
-          className="border border-solid border-gray-d0-500 rounded-md size-10 transition-colors hover:bg-gray-d0-500 hover:text-black active:bg-transparent active:text-gray-d0-500"
-        >
-          +
-        </button>
       </div>
     </div>
   );
@@ -405,7 +413,7 @@ const StatusSelector = ({
     <Dropdown
       onChange={onChange}
       value={status}
-      className="rounded-md pr-4 p-2 border border-solid border-gray-d0-500"
+      className="pr-4 h-7 border-b border-solid border-gray-d0-500"
     >
       {Object.entries(TASK_TABLE).map(([label, value]) => (
         <Dropdown.Option key={label} label={label} value={value} />
