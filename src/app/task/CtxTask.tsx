@@ -21,6 +21,7 @@ export const CtxTask = ({ children }: { children: ReactNode }) => {
   const [email] = useUserStore((state) => state.email);
 
   const fetchList = useCallback(async () => {
+    if (email === "") return;
     const taskTable = await fetchTodoList(email);
     if (Object.keys(taskTable).length > 0) {
       const sorted = {} as Record<TASK_STATUS, ITodo[]>;
