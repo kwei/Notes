@@ -72,10 +72,10 @@ export const TaskModal = () => {
         })
           .then((res: IMongoQueryRes) => {
             console.log(res.status, JSON.parse(res.message));
+            reFetch().finally();
           })
           .finally(() => {
             handleLoading(false);
-            reFetch().finally();
           });
       } else if (action === "add") {
         setTodo({
@@ -89,10 +89,10 @@ export const TaskModal = () => {
         })
           .then((res: IMongoQueryRes) => {
             console.log(res.status, JSON.parse(res.message));
+            reFetch().finally();
           })
           .finally(() => {
             handleLoading(false);
-            reFetch().finally();
           });
       } else {
         handleLoading(false);
@@ -233,7 +233,7 @@ export const TaskModal = () => {
           <textarea
             name="detail"
             rows={8}
-            className="w-full bg-transparent resize-none px-2 py-1"
+            className="w-full bg-transparent resize-none px-2 py-1 focus:outline-0"
             defaultValue={task.detail}
           />
         </fieldset>
