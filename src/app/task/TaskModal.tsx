@@ -72,7 +72,6 @@ export const TaskModal = () => {
         })
           .then((res: IMongoQueryRes) => {
             console.log(res.status, JSON.parse(res.message));
-            reFetch().finally();
           })
           .finally(() => {
             handleLoading(false);
@@ -89,7 +88,6 @@ export const TaskModal = () => {
         })
           .then((res: IMongoQueryRes) => {
             console.log(res.status, JSON.parse(res.message));
-            reFetch().finally();
           })
           .finally(() => {
             handleLoading(false);
@@ -187,7 +185,7 @@ export const TaskModal = () => {
               className="bg-transparent text-gray-d0-500 px-2 h-7 border-b border-solid border-gray-d0-500"
               defaultValue={task.iat ? formatDateString(task.iat) : ""}
             />
-            <IoMdArrowRoundForward className='size-4' />
+            <IoMdArrowRoundForward className="size-4" />
             <input
               type="date"
               name="expiry"

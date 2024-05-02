@@ -28,7 +28,8 @@ export const TaskCard = (props: Props) => {
 
   const handleCloseContent = useCallback(() => {
     if (!loading) setTaskModal({ open: false });
-  }, [loading, setTaskModal]);
+    setTimeout(() => reFetch(), 500);
+  }, [loading, reFetch, setTaskModal]);
 
   const handleOpenContent = useCallback(() => {
     if (!loading) {
