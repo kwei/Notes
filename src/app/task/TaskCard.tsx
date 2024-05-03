@@ -75,19 +75,20 @@ export const TaskCard = (props: Props) => {
   const handleOnDeleteTask = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
-      if (loading) return false;
-      setLoading(true);
-      deleteTodo(task)
-        .then((res: IMongoQueryRes) => {
-          console.log(res.status, JSON.parse(res.message));
-        })
-        .finally(() => {
-          reFetch().finally(() => {
-            setLoading(false);
+      if (window.confirm(`確定要刪除任務【${task.title}】嗎?`)) {
+        setLoading(true);
+        deleteTodo(task)
+          .then((res: IMongoQueryRes) => {
+            console.log(res.status, JSON.parse(res.message));
+          })
+          .finally(() => {
+            reFetch().finally(() => {
+              setLoading(false);
+            });
           });
-        });
+      }
     },
-    [loading, reFetch, task],
+    [reFetch, task],
   );
 
   return (
