@@ -11,22 +11,6 @@ type ArticleTable = Record<string, ArticleTopics>;
 type ArticleTopics = Record<string, Article[]>;
 type Article = { name: string; id: string };
 
-interface Task {
-  id: string;
-  title: string;
-  tags: {
-    name: string;
-    color: TASK_COLOR;
-  }[];
-  status: {
-    id: string;
-    name: TASK_STATUS;
-    color: TASK_COLOR;
-  };
-  iat?: Date;
-  expiry?: Date;
-}
-
 interface ITaskContextValue {
   list: Record<TASK_STATUS, ITodo[]>;
   reFetch: () => Promise<void>;
@@ -36,6 +20,11 @@ type ITag = {
   name: string;
   color: TASK_COLOR;
 };
+
+type IMsgLog = {
+  text: string;
+  datetime: string;
+}
 
 interface ITodo {
   id?: string;
@@ -48,6 +37,7 @@ interface ITodo {
   expiry?: Date;
   userEmail: string;
   detail: string;
+  msgLog?: IMsgLog[];
 }
 
 interface IUser {

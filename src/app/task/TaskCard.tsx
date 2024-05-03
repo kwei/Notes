@@ -4,10 +4,11 @@ import { useTaskCtx } from "@/app/task/CtxTask";
 import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
 import { sortTags } from "@/hooks/useAllTags";
-import { IMongoQueryRes, ITodo } from "@/type";
+import { IMongoQueryRes, IMsgLog, ITodo } from "@/type";
 import { deleteTodo } from "@/utils/deleteTodo";
 import { useTaskModalStoreCtx } from "@/utils/externalStores";
 import { formatPeriod } from "@/utils/formatPeriod";
+import { format } from "date-fns";
 import { useCallback, useState, MouseEvent, DragEvent, useRef } from "react";
 import { IoCalendarOutline, IoClose } from "react-icons/io5";
 
@@ -29,8 +30,7 @@ export const TaskCard = (props: Props) => {
 
   const handleCloseContent = useCallback(() => {
     if (!loading) setTaskModal({ open: false });
-    setTimeout(() => reFetch(), 500);
-  }, [loading, reFetch, setTaskModal]);
+  }, [loading, setTaskModal]);
 
   const handleOpenContent = useCallback(() => {
     if (!loading) {
@@ -115,6 +115,11 @@ export const TaskCard = (props: Props) => {
               {formatPeriod(task.iat, task.expiry)}
             </span>
           </div>
+          <div className="flex flex-col">
+            {task.msgLog?.map((log) => (
+              <LogBlock key={JSON.stringify(log)} log={log} />
+            ))}
+          </div>
           <div className="flex items-center flex-wrap mt-2 gap-2">
             {sortTags(task.tags).map((tag) => (
               <TagBlock key={tag.name} tag={tag} />
@@ -130,6 +135,25 @@ export const TaskCard = (props: Props) => {
       >
         <IoClose />
       </button>
+    </div>
+  );
+};
+
+const LogBlock = ({ log }: { log: IMsgLog }) => {
+  return (
+    <div className="relative flex items-center group/log">
+      <div className="absolute left-0 top-0 bottom-0 flex items-center">
+        <span className="ml-2 h-full px-px bg-gray-8b-500"></span>
+      </div>
+      <div className="absolute left-0 top-0 bottom-0 flex items-center">
+        <span
+          className="size-[9px] ml-[4px] bg-gray-8b-500 rounded-full group-hover/log:bg-gray-be-500 transition-colors"
+          title={format(new Date(log.datetime), "yyyy/MM/dd hh:mm:ss")}
+        ></span>
+      </div>
+      <span className="text-xs text-left pl-5 text-gray-8b-500 py-px group-hover/log:text-gray-be-500 transition-colors">
+        {log.text}
+      </span>
     </div>
   );
 };

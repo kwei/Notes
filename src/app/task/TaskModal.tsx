@@ -1,9 +1,11 @@
 "use client";
 
+import { useTaskCtx } from "@/app/task/CtxTask";
+import { MsgLog } from "@/app/task/MsgLog";
 import { Dropdown } from "@/components/Dropdown";
 import { sortTags, useAllTags } from "@/hooks/useAllTags";
 import { useFocusRef } from "@/hooks/useFocusRef";
-import { IMongoQueryRes } from "@/type";
+import { IMongoQueryRes, IMsgLog, ITag } from "@/type";
 import {
   COLOR_TABLE,
   TASK_COLOR,
@@ -30,11 +32,15 @@ export const TaskModal = () => {
   const [info] = useTaskModalStore((state) => state);
   const { task, open, action, onClose, handleLoading } = info;
   const { allTags } = useAllTags();
+  const { reFetch } = useTaskCtx();
+  const [loading, setLoading] = useState(false);
   const [newTags, setNewTags] = useState(JSON.stringify(task.tags));
+  const [newLogs, setNewLogs] = useState(JSON.stringify(task.msgLog ?? []));
   const handleOnClose = useCallback(() => {
     setNewTags(JSON.stringify(task.tags));
+    setNewLogs(JSON.stringify(task.msgLog ?? []));
     onClose();
-  }, [onClose, task.tags]);
+  }, [onClose, task.msgLog, task.tags]);
   const ref = useFocusRef<HTMLFormElement>(() => {
     handleOnClose();
   });
@@ -51,7 +57,8 @@ export const TaskModal = () => {
       const status = {
         name: (formData.get("status") ?? task.status.name) as TASK_STATUS,
       };
-      const tags = JSON.parse(newTags) as { name: string; color: TASK_COLOR }[];
+      const tags = JSON.parse(newTags) as ITag[];
+      const msgLog = JSON.parse(newLogs) as IMsgLog[];
       const iat = formData.get("iat")
         ? new Date(formData.get("iat") as string)
         : undefined;
@@ -61,44 +68,61 @@ export const TaskModal = () => {
       const detail = formData.get("detail") as string;
       handleLoading(true);
       if (action === "update") {
+        setLoading(true);
         updateTodo(task, {
           ...task,
           title,
           status,
           tags,
+          msgLog,
           iat,
           expiry,
           detail,
-        })
-          .then((res: IMongoQueryRes) => {
-            console.log(res.status, JSON.parse(res.message));
-          })
-          .finally(() => {
+        }).then((res: IMongoQueryRes) => {
+          console.log(res.status, JSON.parse(res.message));
+          reFetch().finally(() => {
             handleLoading(false);
+            setLoading(false);
+            resetFormData();
+            handleOnClose();
           });
+        });
       } else if (action === "add") {
+        setLoading(true);
         setTodo({
           ...task,
           title,
           status,
           tags,
+          msgLog,
           iat,
           expiry,
           detail,
-        })
-          .then((res: IMongoQueryRes) => {
-            console.log(res.status, JSON.parse(res.message));
-          })
-          .finally(() => {
+        }).then((res: IMongoQueryRes) => {
+          console.log(res.status, JSON.parse(res.message));
+          reFetch().finally(() => {
             handleLoading(false);
+            setLoading(false);
+            resetFormData();
+            handleOnClose();
           });
+        });
       } else {
         handleLoading(false);
+        resetFormData();
+        handleOnClose();
       }
-      resetFormData();
-      handleOnClose();
     },
-    [action, handleLoading, handleOnClose, newTags, resetFormData, task],
+    [
+      action,
+      handleLoading,
+      handleOnClose,
+      newLogs,
+      newTags,
+      reFetch,
+      resetFormData,
+      task,
+    ],
   );
 
   function handleOnAddTag(data: { name: string; color: string }) {
@@ -153,17 +177,49 @@ export const TaskModal = () => {
     });
   }
 
+  function handleOnAddMsgLog(data: IMsgLog) {
+    setNewLogs((prevState) => {
+      const newState = prevState;
+      if (newState !== "") {
+        const newOne = JSON.parse(newState) as IMsgLog[];
+        newOne.push(data);
+        return JSON.stringify(newOne);
+      } else {
+        return JSON.stringify(data);
+      }
+    });
+  }
+
+  function handleOnRemoveMsgLog(data: IMsgLog) {
+    setNewLogs((prevState) => {
+      const newState = prevState;
+      if (newState !== "") {
+        const newOne = JSON.parse(newState) as IMsgLog[];
+        const i = newOne.findIndex(
+          (d) => JSON.stringify(d) === JSON.stringify(data),
+        );
+        if (i !== -1) newOne.splice(i, 1);
+        return JSON.stringify(newOne);
+      } else {
+        return newState;
+      }
+    });
+  }
+
   useEffect(() => {
     setNewTags(JSON.stringify(task.tags));
-  }, [task.tags]);
+    setNewLogs(JSON.stringify(task.msgLog ?? []));
+  }, [task.msgLog, task.tags]);
 
   if (!open) return null;
   return (
-    <div className="fixed z-40 left-0 right-0 top-0 bottom-0 bg-black/50 md:items-center flex justify-center items-end">
+    <div
+      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-black/50 md:items-center flex justify-center items-end ${loading ? "invisible opacity-0" : ""}`}
+    >
       <form
         ref={ref}
         onSubmit={handleOnSubmit}
-        className="relative flex flex-col bg-[#403F44] p-5 max-w-[800px] md:py-8 md:px-10 rounded-t-2xl md:rounded-2xl w-full md:w-2/3 md:max-h-5/6 animate-slideIn-from-bottom"
+        className="relative max-h-full overflow-y-auto flex flex-col bg-[#403F44] p-5 max-w-[800px] md:py-8 md:px-10 md:rounded-2xl w-full md:w-2/3 md:max-h-5/6 animate-slideIn-from-bottom"
       >
         <button
           type="button"
@@ -258,12 +314,23 @@ export const TaskModal = () => {
           <legend className="px-2 select-none">內容</legend>
           <textarea
             name="detail"
-            rows={8}
+            rows={5}
             className="w-full bg-transparent resize-none px-2 py-1 focus:outline-0"
             defaultValue={task.detail}
           />
         </fieldset>
-        <div className="flex items-center justify-end gap-4">
+        <fieldset className="mb-4 py-2 flex flex-col">
+          <legend className="px-4 bg-gray-500 rounded-sm">日誌</legend>
+          {JSON.parse(newLogs)?.map((log: IMsgLog) => (
+            <MsgLog
+              key={log.datetime}
+              msg={log}
+              removeLog={handleOnRemoveMsgLog}
+            />
+          ))}
+          <MsgLog addLog={handleOnAddMsgLog} />
+        </fieldset>
+        <div className="flex flex-1 items-end justify-end gap-4">
           <button
             type="button"
             onClick={handleOnClose}

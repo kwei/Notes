@@ -78,6 +78,7 @@ async function updateData(
     detail: data.detail,
     status: data.status,
     tags: data.tags,
+    msgLog: data.msgLog,
   };
   const res = await collections.updateOne(formatQueryObj(filter), {
     $set: newData,
@@ -105,5 +106,6 @@ function formatQueryObj(data: Partial<ITodo>): Partial<ITodo> {
     detail: data.detail,
     status: data.status,
     tags: data.tags,
+    msgLog: data.msgLog,
   };
 }

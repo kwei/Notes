@@ -92,7 +92,6 @@ export const TaskContainer = (props: Props) => {
 
   function handleCloseContent() {
     setTaskModal({ open: false });
-    setTimeout(() => reFetch(), 500);
   }
 
   return (
