@@ -16,13 +16,24 @@ export const useAllTags = () => {
         });
       }),
     );
-    return Array.from(res).sort();
+    return Array.from(res);
   }, [list]);
 
-  const allTags = useMemo(
-    () => allTagStringify.map((s) => JSON.parse(s) as ITag),
-    [allTagStringify],
-  );
+  const allTags = useMemo(() => {
+    const unsorted = allTagStringify.map((s) => JSON.parse(s) as ITag);
+    return sortTags(unsorted);
+  }, [allTagStringify]);
 
   return { allTags };
 };
+
+export function sortTags(tags: ITag[]) {
+  const unsorted = Array.from(tags);
+  const sorted = unsorted.map((d) => d.name).sort();
+  const res: ITag[] = [];
+  sorted.forEach((tagName) => {
+    const tag = unsorted.find((d) => d.name === tagName);
+    if (tag) res.push(tag);
+  });
+  return res;
+}

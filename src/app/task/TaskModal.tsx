@@ -1,7 +1,7 @@
 "use client";
 
 import { Dropdown } from "@/components/Dropdown";
-import { useAllTags } from "@/hooks/useAllTags";
+import { sortTags, useAllTags } from "@/hooks/useAllTags";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { IMongoQueryRes } from "@/type";
 import {
@@ -233,24 +233,26 @@ export const TaskModal = () => {
           </div>
         </fieldset>
         <div className="mb-4 flex items-center gap-2 flex-wrap">
-          {JSON.parse(newTags).map((tag: { name: string; color: string }) => (
-            <div key={`${tag.name}-${tag.color}`} className="relative group">
-              <span
-                className="rounded-full px-2 py-1 text-black select-none break-anywhere text-sm"
-                style={{ backgroundColor: tag.color }}
-              >
-                {tag.name}
-              </span>
-              <button
-                type="button"
-                title="Delete Tag"
-                onClick={() => handleOnRemoveTag(tag)}
-                className="absolute flex items-center justify-center z-20 -top-2 -right-2 hover:bg-red-ff-500 size-4 rounded-full bg-red-ff-500/50 opacity-0 group-hover:opacity-100 transition-all pointer-events-none group-hover:pointer-events-auto"
-              >
-                <IoClose />
-              </button>
-            </div>
-          ))}
+          {sortTags(JSON.parse(newTags)).map(
+            (tag: { name: string; color: string }) => (
+              <div key={`${tag.name}-${tag.color}`} className="relative group">
+                <span
+                  className="rounded-full px-2 py-1 text-black select-none break-anywhere text-sm"
+                  style={{ backgroundColor: tag.color }}
+                >
+                  {tag.name}
+                </span>
+                <button
+                  type="button"
+                  title="Delete Tag"
+                  onClick={() => handleOnRemoveTag(tag)}
+                  className="absolute flex items-center justify-center z-20 -top-2 -right-2 hover:bg-red-ff-500 size-4 rounded-full bg-red-ff-500/50 opacity-0 group-hover:opacity-100 transition-all pointer-events-none group-hover:pointer-events-auto"
+                >
+                  <IoClose />
+                </button>
+              </div>
+            ),
+          )}
         </div>
         <fieldset className="mb-4 px-2 pb-2 flex flex-col border border-solid border-gray-d0-500 rounded-md">
           <legend className="px-2 select-none">內容</legend>

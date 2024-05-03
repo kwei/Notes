@@ -3,6 +3,7 @@
 import { useTaskCtx } from "@/app/task/CtxTask";
 import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
+import { sortTags } from "@/hooks/useAllTags";
 import { IMongoQueryRes, ITodo } from "@/type";
 import { deleteTodo } from "@/utils/deleteTodo";
 import { useTaskModalStoreCtx } from "@/utils/externalStores";
@@ -115,7 +116,7 @@ export const TaskCard = (props: Props) => {
             </span>
           </div>
           <div className="flex items-center flex-wrap mt-2 gap-2">
-            {task.tags.map((tag) => (
+            {sortTags(task.tags).map((tag) => (
               <TagBlock key={tag.name} tag={tag} />
             ))}
           </div>

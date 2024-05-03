@@ -38,7 +38,7 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
   if (loading && !user) return <Loading />;
 
   return (
-    <div className="w-full flex items-center justify-end pb-4 max-md:p-4">
+    <div className="w-full flex items-center justify-end pb-4 max-xl:p-4">
       {user && (
         <div className="relative group flex items-center gap-3">
           <Image

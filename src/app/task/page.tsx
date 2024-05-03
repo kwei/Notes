@@ -22,7 +22,7 @@ export default async function Home() {
     : null;
 
   return (
-    <main className="flex w-full flex-1 flex-col md:p-4">
+    <main className="flex w-full flex-1 flex-col xl:p-4 items-center">
       <UserProvider>
         <ToastProvider>
           <CtxTask>

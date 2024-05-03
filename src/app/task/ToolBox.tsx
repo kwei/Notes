@@ -14,9 +14,7 @@ interface Props {
 
 export const ToolBox = ({ className = "" }: Props) => {
   return (
-    <div
-      className={`w-full flex items-center justify-end gap-5 bg-gray-800 p-3 md:pr-5 md:rounded-t-3xl flex-wrap ${className}`}
-    >
+    <div className="w-full flex items-center justify-end gap-5 flex-wrap">
       <TagFilter />
       <TimeFilter />
       <SaveBtn />
