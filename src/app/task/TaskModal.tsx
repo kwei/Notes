@@ -1,7 +1,7 @@
 "use client";
 
-import { useTaskCtx } from "@/app/task/CtxTask";
 import { Dropdown } from "@/components/Dropdown";
+import { useAllTags } from "@/hooks/useAllTags";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { IMongoQueryRes } from "@/type";
 import {
@@ -29,6 +29,7 @@ export const TaskModal = () => {
   const { useStore: useTaskModalStore } = useTaskModalStoreCtx();
   const [info] = useTaskModalStore((state) => state);
   const { task, open, action, onClose, handleLoading } = info;
+  const { allTags } = useAllTags();
   const [newTags, setNewTags] = useState(JSON.stringify(task.tags));
   const handleOnClose = useCallback(() => {
     setNewTags(JSON.stringify(task.tags));
@@ -37,7 +38,6 @@ export const TaskModal = () => {
   const ref = useFocusRef<HTMLFormElement>(() => {
     handleOnClose();
   });
-  const { reFetch } = useTaskCtx();
 
   const resetFormData = useCallback(() => {
     (ref.current as HTMLFormElement).reset();
@@ -98,15 +98,7 @@ export const TaskModal = () => {
       resetFormData();
       handleOnClose();
     },
-    [
-      action,
-      handleLoading,
-      handleOnClose,
-      newTags,
-      reFetch,
-      resetFormData,
-      task,
-    ],
+    [action, handleLoading, handleOnClose, newTags, resetFormData, task],
   );
 
   function handleOnAddTag(data: { name: string; color: string }) {
@@ -140,6 +132,23 @@ export const TaskModal = () => {
         return JSON.stringify(newOne);
       } else {
         return newState;
+      }
+    });
+  }
+
+  function handleSelectExistedTag(tagStringify: string) {
+    const data = JSON.parse(tagStringify);
+    setNewTags((prevState) => {
+      const newState = prevState;
+      if (newState !== "") {
+        const newOne = JSON.parse(newState) as {
+          name: string;
+          color: string;
+        }[];
+        newOne.push(data);
+        return JSON.stringify(newOne);
+      } else {
+        return JSON.stringify(data);
       }
     });
   }
@@ -205,6 +214,23 @@ export const TaskModal = () => {
             value={newTags}
             readOnly
           />
+          <div className="md:w-fit w-full pt-4">
+            <Dropdown
+              onChange={handleSelectExistedTag}
+              placeHolder="Add Existed Tag"
+              className="border border-solid border-gray-d0-500 rounded-lg p-1 pr-4 md:w-fit w-full"
+            >
+              {allTags.map((tag) => (
+                <Dropdown.Option
+                  key={tag.name}
+                  label={tag.name}
+                  value={JSON.stringify(tag)}
+                  style={{ borderColor: tag.color }}
+                  className="border-l-4 border-solid rounded-l-none"
+                />
+              ))}
+            </Dropdown>
+          </div>
         </fieldset>
         <div className="mb-4 flex items-center gap-2 flex-wrap">
           {JSON.parse(newTags).map((tag: { name: string; color: string }) => (

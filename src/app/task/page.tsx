@@ -1,3 +1,4 @@
+import { CtxTask } from "@/app/task/CtxTask";
 import { TaskBoardContainer } from "@/app/task/TaskBoardContainer";
 import { TaskModal } from "@/app/task/TaskModal";
 import { Toast } from "@/components/Toast";
@@ -24,11 +25,13 @@ export default async function Home() {
     <main className="flex w-full flex-1 flex-col md:p-4">
       <UserProvider>
         <ToastProvider>
-          <TaskModalProvider>
-            <UserInfo user={userInfo} />
-            {userInfo && <TaskBoardContainer />}
-            <TaskModal />
-          </TaskModalProvider>
+          <CtxTask>
+            <TaskModalProvider>
+              <UserInfo user={userInfo} />
+              {userInfo && <TaskBoardContainer />}
+              <TaskModal />
+            </TaskModalProvider>
+          </CtxTask>
           <Toast />
         </ToastProvider>
       </UserProvider>

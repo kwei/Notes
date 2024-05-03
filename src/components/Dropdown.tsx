@@ -113,7 +113,7 @@ interface OptionProps
 }
 
 const Option = (props: OptionProps) => {
-  const { label, value, prefix, postfix, ...legacy } = props;
+  const { label, value, prefix, postfix, className, ...legacy } = props;
   const { value: selected, onChange } = useContext(DropdownContext);
 
   const isSelected = useMemo(() => {
@@ -130,7 +130,7 @@ const Option = (props: OptionProps) => {
       {...legacy}
       onClick={handleOnClick}
       type="button"
-      className={`flex items-center gap-3 py-2 px-2 rounded-md transition-all ${isSelected ? "text-green-50-500 bg-gray-600" : "hover:bg-gray-600 hover:text-green-50-500"}`}
+      className={`${className} flex items-center gap-3 py-2 px-2 rounded-md transition-all ${isSelected ? "text-green-50-500 bg-gray-600" : "hover:bg-gray-600 hover:text-green-50-500"}`}
     >
       {prefix}
       {label ?? value}

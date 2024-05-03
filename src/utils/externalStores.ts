@@ -1,6 +1,6 @@
 "use client";
 
-import { ITaskModal, IToast, ITodo, IUser } from "@/type";
+import { IMetaConfig, ITaskModal, IToast, ITodo, IUser } from "@/type";
 import { TASK_STATUS, TOAST_TYPE } from "@/utils/constants";
 import { createExternalStoreProvider } from "@/utils/createExternalStoreProvider";
 
@@ -36,3 +36,9 @@ export const {
   onClose: () => {},
   handleLoading: () => {},
 });
+
+export const { Provider: MetaProvider, useStoreCtx: useMetaStoreCtx } =
+  createExternalStoreProvider<IMetaConfig>({
+    filteredTag: "",
+    filteredPeriod: "",
+  });

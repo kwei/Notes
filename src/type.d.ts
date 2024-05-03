@@ -32,13 +32,15 @@ interface ITaskContextValue {
   reFetch: () => Promise<void>;
 }
 
+type ITag = {
+  name: string;
+  color: TASK_COLOR;
+};
+
 interface ITodo {
   id?: string;
   title: string;
-  tags: {
-    name: string;
-    color: TASK_COLOR;
-  }[];
+  tags: ITag[];
   status: {
     name: TASK_STATUS;
   };
@@ -65,7 +67,7 @@ interface IMongoQueryRes {
   message: string;
 }
 
-interface MetaConfig {}
+interface IMetaConfig {}
 
 interface IToast {
   type: TOAST_TYPE;

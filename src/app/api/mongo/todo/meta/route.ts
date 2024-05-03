@@ -1,12 +1,12 @@
 import { MONGODB_LINE_USER_URI } from "@/app/api/mongo/constants";
-import { MetaConfig, IMongoQuery, IMongoQueryRes } from "@/type";
+import { IMetaConfig, IMongoQuery, IMongoQueryRes } from "@/type";
 import { NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 
 export async function POST(req: Request) {
   console.log("[POST] req url: ", req.url);
   const MONGODB_LINE_USER_CLIENT = new MongoClient(MONGODB_LINE_USER_URI);
-  const doc = (await req.json()) as IMongoQuery<MetaConfig>;
+  const doc = (await req.json()) as IMongoQuery<IMetaConfig>;
   let res: IMongoQueryRes = {
     status: true,
     message: "",

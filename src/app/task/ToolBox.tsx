@@ -1,15 +1,11 @@
 "use client";
 
-import { useTaskCtx } from "@/app/task/CtxTask";
 import { ExportTaskModal } from "@/app/task/ExportTaskModal";
 import { useToolCtx } from "@/app/task/ToolCtxProvider";
 import { Dropdown } from "@/components/Dropdown";
-import { ITodo } from "@/type";
-import { TASK_STATUS, TASK_TABLE } from "@/utils/constants";
-import { filterPeriod } from "@/utils/filterPeriod";
-import { filterTag } from "@/utils/filterTag";
+import { useAllTags } from "@/hooks/useAllTags";
 import { formatDateString } from "@/utils/formatDateString";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 
 interface Props {
@@ -29,21 +25,9 @@ export const ToolBox = ({ className = "" }: Props) => {
 };
 
 const TagFilter = () => {
-  const { list } = useTaskCtx();
   const { setSelectedTag } = useToolCtx();
+  const { allTags } = useAllTags();
   const [tag, setTag] = useState<string>();
-
-  const allTags = useMemo(() => {
-    const res = new Set<string>([]);
-    Object.values(list).forEach((tasks) =>
-      tasks.forEach((task) => {
-        task.tags.forEach((tag) => {
-          res.add(tag.name);
-        });
-      }),
-    );
-    return Array.from(res);
-  }, [list]);
 
   const handleOnChange = useCallback((option: string) => {
     if (option !== "") {
@@ -76,7 +60,7 @@ const TagFilter = () => {
     >
       <Dropdown.Option label="Reset" value="" />
       {allTags.map((tag) => (
-        <Dropdown.Option key={tag} label={tag} value={tag} />
+        <Dropdown.Option key={tag.name} label={tag.name} value={tag.name} />
       ))}
     </Dropdown>
   );
