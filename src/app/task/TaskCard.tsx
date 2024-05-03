@@ -8,13 +8,13 @@ import { deleteTodo } from "@/utils/deleteTodo";
 import { useTaskModalStoreCtx } from "@/utils/externalStores";
 import { formatPeriod } from "@/utils/formatPeriod";
 import { useCallback, useState, MouseEvent, DragEvent, useRef } from "react";
-import { IoClose, IoTimeOutline } from "react-icons/io5";
+import { IoCalendarOutline, IoClose } from "react-icons/io5";
 
 interface Props {
   task: ITodo;
 }
 
-const TODAY = new Date().getTime();
+const TODAY = new Date().getTime() - 24 * 60 * 60 * 1000;
 
 export const TaskCard = (props: Props) => {
   const { task } = props;
@@ -107,7 +107,7 @@ export const TaskCard = (props: Props) => {
         >
           <span className="font-semibold text-left">{task.title}</span>
           <div className="flex items-center gap-1 py-1">
-            <IoTimeOutline
+            <IoCalendarOutline
               className={`size-4 ${new Date(task.expiry ?? new Date()).getTime() < TODAY ? "text-red-ff-500" : "text-gray-500"}`}
             />
             <span className="text-xs text-gray-d0-500/50 text-start break-words">
