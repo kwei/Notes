@@ -70,16 +70,7 @@ async function updateData(
   filter: Partial<ITodo>,
   data: ITodo,
 ) {
-  const newData = {
-    title: data.title,
-    iat: data.iat,
-    expiry: data.expiry,
-    userEmail: data.userEmail,
-    detail: data.detail,
-    status: data.status,
-    tags: data.tags,
-    msgLog: data.msgLog,
-  };
+  const newData = formatQueryObj(data);
   const res = await collections.updateOne(formatQueryObj(filter), {
     $set: newData,
   });
@@ -98,14 +89,16 @@ async function deleteData(collections: Collection, filter: Partial<ITodo>) {
 }
 
 function formatQueryObj(data: Partial<ITodo>): Partial<ITodo> {
+  const newObj = JSON.parse(JSON.stringify(data)) as Partial<ITodo>;
   return {
-    title: data.title,
-    iat: data.iat,
-    expiry: data.expiry,
-    userEmail: data.userEmail,
-    detail: data.detail,
-    status: data.status,
-    tags: data.tags,
-    msgLog: data.msgLog,
+    title: newObj.title,
+    iat: newObj.iat,
+    expiry: newObj.expiry,
+    userEmail: newObj.userEmail,
+    detail: newObj.detail,
+    status: newObj.status,
+    tags: newObj.tags,
+    msgLog: newObj.msgLog,
+    complete: newObj.complete,
   };
 }

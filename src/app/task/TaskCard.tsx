@@ -8,9 +8,11 @@ import { IMongoQueryRes, IMsgLog, ITodo } from "@/type";
 import { deleteTodo } from "@/utils/deleteTodo";
 import { useTaskModalStoreCtx } from "@/utils/externalStores";
 import { formatPeriod } from "@/utils/formatPeriod";
+import { updateTodo } from "@/utils/updateTodo";
 import { format } from "date-fns";
 import { useCallback, useState, MouseEvent, DragEvent, useRef } from "react";
 import { IoCalendarOutline, IoClose } from "react-icons/io5";
+import { MdCheckCircle, MdOutlineCheckCircleOutline } from "react-icons/md";
 
 interface Props {
   task: ITodo;
@@ -91,6 +93,23 @@ export const TaskCard = (props: Props) => {
     [reFetch, task],
   );
 
+  const handleOnChangeTaskStatus = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      setLoading(true);
+      updateTodo(task, { ...task, complete: !task.complete })
+        .then((res: IMongoQueryRes) => {
+          console.log(res.status, JSON.parse(res.message));
+        })
+        .finally(() => {
+          reFetch().finally(() => {
+            setLoading(false);
+          });
+        });
+    },
+    [reFetch, task],
+  );
+
   return (
     <div
       draggable={true}
@@ -107,7 +126,7 @@ export const TaskCard = (props: Props) => {
           onClick={handleOpenContent}
           className="flex flex-col md:p-4 p-3 w-full z-20 bg-gray-800 rounded-2xl"
         >
-          <span className="font-semibold text-left">{task.title}</span>
+          <span className="font-semibold text-left pl-5">{task.title}</span>
           <div className="flex items-center gap-1 py-1">
             <IoCalendarOutline
               className={`size-4 ${new Date(task.expiry ?? new Date()).getTime() < TODAY ? "text-red-ff-500" : "text-gray-500"}`}
@@ -134,7 +153,19 @@ export const TaskCard = (props: Props) => {
         onClick={handleOnDeleteTask}
         className="absolute flex items-center justify-center z-20 top-2 right-2 hover:bg-red-ff-500 size-6 rounded-full bg-red-ff-500/50 opacity-0 group-hover:opacity-100 transition-all pointer-events-none group-hover:pointer-events-auto"
       >
-        <IoClose />
+        <IoClose className="size-4" />
+      </button>
+      <button
+        disabled={loading}
+        title="Complete Task"
+        onClick={handleOnChangeTaskStatus}
+        className="absolute flex items-center justify-center z-20 top-4 left-2 size-6 transition-all rounded-full group/task"
+      >
+        {task.complete ? (
+          <MdCheckCircle className="size-5 text-green-600" />
+        ) : (
+          <MdOutlineCheckCircleOutline className="size-5 text-gray-8b-500 group-hover/task:text-gray-d0-500" />
+        )}
       </button>
     </div>
   );

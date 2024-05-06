@@ -38,6 +38,7 @@ interface ITodo {
   userEmail: string;
   detail: string;
   msgLog?: IMsgLog[];
+  complete?: boolean;
 }
 
 interface IUser {
