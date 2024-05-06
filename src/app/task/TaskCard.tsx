@@ -159,12 +159,12 @@ export const TaskCard = (props: Props) => {
         disabled={loading}
         title="Complete Task"
         onClick={handleOnChangeTaskStatus}
-        className="absolute flex items-center justify-center z-20 top-4 left-2 size-6 transition-all rounded-full group/task"
+        className="absolute flex items-center justify-center z-20 top-4 left-2 size-6 rounded-full group/task-complete"
       >
         {task.complete ? (
-          <MdCheckCircle className="size-5 text-green-600" />
+          <MdCheckCircle className="size-5 text-green-600 group-hover/task-complete:text-green-500 transition-all" />
         ) : (
-          <MdOutlineCheckCircleOutline className="size-5 text-gray-8b-500 group-hover/task:text-gray-d0-500" />
+          <MdOutlineCheckCircleOutline className="size-5 text-gray-8b-500 group-hover/task-complete:text-gray-d0-500 transition-all" />
         )}
       </button>
     </div>
