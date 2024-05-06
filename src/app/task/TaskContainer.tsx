@@ -6,7 +6,7 @@ import { useDraggableTask } from "@/app/task/DraggableTask";
 import { TaskCardSkeleton } from "@/app/task/TaskCardSkeleton";
 import { useToolCtx } from "@/app/task/ToolCtxProvider";
 import { IMongoQueryRes, ITodo } from "@/type";
-import { TASK_STATUS, TASK_TABLE } from "@/utils/constants";
+import { TASK_STATUS } from "@/utils/constants";
 import { useTaskModalStoreCtx, useUserStoreCtx } from "@/utils/externalStores";
 import { filterPeriod } from "@/utils/filterPeriod";
 import { filterTag } from "@/utils/filterTag";
