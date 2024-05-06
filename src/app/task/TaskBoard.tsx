@@ -3,8 +3,14 @@
 import { TaskContainer } from "@/app/task/TaskContainer";
 import { TaskCard } from "@/app/task/TaskCard";
 import { TASK_STATUS, TASK_TABLE } from "@/utils/constants";
+import { requestNotificationPermission } from "@/utils/notify";
+import { useEffect } from "react";
 
 export const TaskBoard = () => {
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
   return (
     <div className="h-full flex-1 flex overflow-x-auto w-full scrollbar">
       <div className="flex-1 grid grid-cols-4 gap-2 min-w-[1060px]">

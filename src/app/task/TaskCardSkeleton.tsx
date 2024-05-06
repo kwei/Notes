@@ -1,6 +1,6 @@
 export const TaskCardSkeleton = () => {
   return (
-    <div className="rounded-2xl border border-solid animate-pulse border-gray-d0-500/50 opca">
+    <div className="rounded-2xl border border-solid animate-pulse border-gray-600">
       <div className="flex flex-col md:p-4 p-3 z-20">
         <span className="w-full pl-5 bg-gray-600 h-6 rounded-md"></span>
         <span className="w-1/2 mt-1 bg-gray-600 h-4 rounded-md"></span>

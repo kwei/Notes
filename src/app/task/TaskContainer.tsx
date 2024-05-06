@@ -6,13 +6,15 @@ import { useDraggableTask } from "@/app/task/DraggableTask";
 import { TaskCardSkeleton } from "@/app/task/TaskCardSkeleton";
 import { useToolCtx } from "@/app/task/ToolCtxProvider";
 import { IMongoQueryRes, ITodo } from "@/type";
-import { TASK_STATUS } from "@/utils/constants";
+import { TASK_STATUS, TASK_TABLE } from "@/utils/constants";
 import { useTaskModalStoreCtx, useUserStoreCtx } from "@/utils/externalStores";
 import { filterPeriod } from "@/utils/filterPeriod";
 import { filterTag } from "@/utils/filterTag";
 import { formatPeriod } from "@/utils/formatPeriod";
+import { notify } from "@/utils/notify";
 import { updateTodo } from "@/utils/updateTodo";
-import { DragEvent, ReactNode, useCallback, useState } from "react";
+import { format } from "date-fns";
+import { DragEvent, ReactNode, useCallback, useEffect, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 
@@ -23,6 +25,7 @@ interface Props {
 }
 
 const TODAY = new Date().getTime();
+let taskWorker: Worker | undefined;
 
 export const TaskContainer = (props: Props) => {
   const { className = "", label, children } = props;
@@ -35,6 +38,7 @@ export const TaskContainer = (props: Props) => {
   const [, setTaskModal] = useTaskModalStore((state) => state);
   const [isDragOver, setIsDragOver] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [beingExpiryTasks, setBeingExpiryTasks] = useState("[]");
 
   function handleOnDragEnter() {
     setIsDragOver(true);
@@ -94,6 +98,29 @@ export const TaskContainer = (props: Props) => {
   function handleCloseContent() {
     setTaskModal({ open: false });
   }
+
+  useEffect(() => {
+    taskWorker = new Worker("notificationWorker.js");
+    taskWorker.onmessage = (event) => {
+      setBeingExpiryTasks(event.data as string);
+    };
+  }, []);
+
+  useEffect(() => {
+    taskWorker?.postMessage(JSON.stringify(list));
+  }, [list]);
+
+  useEffect(() => {
+    if (beingExpiryTasks !== "[]") {
+      const taskList = JSON.parse(beingExpiryTasks) as ITodo[];
+      taskList.forEach((_task) => {
+        notify(
+          "任務即將到期!",
+          `任務【${_task.title}】\n將於 ${format(new Date(_task.expiry!), "yyy/MM/dd")} 到期`,
+        );
+      });
+    }
+  }, [beingExpiryTasks]);
 
   return (
     <div
