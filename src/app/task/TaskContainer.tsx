@@ -3,6 +3,7 @@
 import { useTaskCtx } from "@/app/task/CtxTask";
 import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
+import { TaskCardSkeleton } from "@/app/task/TaskCardSkeleton";
 import { useToolCtx } from "@/app/task/ToolCtxProvider";
 import { IMongoQueryRes, ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
@@ -25,7 +26,7 @@ const TODAY = new Date().getTime();
 
 export const TaskContainer = (props: Props) => {
   const { className = "", label, children } = props;
-  const { list, reFetch } = useTaskCtx();
+  const { list, loading: loadingList, reFetch } = useTaskCtx();
   const { selectedTag, selectedPeriod } = useToolCtx();
   const { dragged, setDragged } = useDraggableTask();
   const { useStore: useUserStore } = useUserStoreCtx();
@@ -112,7 +113,9 @@ export const TaskContainer = (props: Props) => {
           <IoIosAdd className="size-6" />
         </button>
       </div>
-      {list[label] &&
+      {loadingList && <TaskCardSkeleton />}
+      {!loadingList &&
+        list[label] &&
         children(
           filterPeriod(selectedPeriod, filterTag(selectedTag, list[label])),
         )}

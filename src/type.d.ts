@@ -13,6 +13,7 @@ type Article = { name: string; id: string };
 
 interface ITaskContextValue {
   list: Record<TASK_STATUS, ITodo[]>;
+  loading: boolean;
   reFetch: () => Promise<void>;
 }
 
@@ -24,7 +25,7 @@ type ITag = {
 type IMsgLog = {
   text: string;
   datetime: string;
-}
+};
 
 interface ITodo {
   id?: string;

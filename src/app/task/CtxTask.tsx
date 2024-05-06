@@ -19,6 +19,7 @@ export const CtxTask = ({ children }: { children: ReactNode }) => {
   const [list, setList] = useState({} as Record<TASK_STATUS, ITodo[]>);
   const { useStore: useUserStore } = useUserStoreCtx();
   const [email] = useUserStore((state) => state.email);
+  const [loading, setLoading] = useState(false);
 
   const fetchList = useCallback(async () => {
     if (email === "") return;
@@ -29,18 +30,21 @@ export const CtxTask = ({ children }: { children: ReactNode }) => {
         sorted[key as TASK_STATUS] = sortTask(list);
       });
       setList(taskTable);
+      setLoading(false);
     }
   }, [email]);
 
   const contextValue = useMemo(
     () => ({
       list,
+      loading,
       reFetch: fetchList,
     }),
-    [fetchList, list],
+    [fetchList, list, loading],
   );
 
   useEffect(() => {
+    setLoading(true);
     fetchList().finally();
   }, [fetchList]);
 
@@ -53,6 +57,7 @@ export const CtxTask = ({ children }: { children: ReactNode }) => {
 
 const Ctx = createContext({
   list: {} as Record<TASK_STATUS, ITodo[]>,
+  loading: true,
   reFetch: async () => {},
 } as ITaskContextValue);
 
