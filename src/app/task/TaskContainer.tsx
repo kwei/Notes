@@ -16,7 +16,13 @@ import { updateTodo } from "@/utils/updateTodo";
 import { format } from "date-fns";
 import { DragEvent, ReactNode, useCallback, useEffect, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
-import { IoTimeOutline } from "react-icons/io5";
+import {
+  IoFileTrayStackedOutline,
+  IoFlashOutline,
+  IoNewspaperOutline,
+  IoRibbonOutline,
+  IoTimeOutline,
+} from "react-icons/io5";
 
 interface Props {
   className?: string;
@@ -26,6 +32,13 @@ interface Props {
 
 const TODAY = new Date().getTime();
 let taskWorker: Worker | undefined;
+
+const LABEL_ICON: Record<TASK_STATUS, ReactNode> = {
+  [TASK_STATUS.BACKLOG]: <IoFileTrayStackedOutline className="size-5" />,
+  [TASK_STATUS.NEW_REQUEST]: <IoNewspaperOutline className="size-5" />,
+  [TASK_STATUS.IN_PROGRESS]: <IoFlashOutline className="size-5" />,
+  [TASK_STATUS.COMPLETE]: <IoRibbonOutline className="size-5" />,
+};
 
 export const TaskContainer = (props: Props) => {
   const { className = "", label, children } = props;
@@ -130,8 +143,11 @@ export const TaskContainer = (props: Props) => {
       onDrop={handleOnDrop}
       className={`flex flex-col py-3 px-4 gap-4 h-full w-full transition-colors rounded-xl ${className} ${isDragOver ? "bg-gray-d0-500/20" : "bg-gray-d0-500/10"} ${loading ? "animate-pulse pointer-events-none" : "pointer-events-auto"}`}
     >
-      <div className="pl-4 flex justify-between items-center">
-        <span className="text-lg font-bold">{label}</span>
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          {LABEL_ICON[label]}
+          <span className="text-lg font-bold">{label}</span>
+        </div>
         <button
           type="button"
           onClick={handleOpenContent}

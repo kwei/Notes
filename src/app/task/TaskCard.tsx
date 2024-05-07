@@ -25,12 +25,13 @@ import { MdCheckCircle, MdOutlineCheckCircleOutline } from "react-icons/md";
 
 interface Props {
   task: ITodo;
+  isComplete: boolean;
 }
 
 const TODAY = new Date().getTime() - 24 * 60 * 60 * 1000;
 
 export const TaskCard = (props: Props) => {
-  const { task } = props;
+  const { task, isComplete } = props;
   const { setDragged } = useDraggableTask();
   const { reFetch } = useTaskCtx();
   const { useStore: useTaskModalStore } = useTaskModalStoreCtx();
@@ -124,7 +125,7 @@ export const TaskCard = (props: Props) => {
       draggable={true}
       onDragStart={handleOnDragStart}
       onDragEnd={handleOnDragEnd}
-      className={`relative rounded-2xl border group border-solid transition-colors overflow-hidden ${isDragged ? "border-gray-d0-500/10" : "border-gray-d0-500/50 hover:border-gray-d0-500"}`}
+      className={`relative rounded-2xl border group border-solid transition-colors overflow-hidden ${isDragged ? "border-gray-d0-500/10" : `border-gray-d0-500/50 ${isComplete ? "" : "hover:border-gray-d0-500"}`}`}
     >
       <div className="relative flex items-center justify-center p-px">
         <div
@@ -135,10 +136,14 @@ export const TaskCard = (props: Props) => {
           onClick={handleOpenContent}
           className="flex flex-col md:p-4 p-3 w-full z-20 bg-gray-800 rounded-2xl"
         >
-          <span className="font-semibold text-left pl-5">{task.title}</span>
+          <span
+            className={`font-semibold text-left pl-5 ${isComplete ? "text-gray-8b-500" : ""}`}
+          >
+            {task.title}
+          </span>
           <div className="flex items-center gap-1 py-1">
             <IoCalendarOutline
-              className={`size-4 ${new Date(task.expiry ?? new Date()).getTime() < TODAY ? "text-red-ff-500" : "text-gray-500"}`}
+              className={`size-4 ${!isComplete && new Date(task.expiry ?? new Date()).getTime() < TODAY ? "text-red-ff-500" : "text-gray-500"}`}
             />
             <span className="text-xs text-gray-d0-500/50 text-start break-words">
               {formatPeriod(task.iat, task.expiry)}
@@ -149,7 +154,9 @@ export const TaskCard = (props: Props) => {
               <LogBlock key={JSON.stringify(log)} log={log} />
             ))}
           </div>
-          <div className="flex items-center flex-wrap mt-2 gap-2">
+          <div
+            className={`flex items-center flex-wrap mt-2 gap-2 ${isComplete ? "opacity-50" : "opacity-100"}`}
+          >
             {sortTags(task.tags).map((tag) => (
               <TagBlock key={tag.name} tag={tag} />
             ))}
@@ -171,7 +178,9 @@ export const TaskCard = (props: Props) => {
         className="absolute flex items-center justify-center z-20 top-4 left-2 size-6 rounded-full group/task-complete"
       >
         {task.complete ? (
-          <MdCheckCircle className="size-5 text-green-600 group-hover/task-complete:text-green-500 transition-all" />
+          <MdCheckCircle
+            className={`size-5 group-hover/task-complete:text-green-500 transition-all ${isComplete ? "text-green-600/50" : "text-green-600"}`}
+          />
         ) : (
           <MdOutlineCheckCircleOutline className="size-5 text-gray-8b-500 group-hover/task-complete:text-gray-d0-500 transition-all" />
         )}

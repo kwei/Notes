@@ -24,6 +24,7 @@ export const TaskBoard = () => {
               taskList.map((task, index) => (
                 <TaskCard
                   key={`task-${task.id}-${index.toString()}`}
+                  isComplete={label === TASK_STATUS.COMPLETE}
                   task={task}
                 />
               ))
