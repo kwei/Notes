@@ -7,8 +7,8 @@ export async function GET(req: Request) {
   const link = getQueryString(queryList, "link");
   try {
     if (link) {
-      console.log("external url: ", new URL(link));
-      const res = await fetch(new URL(link));
+      console.log("external url: ", decodeURIComponent(link));
+      const res = await fetch(decodeURIComponent(link));
       return NextResponse.json(await res.text());
     }
   } catch (e) {
