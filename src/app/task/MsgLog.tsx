@@ -46,12 +46,12 @@ export const MsgLog = (props: Props) => {
   };
 
   return (
-    <div className="relative flex items-center px-2 py-px pl-6 group">
+    <div className="relative w-full flex items-center px-2 py-px pl-6 group">
       <div className="absolute left-0 top-0 bottom-0 flex items-center">
-        <span className="ml-2 h-full px-px bg-gray-be-500"></span>
+        <span className="ml-2 h-full pl-[3px] bg-gray-be-500"></span>
       </div>
-      <div className="absolute left-0 top-0 bottom-0 flex items-center">
-        <span className="size-[13px] ml-[2px] bg-gray-be-500 rounded-full group-hover:bg-gray-eb-500"></span>
+      <div className="absolute left-0 top-4 bottom-0 flex">
+        <span className="size-[13px] ml-[3px] bg-gray-be-500 rounded-full group-hover:bg-gray-eb-500"></span>
       </div>
       {msg?.datetime && (
         <span className="text-xs text-gray-d0-500/50 select-none flex flex-col items-end pr-2 group-hover:text-gray-d0-500/70">
@@ -60,7 +60,7 @@ export const MsgLog = (props: Props) => {
         </span>
       )}
       {msg ? (
-        <span className="w-full break-words p-2 py-1 border border-solid border-transparent rounded-md group-hover:bg-gray-d0-500/50 transition-colors">
+        <span className="flex-1 break-all break-words p-2 py-1 border border-solid border-transparent rounded-md group-hover:bg-gray-d0-500/50 transition-colors">
           {msg.text}
         </span>
       ) : (
@@ -69,7 +69,7 @@ export const MsgLog = (props: Props) => {
           type="text"
           onKeyDown={handleOnKeyDown}
           placeholder="寫下新日誌"
-          className="w-full p-2 py-1 bg-transparent cursor-pointer focus:cursor-text border border-solid border-transparent rounded-md focus:border-gray-d0-500 focus:outline-0 group-hover:bg-gray-d0-500/50 transition-colors"
+          className="w-full text-white p-2 py-1 bg-transparent cursor-pointer focus:cursor-text border border-solid border-transparent rounded-md focus:border-gray-d0-500 focus:outline-0 group-hover:bg-gray-d0-500/50 transition-colors"
         />
       )}
 

@@ -63,3 +63,6 @@ export const TOAST_TYPE_COLOR: Record<TOAST_TYPE, string> = {
   [TOAST_TYPE.error]: TASK_COLOR.Red,
   [TOAST_TYPE.info]: TASK_COLOR.Blue,
 };
+
+export const URL_REGEX =
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;

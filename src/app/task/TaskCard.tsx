@@ -5,12 +5,21 @@ import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
 import { sortTags } from "@/hooks/useAllTags";
 import { IMongoQueryRes, IMsgLog, ITodo } from "@/type";
+import { URL_REGEX } from "@/utils/constants";
 import { deleteTodo } from "@/utils/deleteTodo";
 import { useTaskModalStoreCtx } from "@/utils/externalStores";
 import { formatPeriod } from "@/utils/formatPeriod";
 import { updateTodo } from "@/utils/updateTodo";
 import { format } from "date-fns";
-import { useCallback, useState, MouseEvent, DragEvent, useRef } from "react";
+import Image from "next/image";
+import {
+  useCallback,
+  useState,
+  MouseEvent,
+  DragEvent,
+  useRef,
+  useEffect,
+} from "react";
 import { IoCalendarOutline, IoClose } from "react-icons/io5";
 import { MdCheckCircle, MdOutlineCheckCircleOutline } from "react-icons/md";
 
@@ -135,7 +144,7 @@ export const TaskCard = (props: Props) => {
               {formatPeriod(task.iat, task.expiry)}
             </span>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             {task.msgLog?.map((log) => (
               <LogBlock key={JSON.stringify(log)} log={log} />
             ))}
@@ -172,19 +181,95 @@ export const TaskCard = (props: Props) => {
 };
 
 const LogBlock = ({ log }: { log: IMsgLog }) => {
+  const [previewData, setPreviewData] = useState<
+    Set<{
+      title: string;
+      desc: string;
+      image: string;
+    }>
+  >(new Set([]));
+
+  const parseLink = useCallback(async () => {
+    for (const text of log.text.split(" ")) {
+      const matchRes = text.match(URL_REGEX);
+      if (matchRes) {
+        const url = matchRes[0];
+        const response = await fetch(`/api/external/externalHtml?link=${url}`);
+        const data = await response.json();
+        const doc = new DOMParser().parseFromString(data, "text/html");
+        const title = doc.querySelector("title")?.textContent || "";
+        const desc =
+          doc
+            .querySelector('meta[name="description"]')
+            ?.getAttribute("content") || "";
+        const image =
+          doc
+            .querySelector('meta[property="og:image"]')
+            ?.getAttribute("content") || "";
+        const externalData = {
+          title,
+          desc,
+          image,
+        };
+        setPreviewData((prevState) => {
+          const dataList = Array.from(prevState);
+          const newState = new Set(dataList);
+          if (dataList.some((d) => d.title === externalData.title)) {
+            return prevState;
+          } else {
+            newState.add(externalData);
+            return newState;
+          }
+        });
+      }
+    }
+  }, [log.text]);
+
+  useEffect(() => {
+    parseLink().then();
+  }, [parseLink]);
+
   return (
-    <div className="relative flex items-center group/log">
+    <div className="relative w-full flex items-center group/log">
       <div className="absolute left-0 top-0 bottom-0 flex items-center">
-        <span className="ml-2 h-full px-px bg-gray-8b-500"></span>
+        <span className="ml-2 h-full pl-px bg-gray-8b-500"></span>
       </div>
-      <div className="absolute left-0 top-0 bottom-0 flex items-center">
+      <div className="absolute left-0 top-1 bottom-0 flex items-start">
         <span
           className="size-[9px] ml-[4px] bg-gray-8b-500 rounded-full group-hover/log:bg-gray-be-500 transition-colors"
           title={format(new Date(log.datetime), "yyyy/MM/dd hh:mm:ss")}
         ></span>
       </div>
-      <span className="text-xs text-left pl-5 text-gray-8b-500 py-px group-hover/log:text-gray-be-500 transition-colors">
-        {log.text}
+      <span
+        className="relative flex flex-col w-full text-xs text-left pl-5 text-gray-8b-500 py-px group-hover/log:text-gray-be-500 transition-colors"
+        title={log.text}
+      >
+        <span className="w-full text-nowrap overflow-x-hidden text-ellipsis">
+          {log.text}
+        </span>
+        <div className="flex flex-col gap-1 mt-1">
+          {Array.from(previewData).map((data) => (
+            <div key={data.title} className="flex flex-row rounded-md bg-gray-700 p-1">
+              {data.image !== "" && (
+                <div className='w-16 flex'>
+                  <Image
+                    src={data.image}
+                    alt={data.title}
+                    className="m-0 mr-2 object-contain overflow-hidden"
+                    width={128}
+                    height={128}
+                    unoptimized
+                    priority
+                  />
+                </div>
+              )}
+              <div className="flex flex-col gap-px">
+                <span className="text-xs font-semibold">{data.title}</span>
+                <span className="text-xs">{data.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </span>
     </div>
   );

@@ -319,7 +319,7 @@ export const TaskModal = () => {
             defaultValue={task.detail}
           />
         </fieldset>
-        <fieldset className="mb-4 py-2 flex flex-col">
+        <fieldset className="mb-4 py-2 flex flex-col w-full">
           <legend className="px-4 bg-gray-500 rounded-sm">日誌</legend>
           {JSON.parse(newLogs)?.map((log: IMsgLog) => (
             <MsgLog
