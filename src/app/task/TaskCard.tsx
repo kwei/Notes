@@ -198,6 +198,9 @@ const LogBlock = ({ log }: { log: IMsgLog }) => {
           `${BASE_URL}/api/external/externalHtml?link=${url}`,
         );
         const data = await response.json();
+        if (data === "") {
+          break;
+        }
         const doc = new DOMParser().parseFromString(data, "text/html");
         const title = doc.querySelector("title")?.textContent || "";
         const desc =
