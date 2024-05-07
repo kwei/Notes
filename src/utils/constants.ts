@@ -66,3 +66,8 @@ export const TOAST_TYPE_COLOR: Record<TOAST_TYPE, string> = {
 
 export const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+
+export const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://notes-kweis-projects.vercel.app";

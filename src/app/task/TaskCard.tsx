@@ -5,7 +5,7 @@ import { TagBlock } from "@/app/task/TagBlock";
 import { useDraggableTask } from "@/app/task/DraggableTask";
 import { sortTags } from "@/hooks/useAllTags";
 import { IMongoQueryRes, IMsgLog, ITodo } from "@/type";
-import { URL_REGEX } from "@/utils/constants";
+import { BASE_URL, URL_REGEX } from "@/utils/constants";
 import { deleteTodo } from "@/utils/deleteTodo";
 import { useTaskModalStoreCtx } from "@/utils/externalStores";
 import { formatPeriod } from "@/utils/formatPeriod";
@@ -194,7 +194,9 @@ const LogBlock = ({ log }: { log: IMsgLog }) => {
       const matchRes = text.match(URL_REGEX);
       if (matchRes) {
         const url = matchRes[0];
-        const response = await fetch(`/api/external/externalHtml?link=${url}`);
+        const response = await fetch(
+          `${BASE_URL}/api/external/externalHtml?link=${url}`,
+        );
         const data = await response.json();
         const doc = new DOMParser().parseFromString(data, "text/html");
         const title = doc.querySelector("title")?.textContent || "";
@@ -249,9 +251,12 @@ const LogBlock = ({ log }: { log: IMsgLog }) => {
         </span>
         <div className="flex flex-col gap-1 mt-1">
           {Array.from(previewData).map((data) => (
-            <div key={data.title} className="flex flex-row rounded-md bg-gray-700 p-1">
+            <div
+              key={data.title}
+              className="flex flex-row rounded-md bg-gray-700 p-1"
+            >
               {data.image !== "" && (
-                <div className='w-16 flex'>
+                <div className="w-16 flex">
                   <Image
                     src={data.image}
                     alt={data.title}
