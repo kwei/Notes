@@ -214,7 +214,7 @@ export const TaskModal = () => {
   if (!open) return null;
   return (
     <div
-      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-black/50 md:items-center flex justify-center items-end ${loading ? "invisible opacity-0" : ""}`}
+      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-black/50 md:items-center flex justify-center items-end overflow-hidden ${loading ? "invisible opacity-0" : ""}`}
     >
       <form
         ref={ref}
