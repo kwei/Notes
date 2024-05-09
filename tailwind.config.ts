@@ -13,6 +13,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      boxShadow: {
+        'neon-cyan': 'box-shadow: rgba(255, 255, 255, 0.56) 0px 22px 70px 4px;'
+      },
       colors: {
         red: {
           "ff-300": "#FF8975",
@@ -31,6 +34,7 @@ const config: Config = {
           "2c-500": "#2C3F50",
         },
         blue: {
+          "7d-500": "#7DF9FF",
           "07-500": "#07B7DC",
           "00-500": "#00ABCF",
           "90-500": "#90B8F8",
