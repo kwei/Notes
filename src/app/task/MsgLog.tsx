@@ -68,7 +68,7 @@ export const MsgLog = (props: Props) => {
           ref={msgRef}
           type="text"
           onKeyDown={handleOnKeyDown}
-          placeholder="寫下新日誌"
+          placeholder="寫下新日誌，也可貼上連結..."
           className="w-full text-white p-2 py-1 bg-transparent cursor-pointer focus:cursor-text border border-solid border-transparent rounded-md focus:border-gray-d0-500 focus:outline-0 group-hover:bg-gray-d0-500/50 transition-colors"
         />
       )}

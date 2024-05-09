@@ -308,18 +308,18 @@ const LogBlock = ({ log }: { log: IMsgLog }) => {
   }, [parseLink]);
 
   return (
-    <div className="relative w-full flex items-center group/log">
+    <div className="relative w-full flex items-center">
       <div className="absolute left-0 top-0 bottom-0 flex items-center">
         <span className="ml-2 h-full pl-px bg-gray-8b-500/50"></span>
       </div>
       <div className="absolute left-0 top-1 bottom-0 flex items-start">
         <span
-          className="size-[9px] ml-[4px] bg-gray-8b-500 rounded-full group-hover/log:bg-gray-be-500 transition-colors"
+          className="size-[9px] ml-[4px] bg-gray-8b-500 rounded-full"
           title={format(new Date(log.datetime), "yyyy/MM/dd hh:mm:ss")}
         ></span>
       </div>
       <span
-        className="relative flex flex-col w-full text-xs text-left pl-5 text-gray-8b-500 py-px group-hover/log:text-gray-be-500 transition-colors"
+        className="relative flex flex-col w-full text-xs text-left pl-5 text-gray-8b-500 py-px"
         title={log.text}
       >
         <span className="w-full text-nowrap overflow-x-hidden text-ellipsis">
