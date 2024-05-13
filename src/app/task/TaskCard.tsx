@@ -37,7 +37,6 @@ export const TaskCard = (props: Props) => {
   const { useStore: useTaskModalStore } = useTaskModalStoreCtx();
   const [, setTaskModal] = useTaskModalStore((state) => state);
   const ghostImageRef = useRef<HTMLDivElement>();
-  const neonCursorRef = useRef<HTMLDivElement>(null);
   const [isDragged, setIsDragged] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -121,83 +120,18 @@ export const TaskCard = (props: Props) => {
     [reFetch, task],
   );
 
-  function handleOnMouseHover(event: MouseEvent) {
-    const x = event.clientX;
-    const y = event.clientY;
-    const parent = neonCursorRef.current?.parentElement;
-    if (parent && neonCursorRef.current) {
-      const rect = parent.getBoundingClientRect();
-      const offsetTop = y - rect.top;
-      const offsetBottom = rect.bottom - y;
-      const offsetLeft = x - rect.left;
-      const offsetRight = rect.right - x;
-      if (
-        offsetTop < offsetBottom &&
-        offsetTop < offsetLeft &&
-        offsetTop < offsetRight
-      ) {
-        neonCursorRef.current.style.top = "-48px";
-        neonCursorRef.current.style.left = `${x - rect.x - 16}px`;
-      } else if (
-        offsetBottom < offsetTop &&
-        offsetBottom < offsetLeft &&
-        offsetBottom < offsetRight
-      ) {
-        neonCursorRef.current.style.top = `${rect.height - 16}px`;
-        neonCursorRef.current.style.left = `${x - rect.x - 16}px`;
-      } else if (
-        offsetLeft < offsetTop &&
-        offsetLeft < offsetBottom &&
-        offsetLeft < offsetRight
-      ) {
-        neonCursorRef.current.style.top = `${y - rect.y - 16}px`;
-        neonCursorRef.current.style.left = "-48px";
-      } else if (
-        offsetRight < offsetTop &&
-        offsetRight < offsetBottom &&
-        offsetRight < offsetLeft
-      ) {
-        neonCursorRef.current.style.top = `${y - rect.y - 16}px`;
-        neonCursorRef.current.style.left = `${rect.width - 16}px`;
-      }
-    }
-  }
-
-  const handleOnMouseLeave = useCallback(() => {
-    if (!isComplete && neonCursorRef.current) {
-      neonCursorRef.current.classList.add("opacity-0");
-      neonCursorRef.current.classList.remove("opacity-100");
-    }
-  }, [isComplete]);
-
-  const handleOnMouseEnter = useCallback(() => {
-    if (!isComplete && neonCursorRef.current) {
-      neonCursorRef.current.classList.add("opacity-100");
-      neonCursorRef.current.classList.remove("opacity-0");
-    }
-  }, [isComplete]);
-
   return (
     <div
       draggable={true}
       onDragStart={handleOnDragStart}
       onDragEnd={handleOnDragEnd}
-      onMouseMove={handleOnMouseHover}
-      onMouseLeave={handleOnMouseLeave}
-      onMouseEnter={handleOnMouseEnter}
       className={`relative rounded-2xl border group border-solid transition-colors overflow-hidden ${isDragged ? "border-gray-d0-500/10" : `border-gray-d0-500/50`}`}
     >
       <div className="relative flex items-center justify-center p-px">
         <div
           className={`absolute w-screen h-screen from-blue-90-500 via-green-50-500 to-red-ff-300 ${loading ? "animate-spin bg-gradient-conic" : "bg-gray-800"}`}
         ></div>
-        <div className="absolute top-0 bottom-0 left-0 right-0 rounded-2xl blur-3xl bg-gray-800">
-          <div
-            ref={neonCursorRef}
-            className="absolute opacity-0 rounded-full size-16 shadow-neon-cyan bg-blue-7d-500"
-          ></div>
-        </div>
-        <div className="flex flex-col md:p-4 p-3 w-full z-20 rounded-2xl">
+        <div className="flex flex-col md:p-4 p-3 w-full z-20 rounded-2xl bg-gray-800">
           <button
             disabled={loading}
             onClick={handleOpenContent}
