@@ -1,0 +1,25 @@
+{
+  "name": "KW Page",
+  "short_name": "KW Page",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "description": "A simple PWA.",
+  "icons": [
+    {
+      "src": "/manifest_icon_144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/manifest_icon_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/manifest_icon_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

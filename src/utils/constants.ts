@@ -1,11 +1,13 @@
 export const ROUTES: Record<string, string> = {
   "My Notes": "/",
+  "My Spending": "/spending",
   // "My Profile": "/profile",
   "Task Manager": "/task",
 };
 
 export const ROUTE_TABLE: Record<string, string> = {
   "/": "My Notes",
+  "/spending": "My Spending",
   // "/profile": "My Profile",
   "/task": "Task Manager",
 };

@@ -83,7 +83,7 @@ export const Header = () => {
           </a>
         </div>
       </header>
-      <NavMenu open={openNav} onClose={handleCloseNav} />
+      {pathname === "/" && <NavMenu open={openNav} onClose={handleCloseNav} />}
     </>
   );
 };
