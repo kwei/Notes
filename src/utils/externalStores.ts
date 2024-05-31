@@ -1,6 +1,6 @@
 "use client";
 
-import { IMetaConfig, ITaskModal, IToast, ITodo, IUser } from "@/type";
+import { IMetaConfig, IRecord, ITaskModal, IToast, ITodo, IUser } from "@/type";
 import { TASK_STATUS, TOAST_TYPE } from "@/utils/constants";
 import { createExternalStoreProvider } from "@/utils/createExternalStoreProvider";
 
@@ -41,4 +41,14 @@ export const { Provider: MetaProvider, useStoreCtx: useMetaStoreCtx } =
   createExternalStoreProvider<IMetaConfig>({
     filteredTag: "",
     filteredPeriod: "",
+  });
+
+export const { Provider: RecordModalProvider, useStoreCtx: useRecordModalCtx } =
+  createExternalStoreProvider({
+    record: null,
+    step: "1",
+    open: false,
+    addCategory: () => {},
+    addRecord: () => {},
+    onClose: () => {}
   });

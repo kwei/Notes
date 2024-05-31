@@ -74,3 +74,18 @@ interface ITaskModal {
   onClose: () => void;
   handleLoading: (status: boolean) => void;
 }
+
+interface IRecord {
+  id: string;
+  price: number;
+  desc: string;
+  category: string;
+  date: string
+}
+
+interface RecordCtxValue {
+  total: number;
+  income: number;
+  outcome: number;
+  list: IRecord[];
+}

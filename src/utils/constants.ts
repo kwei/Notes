@@ -1,12 +1,12 @@
 export const ROUTES: Record<string, string> = {
-  "My Notes": "/",
+  // "My Notes": "/",
   "My Spending": "/spending",
   // "My Profile": "/profile",
   "Task Manager": "/task",
 };
 
 export const ROUTE_TABLE: Record<string, string> = {
-  "/": "My Notes",
+  // "/": "My Notes",
   "/spending": "My Spending",
   // "/profile": "My Profile",
   "/task": "Task Manager",
@@ -71,5 +71,12 @@ export const URL_REGEX =
 
 export const BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
+    ? "https://localhost:3000"
     : "https://notes-kweis-projects.vercel.app";
+
+
+export enum INPUT_RECORD_TYPE {
+  ADD,
+  UPDATE,
+  DELETE
+}
