@@ -80,3 +80,10 @@ export enum INPUT_RECORD_TYPE {
   UPDATE,
   DELETE
 }
+
+export enum RecordModalType {
+  Step_1 = "1",
+  Step_2 = "2",
+  Step_2_1 = "2-1",
+  Step_3 = "3",
+}

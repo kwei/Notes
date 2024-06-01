@@ -1,4 +1,9 @@
-import { TASK_COLOR, TASK_STATUS, TOAST_TYPE } from "@/utils/constants";
+import {
+  RecordModalType,
+  TASK_COLOR,
+  TASK_STATUS,
+  TOAST_TYPE,
+} from "@/utils/constants";
 
 interface ArticleList {
   category: string;
@@ -80,7 +85,7 @@ interface IRecord {
   price: number;
   desc: string;
   category: string;
-  date: string
+  date: string;
 }
 
 interface RecordCtxValue {
@@ -88,4 +93,13 @@ interface RecordCtxValue {
   income: number;
   outcome: number;
   list: IRecord[];
+}
+
+interface IRecordModal {
+  record?: IRecord;
+  step: RecordModalType;
+  open: boolean;
+  addCategory: (category: string) => void;
+  addRecord: (record: IRecord) => void;
+  onClose: () => void;
 }

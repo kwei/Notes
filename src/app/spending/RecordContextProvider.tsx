@@ -12,7 +12,7 @@ import {
 } from "react";
 
 const initState = {
-  total: 20,
+  total: 0,
   income: 0,
   outcome: 0,
   list: [],

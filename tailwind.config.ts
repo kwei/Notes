@@ -14,7 +14,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       boxShadow: {
-        'neon-cyan': 'box-shadow: rgba(255, 255, 255, 0.56) 0px 22px 70px 4px;'
+        "neon-cyan": "box-shadow: rgba(255, 255, 255, 0.56) 0px 22px 70px 4px;",
       },
       colors: {
         red: {
@@ -76,10 +76,13 @@ const config: Config = {
         "slideOut-to-top": "slideOutToTop 0.2s ease-in-out forwards",
       },
       grayscale: {
-        30: '30%',
-        50: '50%',
-        75: '75%',
-      }
+        30: "30%",
+        50: "50%",
+        75: "75%",
+      },
+      gridTemplateRows: {
+        "0": "repeat(1, minmax(0, 0fr))",
+      },
     },
   },
   plugins: [],
