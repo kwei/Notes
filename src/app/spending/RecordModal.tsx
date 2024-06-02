@@ -8,7 +8,6 @@ import {
   ChangeEvent,
   useCallback,
   useEffect,
-  useRef,
   useState,
   useTransition,
 } from "react";
@@ -18,9 +17,8 @@ import { v4 as uuidv4 } from "uuid";
 export const RecordModal = ({ loading }: { loading: boolean }) => {
   const { useStore } = useRecordModalCtx();
   const [state] = useStore((state) => state);
-  const [open, setOpen] = useState(false);
   const ref = useFocusRef<HTMLDivElement>(() => {
-    if (open) state.onClose();
+    if (state.open) state.onClose();
   });
   const [, startTransition] = useTransition();
 
@@ -29,18 +27,19 @@ export const RecordModal = ({ loading }: { loading: boolean }) => {
     if (modalElementRef) {
       startTransition(() => {
         if (state.open) {
+          modalElementRef.classList.remove("translate-y-full");
           modalElementRef.classList.add("translate-y-0");
         } else {
           modalElementRef.classList.remove("translate-y-0");
+          modalElementRef.classList.add("translate-y-full");
         }
-        setOpen(state.open);
       });
     }
-  }, [state.open]);
+  }, [ref, state.open]);
 
   return (
     <div
-      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-transparent flex flex-col items-center justify-end ${open ? "translate-y-0" : "delay-500 translate-y-full"}`}
+      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-transparent flex flex-col items-center justify-end ${state.open ? "translate-y-0" : "delay-500 translate-y-full"}`}
     >
       <div
         ref={ref}

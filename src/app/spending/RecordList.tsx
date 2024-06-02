@@ -1,3 +1,5 @@
+"use client";
+import { Record } from "@/app/spending/Record";
 import { useRecordCtx } from "@/app/spending/RecordContextProvider";
 import { IRecord } from "@/type";
 import { useMemo } from "react";
@@ -16,5 +18,13 @@ export const RecordList = () => {
     return res;
   }, [list]);
 
-  return <div></div>;
+  return (
+    <div className="w-full flex flex-col gap-1">
+      {/* month selector */}
+      {/* graph */}
+      {Object.entries(recordMap).map(([key, value]) => (
+        <Record key={key} category={key} list={value} />
+      ))}
+    </div>
+  );
 };

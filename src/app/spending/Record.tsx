@@ -1,6 +1,7 @@
 "use client";
 import { IRecord } from "@/type";
 import { useMemo, useState } from "react";
+import { IoChevronDownOutline } from "react-icons/io5";
 
 export const Record = ({
   category,
@@ -17,27 +18,35 @@ export const Record = ({
   );
 
   return (
-    <div className="w-full flex flex-col py-2  px-4 bg-gray-800 rounded-md">
+    <div className="w-full flex flex-col items-center py-2 px-4 bg-gray-800 rounded-md group">
       <button
-        className="w-full flex items-center justify-between bg-gray-800"
+        className="w-full flex flex-col bg-gray-800"
         onClick={() => setOpen((prevState) => !prevState)}
       >
-        <span>{category}</span>
-        <span>${total}</span>
+        <span className="w-full flex items-center justify-between">
+          <span>{category}</span>
+          <span>${total}</span>
+        </span>
       </button>
+
       <div
-        className={`grid transition-all overflow-hidden ${open ? "grid-rows-1" : "grid-rows-0"}`}
+        className={`w-full grid transition-all overflow-hidden ${open ? "grid-rows-1" : "grid-rows-0"}`}
       >
-        <div className="row-span-1 flex flex-col pt-2">
+        <div className="row-span-1 flex flex-col py-2 divide-y divide-stone-500">
           {list.map((item) => (
             <div
               key={item.id}
-              className="border-t border-solid border-stone-500 grid grid-cols-5 py-1"
+              className="grid grid-cols-5 py-1 hover:bg-stone-300/30 transition-colors"
             >
               <span className="col-span-2">
                 {new Date(item.date).toLocaleDateString()}
               </span>
-              <span className="col-span-2">{item.desc}</span>
+              <span
+                className="col-span-2 text-ellipsis overflow-hidden text-nowrap"
+                title={item.desc}
+              >
+                {item.desc}
+              </span>
               <div className="col-span-1 flex items-center justify-end">
                 <span>${item.price}</span>
               </div>
@@ -45,6 +54,15 @@ export const Record = ({
           ))}
         </div>
       </div>
+
+      <button
+        className="px-10 rounded-full flex items-center justify-center text-stone-500 group-hover:bg-stone-300/10"
+        onClick={() => setOpen((prevState) => !prevState)}
+      >
+        <IoChevronDownOutline
+          className={`size-3 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
     </div>
   );
 };

@@ -74,11 +74,10 @@ export const BASE_URL =
     ? "https://localhost:3000"
     : "https://notes-kweis-projects.vercel.app";
 
-
 export enum INPUT_RECORD_TYPE {
   ADD,
   UPDATE,
-  DELETE
+  DELETE,
 }
 
 export enum RecordModalType {
@@ -87,3 +86,15 @@ export enum RecordModalType {
   Step_2_1 = "2-1",
   Step_3 = "3",
 }
+
+export enum SPENDING_PAGE_TAB {
+  DEFAULT = "主畫面",
+  CHART_BY_MONTH = "月度回顧",
+  ANNUAL_REVIEW = "年度回顧",
+}
+
+export const SPENDING_PAGE_TABS = [
+  SPENDING_PAGE_TAB.DEFAULT,
+  SPENDING_PAGE_TAB.CHART_BY_MONTH,
+  SPENDING_PAGE_TAB.ANNUAL_REVIEW,
+];
