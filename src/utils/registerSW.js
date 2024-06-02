@@ -13,7 +13,7 @@ export const register = () => {
       if (status.state === "granted") {
         try {
           await registration.periodicSync.register("periodic-notify", {
-            minInterval: 8 * 60 * 60 * 1000,
+            minInterval: 60 * 60 * 1000,
           });
           console.log("Periodic background sync registered!");
         } catch (e) {
