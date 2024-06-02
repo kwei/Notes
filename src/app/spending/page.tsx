@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <main className="flex w-full flex-1 flex-col items-center">
       <NotificationRegister />
-      <div className="flex flex-col my-4 p-5 w-full lg:w-1/3">
+      <div className="flex flex-col my-4 p-5 w-full md:1/2 lg:w-1/3">
         <RecordContextProvider>
           <Dashboard />
         </RecordContextProvider>

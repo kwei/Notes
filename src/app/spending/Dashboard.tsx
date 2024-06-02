@@ -96,10 +96,12 @@ const AddRecordBtn = ({
 
   return (
     <button
-      className="underline underline-offset-8 text-xl font-semibold hover:text-green-50-500 transition-colors"
+      className="p-2 pb-0 group"
       onClick={handleOpenRecordModal}
     >
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 新增 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <span className="col-span-1 px-6 pb-2 text-xl font-semibold border-b border-solid border-b-gray-d0-500 group-hover:border-b-green-50-500 group-hover:text-green-50-500 group-hover:shadow-down-side group-hover:shadow-green-50-500/70 duration-300 transition-all">
+        新增
+      </span>
     </button>
   );
 };

@@ -4,23 +4,47 @@ import { useFocusRef } from "@/hooks/useFocusRef";
 import { IRecord } from "@/type";
 import { RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx } from "@/utils/externalStores";
-import { ChangeEvent, useCallback, useState } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { IoCheckmarkCircleOutline, IoChevronBack } from "react-icons/io5";
 import { v4 as uuidv4 } from "uuid";
 
 export const RecordModal = ({ loading }: { loading: boolean }) => {
   const { useStore } = useRecordModalCtx();
   const [state] = useStore((state) => state);
+  const [open, setOpen] = useState(false);
   const ref = useFocusRef<HTMLDivElement>(() => {
-    state.onClose();
+    if (open) state.onClose();
   });
+  const [, startTransition] = useTransition();
 
-  if (!state.open) return null;
+  useEffect(() => {
+    const modalElementRef = ref.current;
+    if (modalElementRef) {
+      startTransition(() => {
+        if (state.open) {
+          modalElementRef.classList.add("translate-y-0");
+        } else {
+          modalElementRef.classList.remove("translate-y-0");
+        }
+        setOpen(state.open);
+      });
+    }
+  }, [state.open]);
+
   return (
-    <div className="fixed z-40 left-0 right-0 top-0 bottom-0 bg-transparent flex flex-col items-center justify-end">
+    <div
+      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-transparent flex flex-col items-center justify-end ${open ? "translate-y-0" : "delay-500 translate-y-full"}`}
+    >
       <div
         ref={ref}
-        className="w-full md:w-auto rounded-t-2xl p-8 flex flex-col bg-gray-800 gap-4"
+        className="w-full md:w-auto rounded-t-2xl p-8 flex flex-col bg-gray-800 gap-4 transition-all duration-300 translate-y-full"
         style={{
           minWidth: ref.current?.clientWidth,
           minHeight: ref.current?.clientHeight,

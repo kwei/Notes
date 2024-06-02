@@ -15,6 +15,7 @@ const config: Config = {
       },
       boxShadow: {
         "neon-cyan": "box-shadow: rgba(255, 255, 255, 0.56) 0px 22px 70px 4px;",
+        "down-side": "0px 10px 10px -10px rgba(0, 0, 0, 0.3)",
       },
       colors: {
         red: {
