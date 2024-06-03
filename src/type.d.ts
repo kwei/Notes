@@ -87,7 +87,7 @@ interface IRecord {
   category: string;
   date: string;
   time: string;
-  email: string,
+  email: string;
 }
 
 interface RecordCtxValue {
@@ -99,6 +99,7 @@ interface IRecordModal {
   record?: IRecord;
   step: RecordModalType;
   open: boolean;
+  loading: boolean;
   addCategory: (category: string) => void;
   addRecord: (record: IRecord) => void;
   onClose: () => void;

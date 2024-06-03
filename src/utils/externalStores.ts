@@ -55,6 +55,7 @@ export const { Provider: RecordModalProvider, useStoreCtx: useRecordModalCtx } =
   createExternalStoreProvider<IRecordModal>({
     step: RecordModalType.Step_1,
     open: false,
+    loading: false,
     addCategory: () => {},
     addRecord: () => {},
     onClose: () => {},

@@ -29,11 +29,13 @@ export const register = () => {
 
   if ("serviceWorker" in navigator) {
     // Register the service worker
-    navigator.serviceWorker.register("/periodicNotifyServiceWorker.js", {
-      scope: "/",
-    });
+    navigator.serviceWorker
+      .register("/periodicNotifyServiceWorker.js", {
+        scope: "/",
+      })
+      .then();
 
     // Register the periodic background sync
-    registerPeriodicSync().then();
+    // registerPeriodicSync().then();
   }
 };

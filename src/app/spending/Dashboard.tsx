@@ -4,20 +4,29 @@ import {
   useRecordCtx,
   useRecordHandlerCtx,
 } from "@/app/spending/RecordContextProvider";
-import { RecordModal } from "@/app/spending/RecordModal";
 import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
-import { RecordModalProvider, useRecordModalCtx } from "@/utils/externalStores";
+import { useRecordModalCtx } from "@/utils/externalStores";
 import { setSpendingRecord } from "@/utils/setSpendingRecord";
 import { useCallback, useState } from "react";
 
 const WEEKDAY = ["日", "一", "二", "三", "四", "五", "六"];
 
 export const Dashboard = () => {
+  const { useStore } = useRecordModalCtx();
+  const [, setState] = useStore((state) => state);
   const { loading } = useRecordCtx();
   const { filterByMonth } = useRecordHandlerCtx();
   const { total, outcome, income } = filterByMonth();
-  const [isAddRecord, setIsAddRecord] = useState(false);
+
+  const handleSetLoading = useCallback(
+    (status: boolean) => {
+      setState({
+        loading: status,
+      });
+    },
+    [setState],
+  );
 
   if (loading) {
     return (
@@ -36,33 +45,30 @@ export const Dashboard = () => {
           (週{WEEKDAY[new Date().getDay()]})
         </span>
       </div>
-      <RecordModalProvider>
-        <div className="w-full rounded-2xl border border-solid border-gray-d0-500 p-4 flex items-center justify-between gap-4">
-          <span className="text-xl font-bold">本月</span>
-          <span
-            className={`text-xl font-bold ${total < 0 ? "text-red-500/80" : "text-green-500/80"}`}
-          >
-            ${total}
-          </span>
-        </div>
 
-        <div className="grid grid-cols-2 gap-2 w-full">
-          <div className="col-span-1 rounded-lg p-2 bg-green-300/50 flex items-center justify-between gap-4">
-            <span className="text-lg">收入</span>
-            <span className="text-lg">${income}</span>
-          </div>
-          <div className="col-span-1 rounded-lg p-2 bg-red-300/50 flex items-center justify-between gap-4">
-            <span className="text-lg">支出</span>
-            <span className="text-lg">${outcome}</span>
-          </div>
-        </div>
+      <div className="w-full rounded-2xl border border-solid border-gray-d0-500 p-4 flex items-center justify-between gap-4">
+        <span className="text-xl font-bold">本月</span>
+        <span
+          className={`text-xl font-bold ${total < 0 ? "text-red-500/80" : "text-green-500/80"}`}
+        >
+          ${total}
+        </span>
+      </div>
 
-        <div className="w-full flex items-center justify-center pt-8">
-          <AddRecordBtn handleLoading={setIsAddRecord} />
+      <div className="grid grid-cols-2 gap-2 w-full">
+        <div className="col-span-1 rounded-lg p-2 bg-green-300/50 flex items-center justify-between gap-4">
+          <span className="text-lg">收入</span>
+          <span className="text-lg">${income}</span>
         </div>
+        <div className="col-span-1 rounded-lg p-2 bg-red-300/50 flex items-center justify-between gap-4">
+          <span className="text-lg">支出</span>
+          <span className="text-lg">${outcome}</span>
+        </div>
+      </div>
 
-        <RecordModal loading={isAddRecord} />
-      </RecordModalProvider>
+      <div className="w-full flex items-center justify-center pt-8">
+        <AddRecordBtn handleLoading={handleSetLoading} />
+      </div>
     </div>
   );
 };
@@ -92,7 +98,6 @@ const AddRecordBtn = ({
   const handleCloseRecordModal = useCallback(() => {
     setState({
       open: false,
-      step: RecordModalType.Step_1,
       record: undefined,
     });
   }, [setState]);
@@ -100,6 +105,7 @@ const AddRecordBtn = ({
   const handleOpenRecordModal = useCallback(() => {
     setState({
       open: true,
+      step: RecordModalType.Step_1,
       onClose: handleCloseRecordModal,
       addCategory: () => {},
       addRecord,

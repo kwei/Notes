@@ -78,6 +78,7 @@ export enum INPUT_RECORD_TYPE {
   ADD,
   UPDATE,
   DELETE,
+  CLEAR,
 }
 
 export enum RecordModalType {
@@ -85,6 +86,7 @@ export enum RecordModalType {
   Step_2 = "2",
   Step_2_1 = "2-1",
   Step_3 = "3",
+  Step_4 = "4",
 }
 
 export enum SPENDING_PAGE_TAB {
@@ -97,4 +99,17 @@ export const SPENDING_PAGE_TABS = [
   SPENDING_PAGE_TAB.DEFAULT,
   SPENDING_PAGE_TAB.CHART_BY_MONTH,
   SPENDING_PAGE_TAB.ANNUAL_REVIEW,
+];
+
+export const DEFAULT_CATEGORIES = [
+  "飲食",
+  "交通",
+  "娛樂",
+  "日常",
+  "醫療",
+  "代墊",
+  "薪水",
+  "投資",
+  "還款",
+  "其他",
 ];

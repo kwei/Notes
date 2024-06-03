@@ -1,13 +1,11 @@
-self.addEventListener("periodicsync", (event) => {
-  notify("測試用", {
-    body: event.tag,
-    // icon: "/images/icon.png",
-    // badge: "/images/badge.png",
-  });
-  if (event.tag === "periodic-notify") {
-    const notifyAgent = new NotifyAgent();
-    event.waitUntil(notifyAgent.start());
-  }
+self.addEventListener("install", () => {
+  setInterval(
+    () => {
+      const notifyAgent = new NotifyAgent();
+      notifyAgent.start().then();
+    },
+    60 * 60 * 1000,
+  );
 });
 
 self.addEventListener("notificationclick", function (event) {
@@ -29,12 +27,13 @@ class NotifyAgent {
   async start() {
     if (this.__checkTime())
       await this.__notify(
-        this._notificationHours.indexOf(new Date().getHours()),
+        this._notificationWords[
+          this._notificationHours.indexOf(new Date().getHours())
+        ],
       );
   }
 
   __checkTime() {
-    console.log(new Date().getHours());
     return new Date().getHours() in this._notificationHours;
   }
 

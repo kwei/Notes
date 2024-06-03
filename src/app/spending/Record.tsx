@@ -1,20 +1,65 @@
 "use client";
+import { useRecordHandlerCtx } from "@/app/spending/RecordContextProvider";
+import { RecordModal } from "@/app/spending/RecordModal";
 import { IRecord } from "@/type";
-import { useMemo, useState } from "react";
+import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
+import { useRecordModalCtx } from "@/utils/externalStores";
+import { setSpendingRecord } from "@/utils/setSpendingRecord";
+import { useCallback, useMemo, useState } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 
-export const Record = ({
-  category,
-  list,
-}: {
+interface Props {
   category: string;
   list: IRecord[];
-}) => {
+}
+
+export const Record = (props: Props) => {
+  const { category, list } = props;
+  const { updateList, reFetch } = useRecordHandlerCtx();
+  const { useStore } = useRecordModalCtx();
+  const [, setState] = useStore((state) => state);
   const [open, setOpen] = useState(false);
 
   const total = useMemo(
     () => list.reduce((sum = 0, d) => sum + d.price, 0),
     [list],
+  );
+
+  const handleCloseRecordModal = useCallback(() => {
+    setState({
+      open: false,
+      record: undefined,
+      loading: false,
+    });
+  }, [setState]);
+
+  const updateRecord = useCallback(
+    (record: IRecord) => {
+      setState({
+        loading: true,
+      });
+      setSpendingRecord(record).then(({ status }) => {
+        updateList(INPUT_RECORD_TYPE.UPDATE, record);
+        reFetch();
+        if (!status) console.error("Setting Spending Record Failed.");
+        handleCloseRecordModal();
+      });
+    },
+    [updateList, reFetch, handleCloseRecordModal, setState],
+  );
+
+  const handleOpenRecordModal = useCallback(
+    (record: IRecord) => {
+      setState({
+        open: true,
+        record,
+        step: RecordModalType.Step_4,
+        onClose: handleCloseRecordModal,
+        addCategory: () => {},
+        addRecord: updateRecord,
+      });
+    },
+    [setState, handleCloseRecordModal, updateRecord],
   );
 
   return (
@@ -36,9 +81,10 @@ export const Record = ({
       >
         <div className="row-span-1 flex flex-col py-2 px-4 divide-y divide-stone-500">
           {list.map((item) => (
-            <div
+            <button
               key={item.id}
               className="grid grid-cols-5 py-1 hover:bg-stone-300/30 transition-colors"
+              onClick={() => handleOpenRecordModal(item)}
             >
               <span
                 className="col-span-1"
@@ -52,10 +98,10 @@ export const Record = ({
               >
                 {item.desc}
               </span>
-              <div className="col-span-1 flex items-center justify-end">
+              <span className="col-span-1 flex items-center justify-end">
                 <span>${item.price}</span>
-              </div>
-            </div>
+              </span>
+            </button>
           ))}
         </div>
       </div>

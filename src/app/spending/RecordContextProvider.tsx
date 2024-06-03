@@ -14,15 +14,22 @@ import {
   useState,
 } from "react";
 
-const initState = {
+const initState: {
+  loading: boolean;
+  list: IRecord[];
+} = {
   loading: true,
   list: [],
 };
 
-type Action = {
-  type: INPUT_RECORD_TYPE;
-  data: IRecord;
-};
+type Action =
+  | {
+      type: INPUT_RECORD_TYPE;
+      data: IRecord;
+    }
+  | {
+      type: INPUT_RECORD_TYPE.CLEAR;
+    };
 
 const reducer = (state: RecordCtxValue, action: Action) => {
   const newState = JSON.parse(JSON.stringify(state)) as RecordCtxValue;
@@ -49,6 +56,8 @@ const reducer = (state: RecordCtxValue, action: Action) => {
         return newState;
       }
       return state;
+    case INPUT_RECORD_TYPE.CLEAR:
+      return { ...newState, list: [] };
     default:
       return state;
   }
@@ -68,6 +77,7 @@ export const RecordContextProvider = ({
     if (email === "") return;
     getSpendingRecord({ email }).then(({ status, message }) => {
       if (status) {
+        dispatch({ type: INPUT_RECORD_TYPE.CLEAR });
         (JSON.parse(message) as IRecord[]).forEach((item) => {
           dispatch({
             type: INPUT_RECORD_TYPE.ADD,

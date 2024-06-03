@@ -1,8 +1,9 @@
 "use client";
 
+import { RecordEditor } from "@/app/spending/RecordEditor";
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { IRecord } from "@/type";
-import { RecordModalType } from "@/utils/constants";
+import { DEFAULT_CATEGORIES, RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx, useUserStoreCtx } from "@/utils/externalStores";
 import {
   ChangeEvent,
@@ -14,7 +15,7 @@ import {
 import { IoCheckmarkCircleOutline, IoChevronBack } from "react-icons/io5";
 import { v4 as uuidv4 } from "uuid";
 
-export const RecordModal = ({ loading }: { loading: boolean }) => {
+export const RecordModal = () => {
   const { useStore } = useRecordModalCtx();
   const [state] = useStore((state) => state);
   const ref = useFocusRef<HTMLDivElement>(() => {
@@ -52,7 +53,10 @@ export const RecordModal = ({ loading }: { loading: boolean }) => {
         {state.step === RecordModalType.Step_1 && <Calculator />}
         {state.step === RecordModalType.Step_2 && <CategorySelector />}
         {state.step === RecordModalType.Step_3 && (
-          <AddResult loading={loading} />
+          <AddResult loading={state.loading} />
+        )}
+        {state.step === RecordModalType.Step_4 && (
+          <RecordEditor loading={state.loading} />
         )}
       </div>
     </div>
@@ -315,28 +319,15 @@ const CategorySelector = () => {
       </fieldset>
 
       <div className="w-full grid grid-cols-4 gap-2">
-        {[
-          "飲食",
-          "交通",
-          "娛樂",
-          "日常",
-          "醫療",
-          "代墊",
-          "薪水",
-          "投資",
-          "還款",
-          "其他",
-        ]
-          .concat([])
-          .map((_category) => (
-            <button
-              key={_category}
-              className={`col-span-1 py-2 px-4 flex items-center justify-center rounded-md transition-colors ${state.record?.category === _category ? "bg-stone-300" : "bg-stone-400 hover:bg-stone-300"}`}
-              onClick={() => handleOnSelectCategory(_category)}
-            >
-              <span className="text-gray-800 font-semibold">{_category}</span>
-            </button>
-          ))}
+        {DEFAULT_CATEGORIES.concat([]).map((_category) => (
+          <button
+            key={_category}
+            className={`col-span-1 py-2 px-4 flex items-center justify-center rounded-md transition-colors ${state.record?.category === _category ? "bg-stone-300" : "bg-stone-400 hover:bg-stone-300"}`}
+            onClick={() => handleOnSelectCategory(_category)}
+          >
+            <span className="text-gray-800 font-semibold">{_category}</span>
+          </button>
+        ))}
         <div className="col-span-4 grid grid-cols-4 gap-2">
           <button className="col-span-1 py-2 px-4 flex items-center justify-center bg-stone-400 rounded-md hover:bg-stone-300 transition-colors">
             <span className="text-gray-800 font-semibold">+</span>
