@@ -86,12 +86,12 @@ interface IRecord {
   desc: string;
   category: string;
   date: string;
+  time: string;
+  email: string,
 }
 
 interface RecordCtxValue {
-  total: number;
-  income: number;
-  outcome: number;
+  loading: boolean;
   list: IRecord[];
 }
 

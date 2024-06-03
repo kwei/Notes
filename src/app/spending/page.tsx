@@ -7,12 +7,12 @@ import { TabSelector } from "@/app/spending/TabSelector";
 export default function Home() {
   return (
     <main className="flex w-full flex-1 flex-col items-center">
-      <NotificationRegister />
-      <div className="flex flex-col justify-between my-4 p-5 w-full flex-1 md:w-2/3 lg:w-1/3">
+      <NotificationRegister/>
+      <div className="flex flex-col justify-between p-5 w-full flex-1 md:w-2/3 lg:w-1/3">
         <RecordContextProvider>
           <TabCtxProvider>
-            <TabSelector />
-            <FunctionTab />
+            <TabSelector/>
+            <FunctionTab/>
           </TabCtxProvider>
         </RecordContextProvider>
       </div>

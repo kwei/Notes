@@ -1,6 +1,8 @@
 "use client";
 import { IRecord, RecordCtxValue } from "@/type";
 import { INPUT_RECORD_TYPE } from "@/utils/constants";
+import { useUserStoreCtx } from "@/utils/externalStores";
+import { getSpendingRecord } from "@/utils/getSpendingRecord";
 import {
   createContext,
   ReactNode,
@@ -9,12 +11,11 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useState,
 } from "react";
 
 const initState = {
-  total: 0,
-  income: 0,
-  outcome: 0,
+  loading: true,
   list: [],
 };
 
@@ -25,50 +26,26 @@ type Action = {
 
 const reducer = (state: RecordCtxValue, action: Action) => {
   const newState = JSON.parse(JSON.stringify(state)) as RecordCtxValue;
+  let index = 0;
   switch (action.type) {
     case INPUT_RECORD_TYPE.ADD:
-      const indexForAdd = newState.list.findIndex(
-        (d) => d.id === action.data.id,
-      );
-      if (indexForAdd === -1) {
+      index = newState.list.findIndex((d) => d.id === action.data.id);
+      if (index === -1) {
         newState.list.push(action.data);
-        newState.total += action.data.price;
-        if (action.data.price > 0) {
-          newState.income += action.data.price;
-        } else {
-          newState.outcome += action.data.price;
-        }
         return newState;
       }
       return state;
     case INPUT_RECORD_TYPE.DELETE:
-      const indexForDelete = newState.list.findIndex(
-        (d) => d.id === action.data.id,
-      );
-      if (indexForDelete !== -1) {
-        newState.list.splice(indexForDelete, 1);
-        newState.total -= action.data.price;
-        if (action.data.price > 0) {
-          newState.income -= action.data.price;
-        } else {
-          newState.outcome -= action.data.price;
-        }
+      index = newState.list.findIndex((d) => d.id === action.data.id);
+      if (index !== -1) {
+        newState.list.splice(index, 1);
         return newState;
       }
       return state;
     case INPUT_RECORD_TYPE.UPDATE:
-      const indexForUpdate = newState.list.findIndex(
-        (d) => d.id === action.data.id,
-      );
-      if (indexForUpdate !== -1) {
-        const old = newState.list[indexForUpdate];
-        newState.list[indexForUpdate] = action.data;
-        newState.total += action.data.price - old.price;
-        if (action.data.price > 0) {
-          newState.income += action.data.price - old.price;
-        } else {
-          newState.outcome += action.data.price - old.price;
-        }
+      index = newState.list.findIndex((d) => d.id === action.data.id);
+      if (index !== -1) {
+        newState.list[index] = action.data;
         return newState;
       }
       return state;
@@ -82,36 +59,96 @@ export const RecordContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
+  const { useStore } = useUserStoreCtx();
+  const [email] = useStore((state) => state.email);
   const [state, dispatch] = useReducer(reducer, initState);
+  const [loading, setLoading] = useState(initState.loading);
 
-  const ctxValue = useMemo(() => state, [state]);
+  const fetch = useCallback(() => {
+    if (email === "") return;
+    getSpendingRecord({ email }).then(({ status, message }) => {
+      if (status) {
+        (JSON.parse(message) as IRecord[]).forEach((item) => {
+          dispatch({
+            type: INPUT_RECORD_TYPE.ADD,
+            data: item,
+          });
+        });
+      }
+      setLoading(false);
+    });
+  }, [email]);
 
-  const updateList = useCallback(
-    (type: INPUT_RECORD_TYPE, record: IRecord) => {
-      dispatch({
-        type,
-        data: record,
+  const filterByMonth = useCallback(
+    (
+      date:
+        | string
+        | undefined = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, "0")}`,
+    ) => {
+      let total = 0,
+        income = 0,
+        outcome = 0;
+      state.list.forEach((data) => {
+        if (date === data.date.split("-").slice(0, 2).join("-")) {
+          total += data.price;
+          if (data.price > 0) {
+            income += data.price;
+          } else {
+            outcome += data.price;
+          }
+        }
       });
+      return { total, income, outcome };
     },
-    [dispatch],
+    [state],
   );
 
+  const ctxValue = useMemo(
+    () => ({
+      ...state,
+      loading,
+    }),
+    [loading, state],
+  );
+
+  const handlerCtxValue = useMemo(
+    () => ({
+      updateList: (type: INPUT_RECORD_TYPE, record: IRecord) => {
+        dispatch({
+          type,
+          data: record,
+        });
+      },
+      reFetch: fetch,
+      filterByMonth,
+    }),
+    [filterByMonth, fetch, dispatch],
+  );
+
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
   return (
-    <RecordHandlerCtx.Provider value={{ updateList }}>
+    <RecordHandlerCtx.Provider value={handlerCtxValue}>
       <RecordCtx.Provider value={ctxValue}>{children}</RecordCtx.Provider>
     </RecordHandlerCtx.Provider>
   );
 };
 
 const RecordCtx = createContext<RecordCtxValue>({
-  total: 0,
-  income: 0,
-  outcome: 0,
+  loading: true,
   list: [],
 });
 
 const RecordHandlerCtx = createContext({
   updateList: (type: INPUT_RECORD_TYPE, record: IRecord) => {},
+  reFetch: () => {},
+  filterByMonth: (date?: string) => ({
+    total: 0,
+    income: 0,
+    outcome: 0,
+  }),
 });
 
 export const useRecordCtx = () => {

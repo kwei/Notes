@@ -2,6 +2,7 @@
 import { Dashboard } from "@/app/spending/Dashboard";
 import { RecordList } from "@/app/spending/RecordList";
 import { useTabCtx } from "@/app/spending/TabCtxProvider";
+import { YearlyRecordList } from "@/app/spending/YearlyRecordList";
 import { SPENDING_PAGE_TAB } from "@/utils/constants";
 
 export const TabSelector = () => {
@@ -12,7 +13,7 @@ export const TabSelector = () => {
   } else if (tab === SPENDING_PAGE_TAB.CHART_BY_MONTH) {
     return <RecordList />;
   } else if (tab === SPENDING_PAGE_TAB.ANNUAL_REVIEW) {
-    return <div>{SPENDING_PAGE_TAB.ANNUAL_REVIEW}</div>;
+    return <YearlyRecordList />;
   }
   return null;
 };

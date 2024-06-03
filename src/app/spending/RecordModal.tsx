@@ -3,7 +3,7 @@
 import { useFocusRef } from "@/hooks/useFocusRef";
 import { IRecord } from "@/type";
 import { RecordModalType } from "@/utils/constants";
-import { useRecordModalCtx } from "@/utils/externalStores";
+import { useRecordModalCtx, useUserStoreCtx } from "@/utils/externalStores";
 import {
   ChangeEvent,
   useCallback,
@@ -61,6 +61,8 @@ export const RecordModal = ({ loading }: { loading: boolean }) => {
 
 const OPERATORS = ["/", "x", "-", "+"];
 const Calculator = () => {
+  const { useStore: useUserStore } = useUserStoreCtx();
+  const [email] = useUserStore((state) => state.email);
   const { useStore } = useRecordModalCtx();
   const [, setState] = useStore((state) => state);
   const [record] = useStore((state) => state.record);
@@ -116,17 +118,20 @@ const Calculator = () => {
         ? {
             ...record,
             price: sign ? Number(total) : -Number(total),
-            date: new Date().toISOString(),
+            date: new Date().toISOString().split("T")[0],
+            time: new Date().toISOString().split("T")[1],
           }
         : {
             id: uuidv4(),
             price: sign ? Number(total) : -Number(total),
             category: "",
-            date: new Date().toISOString(),
+            date: new Date().toISOString().split("T")[0],
+            time: new Date().toISOString().split("T")[1],
             desc: "",
+            email,
           },
     });
-  }, [record, setState, sign, total]);
+  }, [email, record, setState, sign, total]);
 
   const handleOnCalculate = useCallback(() => {
     if (temp.length > 0) {
@@ -353,7 +358,14 @@ const CategorySelector = () => {
 
 const AddResult = ({ loading }: { loading: boolean }) => {
   const { useStore } = useRecordModalCtx();
-  const [onClose] = useStore((state) => state.onClose);
+  const [, setState] = useStore((state) => state);
+
+  const handleOnKeepInputNext = useCallback(() => {
+    setState({
+      step: RecordModalType.Step_1,
+      record: undefined,
+    });
+  }, [setState]);
 
   return (
     <div className="w-full h-full flex justify-center">
@@ -369,9 +381,9 @@ const AddResult = ({ loading }: { loading: boolean }) => {
           </div>
           <button
             className="w-full py-2 px-4 flex items-center justify-center bg-blue-5F-500/80 rounded-md hover:bg-blue-5F-500 transition-colors"
-            onClick={onClose}
+            onClick={handleOnKeepInputNext}
           >
-            關閉
+            繼續輸入下一筆
           </button>
         </div>
       )}

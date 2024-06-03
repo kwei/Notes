@@ -120,6 +120,10 @@ hr {
     @apply my-6 border-2 border-solid border-gray-500/50
 }
 
+input {
+    color-scheme: dark;
+}
+
 
 .loader {
     width: 50px;
