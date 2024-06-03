@@ -8,12 +8,12 @@ import { RecordModal } from "@/app/spending/RecordModal";
 import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
 import { RecordModalProvider, useRecordModalCtx } from "@/utils/externalStores";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
 const WEEKDAY = ["日", "一", "二", "三", "四", "五", "六"];
 
 export const Dashboard = () => {
-  const { total, income, outcome, list } = useRecordCtx();
+  const { total, income, outcome } = useRecordCtx();
   const [isAddRecord, setIsAddRecord] = useState(false);
 
   return (
@@ -99,8 +99,8 @@ const AddRecordBtn = ({
       className="p-2 pb-0 group"
       onClick={handleOpenRecordModal}
     >
-      <span className="col-span-1 px-6 pb-2 text-xl font-semibold border-b border-solid border-b-gray-d0-500 group-hover:border-b-green-50-500 group-hover:text-green-50-500 group-hover:shadow-down-side group-hover:shadow-green-50-500/70 duration-300 transition-all">
-        新增
+      <span className="col-span-1 px-12 pb-2 text-xl font-semibold border-b border-dashed border-b-gray-d0-500 group-hover:border-b-green-50-500 group-hover:text-green-50-500 group-hover:shadow-down-side group-hover:shadow-green-50-500/70 duration-300 transition-all">
+        輸入!
       </span>
     </button>
   );
