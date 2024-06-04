@@ -7,17 +7,17 @@
   "description": "A simple PWA.",
   "icons": [
     {
-      "src": "/manifest_icon_144.png",
+      "src": "/manifest_icon_144.jpg",
       "type": "image/png",
       "sizes": "144x144"
     },
     {
-      "src": "/manifest_icon_192.png",
+      "src": "/manifest_icon_192.jpg",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/manifest_icon_512.png",
+      "src": "/manifest_icon_512.jpg",
       "type": "image/png",
       "sizes": "512x512"
     }
