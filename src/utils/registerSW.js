@@ -13,7 +13,7 @@ export const register = () => {
       if (status.state === "granted") {
         try {
           await registration.periodicSync.register("periodic-notify", {
-            minInterval: 60 * 60 * 1000,
+            minInterval: 1000,
           });
           console.log("Periodic background sync registered!");
         } catch (e) {
@@ -33,9 +33,11 @@ export const register = () => {
       .register("/periodicNotifyServiceWorker.js", {
         scope: "/",
       })
-      .then();
+      .then(() => {
+        console.log("Register Service Worker.");
+      });
 
     // Register the periodic background sync
-    // registerPeriodicSync().then();
+    registerPeriodicSync().then();
   }
 };

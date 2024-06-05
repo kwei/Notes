@@ -1,7 +1,9 @@
+const notifyAgent = new NotifyAgent();
+
 self.addEventListener("install", () => {
+  console.log("start a timer");
   setInterval(
     () => {
-      const notifyAgent = new NotifyAgent();
       notifyAgent.start().then();
     },
     60 * 60 * 1000,
@@ -13,6 +15,13 @@ self.addEventListener("notificationclick", function (event) {
   event.waitUntil(
     clients.openWindow("https://notes-kweis-projects.vercel.app/spending"),
   );
+});
+
+self.addEventListener("periodicsync", (event) => {
+  if (event.tag === "periodic-background-sync") {
+    console.log("periodic sync");
+    event.waitUntil(notifyAgent.start());
+  }
 });
 
 class NotifyAgent {
