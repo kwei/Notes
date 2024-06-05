@@ -17,8 +17,7 @@ class NotifyAgent {
   }
 
   __checkTime() {
-    console.log("Check Time: ", new Date().getHours());
-    return new Date().getHours() in this._notificationHours;
+    return this._notificationHours.includes(new Date().getHours());
   }
 
   async __notify(wording) {
@@ -35,22 +34,16 @@ async function notify(title, options) {
 }
 
 const notifyAgent = new NotifyAgent();
+let timer;
 
-self.addEventListener("install", () => {
-  console.log("start a timer");
-  setInterval(
-    () => {
-      notifyAgent.start().then();
-    },
-    60 * 60 * 1000,
-  );
-});
-
-
-self.addEventListener('sync', event => {
-  if (event.tag === 'background-sync') {
+self.addEventListener("sync", (event) => {
+  if (event.tag === "background-sync") {
     console.log("background sync");
-    event.waitUntil(notifyAgent.start());
+    console.log("start a timer");
+    clearInterval(timer);
+    timer = setInterval(() => {
+      notifyAgent.start().then();
+    }, 60 * 60 * 1000);
   }
 });
 
