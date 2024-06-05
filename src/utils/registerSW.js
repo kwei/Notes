@@ -7,7 +7,7 @@ export const register = () => {
     if ("periodicSync" in registration) {
       // Request permission
       const status = await navigator.permissions.query({
-        name: "periodic-notify",
+        name: "periodic-background-sync",
       });
 
       if (status.state === "granted") {
