@@ -17,6 +17,7 @@ class NotifyAgent {
   }
 
   __checkTime() {
+    console.log("Check Time: ", new Date().getHours());
     return new Date().getHours() in this._notificationHours;
   }
 
