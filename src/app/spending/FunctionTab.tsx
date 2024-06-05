@@ -17,7 +17,7 @@ const TabItem = ({ tab }: { tab: SPENDING_PAGE_TAB }) => {
   const { setTab } = useTabHandlerCtx();
   return (
     <button
-      className="flex w-[100px] items-center justify-center border border-solid border-gray-d0-500 py-2 transition-all hover:shadow-lg hover:shadow-gray-d0-500/50"
+      className="flex w-[100px] items-center justify-center border border-solid border-gray-d0-500 py-2 transition-all hover:shadow-gray-d0-500/50 md:hover:shadow-lg"
       onClick={() => setTab(tab)}
     >
       <span className="font-bold">{tab}</span>

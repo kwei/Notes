@@ -39,9 +39,11 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className={`h-dvh w-full overflow-hidden ${inter.className}`}>
+      <body
+        className={`relative h-dvh w-full overflow-hidden ${inter.className}`}
+      >
         <Suspense>
-          <div className="relative flex h-full w-full flex-col overflow-y-auto">
+          <div className="flex h-full w-full flex-col overflow-y-auto">
             <Header />
             <UserProvider>
               <UserInfo user={userInfo} />
