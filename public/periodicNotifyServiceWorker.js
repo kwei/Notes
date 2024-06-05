@@ -45,11 +45,12 @@ self.addEventListener("install", () => {
   );
 });
 
-self.addEventListener("notificationclick", function (event) {
-  event.notification.close();
-  event.waitUntil(
-    clients.openWindow("https://notes-kweis-projects.vercel.app/spending"),
-  );
+
+self.addEventListener('sync', event => {
+  if (event.tag === 'background-sync') {
+    console.log("background sync");
+    event.waitUntil(notifyAgent.start());
+  }
 });
 
 self.addEventListener("periodicsync", (event) => {
@@ -57,4 +58,11 @@ self.addEventListener("periodicsync", (event) => {
     console.log("periodic sync");
     event.waitUntil(notifyAgent.start());
   }
+});
+
+self.addEventListener("notificationclick", function (event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow("https://notes-kweis-projects.vercel.app/spending"),
+  );
 });

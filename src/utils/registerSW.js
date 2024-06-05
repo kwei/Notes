@@ -1,6 +1,11 @@
 "use client";
 
 export const register = () => {
+  async function requestBackgroundSync() {
+    const registration = await navigator.serviceWorker.ready;
+    await registration.sync.register("background-sync");
+  }
+
   async function registerPeriodicSync() {
     const registration = await navigator.serviceWorker.ready;
     // Check if periodicSync is supported
@@ -42,6 +47,8 @@ export const register = () => {
         console.log("Register Service Worker.");
       });
 
+    // Register the background sync
+    requestBackgroundSync().then();
     // Register the periodic background sync
     registerPeriodicSync().then();
   }
