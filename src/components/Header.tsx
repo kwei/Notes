@@ -2,29 +2,19 @@
 
 import { Dropdown } from "@/components/Dropdown";
 import { MyInfo } from "@/components/MyInfo";
-import { NavMenu } from "@/components/NavMenu";
 import { ROUTE_TABLE, ROUTES } from "@/utils/constants";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdLaunch, MdMenu } from "react-icons/md";
+import { MdLaunch } from "react-icons/md";
 
 export const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const [openNav, setOpenNav] = useState(false);
   const [route, setRoute] = useState("NOTES");
 
   function handleOnChangeRoute(_route: string) {
     router.push(ROUTES[_route]);
-  }
-
-  function handleOpenNav() {
-    setOpenNav(true);
-  }
-
-  function handleCloseNav() {
-    setOpenNav(false);
   }
 
   useEffect(() => {
@@ -35,9 +25,6 @@ export const Header = () => {
     <>
       <header className="sticky left-0 right-0 top-0 z-50 flex items-center justify-between px-4 py-4 shadow-md backdrop-blur-sm">
         <div className="flex items-center gap-4">
-          <button className="group size-6 lg:hidden" onClick={handleOpenNav}>
-            <MdMenu className="h-full w-full transition-all group-hover:text-blue-5F-500" />
-          </button>
           <MyInfo />
           <nav className="ml-4 flex items-center gap-6 border-l-2 border-solid border-gray-500 pl-8 max-lg:hidden">
             {Object.entries(ROUTES).map(([label, path]) => (
@@ -83,7 +70,6 @@ export const Header = () => {
           </a>
         </div>
       </header>
-      {pathname === "/" && <NavMenu open={openNav} onClose={handleCloseNav} />}
     </>
   );
 };
