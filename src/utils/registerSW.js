@@ -12,12 +12,13 @@ export const register = () => {
 
       if (status.state === "granted") {
         try {
-          await registration.periodicSync.register("periodic-notify", {
-            minInterval: 1000,
-          });
-          registration.periodicSync.getTags().then((tags) => {
+          registration.periodicSync.getTags().then(async (tags) => {
             if (tags.includes("periodic-notify")) {
               console.log("Periodic background sync registered!");
+            } else {
+              await registration.periodicSync.register("periodic-notify", {
+                minInterval: 1000,
+              });
             }
           });
         } catch (e) {
