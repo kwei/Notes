@@ -45,7 +45,7 @@ export const RecordModal = () => {
       <div className="absolute bottom-0 left-0 right-0 top-0 bg-black/50 backdrop-blur-sm"></div>
       <div
         ref={ref}
-        className="mb-[90px] flex w-full translate-y-full flex-col gap-4 rounded-t-2xl bg-gray-800 p-8 transition-all duration-300 md:w-auto"
+        className="flex w-full translate-y-full flex-col gap-4 rounded-t-2xl bg-gray-800 p-8 transition-all duration-300 md:w-auto"
         style={{
           minWidth: ref.current?.clientWidth,
           minHeight: ref.current?.clientHeight,
