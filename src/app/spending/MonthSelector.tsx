@@ -54,9 +54,9 @@ export const MonthSelector = (props: Props) => {
   }, [onChange, currentDate]);
 
   return (
-    <div className="w-full flex items-center justify-between">
+    <div className="flex w-full items-center justify-between">
       <button
-        className="size-5 rounded-full hover:bg-stone-300/50 hover:text-gray-800 flex items-center justify-center transition-colors"
+        className="flex size-5 items-center justify-center rounded-full transition-colors hover:bg-stone-300/50 hover:text-gray-800"
         onClick={() => handleChangeMonthByStep(-1)}
       >
         <IoCaretBack className="size-4" />
@@ -68,7 +68,7 @@ export const MonthSelector = (props: Props) => {
         onChange={handleOnChangeMonth}
       />
       <button
-        className="size-5 rounded-full hover:bg-stone-300/50 hover:text-gray-800 flex items-center justify-center transition-colors"
+        className="flex size-5 items-center justify-center rounded-full transition-colors hover:bg-stone-300/50 hover:text-gray-800"
         onClick={() => handleChangeMonthByStep(1)}
       >
         <IoCaretForward className="size-4" />

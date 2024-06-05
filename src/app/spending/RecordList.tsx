@@ -65,28 +65,28 @@ export const RecordList = () => {
     );
   } else if (list.length === 0) {
     return (
-      <div className="w-full flex items-center justify-center">
+      <div className="flex w-full items-center justify-center">
         <span className="text-xl">查無資料</span>
       </div>
     );
   }
 
   return (
-    <div className="w-full flex-1 flex flex-col gap-1">
-      <div className="w-full flex items-center justify-center border-b-2 border-solid border-stone-500 mb-8">
+    <div className="flex w-full flex-1 flex-col gap-1">
+      <div className="mb-8 flex w-full items-center justify-center border-b-2 border-solid border-stone-500">
         <span className="text-2xl font-bold">月度回顧</span>
       </div>
       <MonthSelector onChange={setCurrentMonth} />
-      <div className="w-full flex flex-col items-center gap-4 p-2">
+      <div className="flex w-full flex-col items-center gap-4 p-2">
         <div className="flex items-center gap-2">
           <button
-            className={`font-bold border border-solid border-stone-500 px-1 transition-colors ${chartType ? "bg-stone-400 text-gray-800" : "text-gray-d0-500 hover:bg-stone-400 hover:text-gray-800"}`}
+            className={`border border-solid border-stone-500 px-1 font-bold transition-colors ${chartType ? "bg-stone-400 text-gray-800" : "text-gray-d0-500 hover:bg-stone-400 hover:text-gray-800"}`}
             onClick={() => setChartType(true)}
           >
             支出
           </button>
           <button
-            className={`font-bold border border-solid border-stone-500 px-1 transition-colors ${chartType ? "text-gray-d0-500 hover:bg-stone-400 hover:text-gray-800" : "bg-stone-400 text-gray-800"}`}
+            className={`border border-solid border-stone-500 px-1 font-bold transition-colors ${chartType ? "text-gray-d0-500 hover:bg-stone-400 hover:text-gray-800" : "bg-stone-400 text-gray-800"}`}
             onClick={() => setChartType(false)}
           >
             收入
@@ -116,7 +116,7 @@ export const RecordList = () => {
           />
         </div>
       </div>
-      <div className="w-full h-[250px] flex flex-col items-center pr-2 gap-2 scrollbar scroll-smooth overflow-y-auto">
+      <div className="scrollbar flex h-[250px] w-full flex-col items-center gap-2 overflow-y-auto scroll-smooth pr-2">
         {Object.entries(recordMap).map(([key, value]) => (
           <Record key={key} category={key} list={value} />
         ))}

@@ -37,7 +37,7 @@ export const Dashboard = () => {
   }
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="w-full flex items-center justify-center gap-1">
+      <div className="flex w-full items-center justify-center gap-1">
         <span className="text-2xl font-bold">
           {new Date().getMonth() + 1}/{new Date().getDate()}
         </span>
@@ -46,7 +46,7 @@ export const Dashboard = () => {
         </span>
       </div>
 
-      <div className="w-full rounded-2xl border border-solid border-gray-d0-500 p-4 flex items-center justify-between gap-4">
+      <div className="flex w-full items-center justify-between gap-4 rounded-2xl border border-solid border-gray-d0-500 p-4">
         <span className="text-xl font-bold">本月</span>
         <span
           className={`text-xl font-bold ${total < 0 ? "text-red-500/80" : "text-green-500/80"}`}
@@ -55,18 +55,18 @@ export const Dashboard = () => {
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 w-full">
-        <div className="col-span-1 rounded-lg p-2 bg-green-300/50 flex items-center justify-between gap-4">
+      <div className="grid w-full grid-cols-2 gap-2">
+        <div className="col-span-1 flex items-center justify-between gap-4 rounded-lg bg-green-300/50 p-2">
           <span className="text-lg">收入</span>
           <span className="text-lg">${income}</span>
         </div>
-        <div className="col-span-1 rounded-lg p-2 bg-red-300/50 flex items-center justify-between gap-4">
+        <div className="col-span-1 flex items-center justify-between gap-4 rounded-lg bg-red-300/50 p-2">
           <span className="text-lg">支出</span>
           <span className="text-lg">${outcome}</span>
         </div>
       </div>
 
-      <div className="w-full flex items-center justify-center pt-8">
+      <div className="flex w-full items-center justify-center pt-8">
         <AddRecordBtn handleLoading={handleSetLoading} />
       </div>
     </div>
@@ -113,8 +113,8 @@ const AddRecordBtn = ({
   }, [setState, handleCloseRecordModal, addRecord]);
 
   return (
-    <button className="p-2 pb-0 group" onClick={handleOpenRecordModal}>
-      <span className="col-span-1 px-12 pb-2 text-xl font-semibold border-b border-dashed border-b-gray-d0-500 group-hover:border-b-green-50-500 group-hover:text-green-50-500 group-hover:shadow-down-side group-hover:shadow-green-50-500/70 duration-300 transition-all">
+    <button className="group p-2 pb-0" onClick={handleOpenRecordModal}>
+      <span className="col-span-1 border-b border-dashed border-b-gray-d0-500 px-12 pb-2 text-xl font-semibold transition-all duration-300 group-hover:border-b-green-50-500 group-hover:text-green-50-500 group-hover:shadow-down-side group-hover:shadow-green-50-500/70">
         輸入!
       </span>
     </button>

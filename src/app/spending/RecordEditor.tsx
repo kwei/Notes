@@ -52,19 +52,19 @@ export const RecordEditor = ({ loading }: { loading: boolean }) => {
     );
   return (
     <>
-      <div className="w-full flex items-center justify-center">
+      <div className="flex w-full items-center justify-center">
         <span className="text-lg font-bold">編輯項目</span>
       </div>
       <form
         onSubmit={handleOnSubmitChange}
-        className="flex flex-col flex-1 w-full gap-2"
+        className="flex w-full flex-1 flex-col gap-2"
       >
-        <fieldset className="border border-solid border-gray-d0-500 rounded-md px-3 pt-1 pb-2">
+        <fieldset className="rounded-md border border-solid border-gray-d0-500 px-3 pb-2 pt-1">
           <legend className="bg-gray-800 px-2">金額</legend>
           <input
             type="number"
             name="price"
-            className="bg-transparent focus:outline-none w-full"
+            className="w-full bg-transparent focus:outline-none"
             defaultValue={record.price}
           />
         </fieldset>
@@ -74,7 +74,7 @@ export const RecordEditor = ({ loading }: { loading: boolean }) => {
             value={record.category}
             onChange={setCategory}
             placeHolder="選擇類型"
-            className="border border-solid border-gray-d0-500 rounded-md p-1 pr-4 w-full"
+            className="w-full rounded-md border border-solid border-gray-d0-500 p-1 pr-4"
           >
             {DEFAULT_CATEGORIES.map((category) => (
               <Dropdown.Option
@@ -86,41 +86,41 @@ export const RecordEditor = ({ loading }: { loading: boolean }) => {
           </Dropdown>
         </fieldset>
 
-        <fieldset className="border border-solid border-gray-d0-500 rounded-md px-3 pt-1 pb-2">
+        <fieldset className="rounded-md border border-solid border-gray-d0-500 px-3 pb-2 pt-1">
           <legend className="bg-gray-800 px-2">日期</legend>
           <input
             type="date"
             name="date"
-            className="bg-transparent focus:outline-none w-full"
+            className="w-full bg-transparent focus:outline-none"
             defaultValue={record.date}
           />
         </fieldset>
 
-        <fieldset className="border border-solid border-gray-d0-500 rounded-md px-3 pt-1 pb-2">
+        <fieldset className="rounded-md border border-solid border-gray-d0-500 px-3 pb-2 pt-1">
           <legend className="bg-gray-800 px-2">說明</legend>
           <input
             type="text"
             name="desc"
-            className="bg-transparent focus:outline-none w-full"
+            className="w-full bg-transparent focus:outline-none"
             defaultValue={record.desc}
           />
         </fieldset>
 
-        <div className="w-full flex-1 flex items-end gap-2">
+        <div className="flex w-full flex-1 items-end gap-2">
           <button
             type="button"
-            className="flex-1 py-1 flex items-center justify-center rounded-md border border-solid border-red-ff-300 text-red-ff-300 hover:bg-red-ff-300 group transition-colors"
+            className="group flex flex-1 items-center justify-center rounded-md border border-solid border-red-ff-300 py-1 text-red-ff-300 transition-colors hover:bg-red-ff-300"
             onClick={handleDeleteRecord}
           >
-            <span className="group-hover:text-gray-800 font-bold transition-colors">
+            <span className="font-bold transition-colors group-hover:text-gray-800">
               刪除
             </span>
           </button>
           <button
             type="submit"
-            className="flex-1 py-1 flex items-center justify-center rounded-md border border-solid border-gray-d0-500/70 bg-gray-d0-500/70 text-gray-800 hover:border-gray-d0-500 hover:bg-gray-d0-500 group transition-colors"
+            className="group flex flex-1 items-center justify-center rounded-md border border-solid border-gray-d0-500/70 bg-gray-d0-500/70 py-1 text-gray-800 transition-colors hover:border-gray-d0-500 hover:bg-gray-d0-500"
           >
-            <span className="group-hover:text-gray-800 font-bold transition-colors">
+            <span className="font-bold transition-colors group-hover:text-gray-800">
               送出
             </span>
           </button>

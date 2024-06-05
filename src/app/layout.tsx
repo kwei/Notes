@@ -40,7 +40,7 @@ export default async function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={`relative w-full h-full min-h-screen text-base flex flex-col ${inter.className}`}
+        className={`relative flex h-full min-h-screen w-full flex-col text-base ${inter.className}`}
       >
         <Suspense>
           <Header />

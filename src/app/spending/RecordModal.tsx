@@ -40,11 +40,11 @@ export const RecordModal = () => {
 
   return (
     <div
-      className={`fixed z-40 left-0 right-0 top-0 bottom-0 bg-transparent flex flex-col items-center justify-end ${state.open ? "translate-y-0" : "delay-500 translate-y-full"}`}
+      className={`fixed bottom-0 left-0 right-0 top-0 z-40 flex flex-col items-center justify-end bg-transparent ${state.open ? "translate-y-0" : "translate-y-full delay-500"}`}
     >
       <div
         ref={ref}
-        className="w-full md:w-auto rounded-t-2xl p-8 flex flex-col bg-gray-800 gap-4 transition-all duration-300 translate-y-full"
+        className="flex w-full translate-y-full flex-col gap-4 rounded-t-2xl bg-gray-800 p-8 transition-all duration-300 md:w-auto"
         style={{
           minWidth: ref.current?.clientWidth,
           minHeight: ref.current?.clientHeight,
@@ -179,66 +179,66 @@ const Calculator = () => {
 
   return (
     <>
-      <div className="flex items-center gap-4 justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div className="flex items-center">
           <button
-            className={`rounded-l-md py-1 px-4 text-gray-800 font-semibold transition-colors ${sign ? "bg-red-300/60 hover:bg-red-300/70" : "bg-red-300"}`}
+            className={`rounded-l-md px-4 py-1 font-semibold text-gray-800 transition-colors ${sign ? "bg-red-300/60 hover:bg-red-300/70" : "bg-red-300"}`}
             onClick={() => setSign(false)}
           >
             支出
           </button>
           <button
-            className={`rounded-r-md py-1 px-4 text-gray-800 font-semibold transition-colors ${sign ? "bg-green-300" : "bg-green-300/60 hover:bg-green-300/70"}`}
+            className={`rounded-r-md px-4 py-1 font-semibold text-gray-800 transition-colors ${sign ? "bg-green-300" : "bg-green-300/60 hover:bg-green-300/70"}`}
             onClick={() => setSign(true)}
           >
             收入
           </button>
         </div>
         <button
-          className="py-1 px-4 flex items-center justify-center bg-stone-400 rounded-md hover:bg-stone-300 transition-colors"
+          className="flex items-center justify-center rounded-md bg-stone-400 px-4 py-1 transition-colors hover:bg-stone-300"
           onClick={clearOutput}
         >
-          <span className="text-gray-800 font-semibold">C</span>
+          <span className="font-semibold text-gray-800">C</span>
         </button>
       </div>
 
-      <div className="rounded-md px-3 py-4 w-full bg-stone-400 text-right text-gray-800 font-bold">
+      <div className="w-full rounded-md bg-stone-400 px-3 py-4 text-right font-bold text-gray-800">
         {total || 0}
       </div>
 
-      <div className="w-full grid grid-cols-4 gap-2">
+      <div className="grid w-full grid-cols-4 gap-2">
         <div className="col-span-3 grid grid-cols-3 gap-2">
           {["7", "8", "9", "4", "5", "6", "1", "2", "3", "0", "."].map((v) => (
             <button
               key={v}
-              className="col-span-1 flex items-center justify-center py-2 px-4 bg-stone-400 rounded-md hover:bg-stone-300 transition-colors"
+              className="col-span-1 flex items-center justify-center rounded-md bg-stone-400 px-4 py-2 transition-colors hover:bg-stone-300"
               onClick={() => handleOnEnterNumber(v)}
             >
-              <span className="text-gray-800 font-semibold">{v}</span>
+              <span className="font-semibold text-gray-800">{v}</span>
             </button>
           ))}
           <button
-            className="col-span-1 flex items-center justify-center py-2 px-4 bg-stone-400 rounded-md hover:bg-stone-300 transition-colors"
+            className="col-span-1 flex items-center justify-center rounded-md bg-stone-400 px-4 py-2 transition-colors hover:bg-stone-300"
             onClick={handleOnCalculate}
           >
-            <span className="text-gray-800 font-semibold">=</span>
+            <span className="font-semibold text-gray-800">=</span>
           </button>
         </div>
         <div className="col-span-1 flex flex-col gap-2">
           {OPERATORS.map((v) => (
             <button
               key={v}
-              className="flex items-center justify-center py-2 px-4 bg-stone-400 rounded-md hover:bg-stone-300 transition-colors"
+              className="flex items-center justify-center rounded-md bg-stone-400 px-4 py-2 transition-colors hover:bg-stone-300"
               onClick={() => handleOnSetOperator(v)}
             >
-              <span className="text-gray-800 font-semibold">{v}</span>
+              <span className="font-semibold text-gray-800">{v}</span>
             </button>
           ))}
           <button
-            className="flex items-center justify-center py-2 px-2 bg-stone-400 rounded-md hover:bg-stone-300 transition-colors"
+            className="flex items-center justify-center rounded-md bg-stone-400 px-2 py-2 transition-colors hover:bg-stone-300"
             onClick={handleOnNextStep}
           >
-            <span className="text-gray-800 font-semibold">下一步</span>
+            <span className="font-semibold text-gray-800">下一步</span>
           </button>
         </div>
       </div>
@@ -296,9 +296,9 @@ const CategorySelector = () => {
 
   return (
     <>
-      <div className="w-full flex items-center pb-2">
+      <div className="flex w-full items-center pb-2">
         <button
-          className="hover:text-green-50-500 transition-colors flex items-center gap-2"
+          className="flex items-center gap-2 transition-colors hover:text-green-50-500"
           onClick={handleOnPreviousStep}
         >
           <IoChevronBack className="size-5" />
@@ -307,40 +307,40 @@ const CategorySelector = () => {
       </div>
 
       <fieldset className="rounded-md border border-solid border-b-gray-d0-500">
-        <legend className="px-2 bg-gray-800 ml-2">說明文字</legend>
+        <legend className="ml-2 bg-gray-800 px-2">說明文字</legend>
         <input
           type="text"
           placeholder="ex: 麵包"
-          className="bg-transparent pb-2 px-2 focus:outline-none"
+          className="bg-transparent px-2 pb-2 focus:outline-none"
           onChange={handleOnChangeDesc}
           onBlur={handleOnBlurDesc}
           defaultValue={state.record?.desc}
         />
       </fieldset>
 
-      <div className="w-full grid grid-cols-4 gap-2">
+      <div className="grid w-full grid-cols-4 gap-2">
         {DEFAULT_CATEGORIES.concat([]).map((_category) => (
           <button
             key={_category}
-            className={`col-span-1 py-2 px-4 flex items-center justify-center rounded-md transition-colors ${state.record?.category === _category ? "bg-stone-300" : "bg-stone-400 hover:bg-stone-300"}`}
+            className={`col-span-1 flex items-center justify-center rounded-md px-4 py-2 transition-colors ${state.record?.category === _category ? "bg-stone-300" : "bg-stone-400 hover:bg-stone-300"}`}
             onClick={() => handleOnSelectCategory(_category)}
           >
-            <span className="text-gray-800 font-semibold">{_category}</span>
+            <span className="font-semibold text-gray-800">{_category}</span>
           </button>
         ))}
         <div className="col-span-4 grid grid-cols-4 gap-2">
-          <button className="col-span-1 py-2 px-4 flex items-center justify-center bg-stone-400 rounded-md hover:bg-stone-300 transition-colors">
-            <span className="text-gray-800 font-semibold">+</span>
+          <button className="col-span-1 flex items-center justify-center rounded-md bg-stone-400 px-4 py-2 transition-colors hover:bg-stone-300">
+            <span className="font-semibold text-gray-800">+</span>
           </button>
         </div>
       </div>
 
-      <div className="w-full flex-1 flex items-end pt-4">
+      <div className="flex w-full flex-1 items-end pt-4">
         <button
-          className="w-full py-2 px-4 flex items-center justify-center bg-blue-5F-500/80 rounded-md hover:bg-blue-5F-500 transition-colors"
+          className="flex w-full items-center justify-center rounded-md bg-blue-5F-500/80 px-4 py-2 transition-colors hover:bg-blue-5F-500"
           onClick={handleOnSubmit}
         >
-          <span className="text-gray-800 font-semibold">送出</span>
+          <span className="font-semibold text-gray-800">送出</span>
         </button>
       </div>
     </>
@@ -359,19 +359,19 @@ const AddResult = ({ loading }: { loading: boolean }) => {
   }, [setState]);
 
   return (
-    <div className="w-full h-full flex justify-center">
+    <div className="flex h-full w-full justify-center">
       {loading ? (
         <div className="m-auto">
           <div className="loader-square"></div>
         </div>
       ) : (
-        <div className="w-full flex flex-col gap-4 justify-between">
+        <div className="flex w-full flex-col justify-between gap-4">
           <div className="flex items-center justify-center gap-2">
             <IoCheckmarkCircleOutline className="size-8 text-green-500" />
             <span className="text-lg font-bold">完成</span>
           </div>
           <button
-            className="w-full py-2 px-4 flex items-center justify-center bg-blue-5F-500/80 rounded-md hover:bg-blue-5F-500 transition-colors"
+            className="flex w-full items-center justify-center rounded-md bg-blue-5F-500/80 px-4 py-2 transition-colors hover:bg-blue-5F-500"
             onClick={handleOnKeepInputNext}
           >
             繼續輸入下一筆

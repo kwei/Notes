@@ -41,9 +41,12 @@ self.addEventListener("sync", (event) => {
     console.log("background sync");
     console.log("start a timer");
     clearInterval(timer);
-    timer = setInterval(() => {
-      notifyAgent.start().then();
-    }, 60 * 60 * 1000);
+    timer = setInterval(
+      () => {
+        notifyAgent.start().then();
+      },
+      60 * 60 * 1000,
+    );
   }
 });
 

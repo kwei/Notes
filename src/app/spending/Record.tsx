@@ -63,13 +63,13 @@ export const Record = (props: Props) => {
   );
 
   return (
-    <div className="w-full flex flex-col items-center bg-gray-800 rounded-lg shadow shadow-gray-900">
+    <div className="flex w-full flex-col items-center rounded-lg bg-gray-800 shadow shadow-gray-900">
       <button
-        className="w-full flex flex-col bg-gray-800 pr-4 py-2 rounded-lg"
+        className="flex w-full flex-col rounded-lg bg-gray-800 py-2 pr-4"
         onClick={() => setOpen((prevState) => !prevState)}
       >
-        <span className="w-full flex items-center justify-between">
-          <span className="rounded-r-md bg-stone-400 py-1 pl-4 pr-3 text-gray-800 font-bold">
+        <span className="flex w-full items-center justify-between">
+          <span className="rounded-r-md bg-stone-400 py-1 pl-4 pr-3 font-bold text-gray-800">
             {category}
           </span>
           <span>${total}</span>
@@ -77,13 +77,13 @@ export const Record = (props: Props) => {
       </button>
 
       <div
-        className={`w-full grid transition-all overflow-hidden ${open ? "grid-rows-1" : "grid-rows-0"}`}
+        className={`grid w-full overflow-hidden transition-all ${open ? "grid-rows-1" : "grid-rows-0"}`}
       >
-        <div className="row-span-1 flex flex-col py-2 px-4 divide-y divide-stone-500">
+        <div className="row-span-1 flex flex-col divide-y divide-stone-500 px-4 py-2">
           {list.map((item) => (
             <button
               key={item.id}
-              className="grid grid-cols-5 py-1 hover:bg-stone-300/30 transition-colors"
+              className="grid grid-cols-5 py-1 transition-colors hover:bg-stone-300/30"
               onClick={() => handleOpenRecordModal(item)}
             >
               <span
@@ -93,7 +93,7 @@ export const Record = (props: Props) => {
                 {formatLocalDate(item.date)}
               </span>
               <span
-                className="col-span-3 text-ellipsis overflow-hidden text-nowrap"
+                className="col-span-3 overflow-hidden text-ellipsis text-nowrap"
                 title={item.desc}
               >
                 {item.desc}
