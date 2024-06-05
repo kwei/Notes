@@ -39,16 +39,16 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body
-        className={`relative flex h-full min-h-screen w-full flex-col text-base ${inter.className}`}
-      >
+      <body className={`h-dvh w-full overflow-hidden ${inter.className}`}>
         <Suspense>
-          <Header />
-          <UserProvider>
-            <UserInfo user={userInfo} />
-            {userInfo && children}
-          </UserProvider>
-          <Footer />
+          <div className="relative flex h-full w-full flex-col overflow-y-auto">
+            <Header />
+            <UserProvider>
+              <UserInfo user={userInfo} />
+              {userInfo && children}
+            </UserProvider>
+            <Footer />
+          </div>
         </Suspense>
       </body>
     </html>

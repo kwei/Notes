@@ -111,12 +111,12 @@ export const RecordList = () => {
                 },
               },
             }}
-            width={400}
+            width={350}
             height={150}
           />
         </div>
       </div>
-      <div className="scrollbar flex h-[250px] w-full flex-col items-center gap-2 overflow-y-auto scroll-smooth pr-2">
+      <div className="flex w-full flex-col items-center gap-2">
         {Object.entries(recordMap).map(([key, value]) => (
           <Record key={key} category={key} list={value} />
         ))}

@@ -11,10 +11,8 @@ import { useTaskModalStoreCtx, useUserStoreCtx } from "@/utils/externalStores";
 import { filterPeriod } from "@/utils/filterPeriod";
 import { filterTag } from "@/utils/filterTag";
 import { formatPeriod } from "@/utils/formatPeriod";
-import { notify } from "@/utils/notify";
 import { updateTodo } from "@/utils/updateTodo";
-import { format } from "date-fns";
-import { DragEvent, ReactNode, useCallback, useEffect, useState } from "react";
+import { DragEvent, ReactNode, useCallback, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import {
   IoFileTrayStackedOutline,
@@ -31,7 +29,6 @@ interface Props {
 }
 
 const TODAY = new Date().getTime();
-let taskWorker: Worker | undefined;
 
 const LABEL_ICON: Record<TASK_STATUS, ReactNode> = {
   [TASK_STATUS.BACKLOG]: <IoFileTrayStackedOutline className="size-5" />,
@@ -51,7 +48,6 @@ export const TaskContainer = (props: Props) => {
   const [, setTaskModal] = useTaskModalStore((state) => state);
   const [isDragOver, setIsDragOver] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [beingExpiryTasks, setBeingExpiryTasks] = useState("[]");
 
   function handleOnDragEnter() {
     setIsDragOver(true);
@@ -111,29 +107,6 @@ export const TaskContainer = (props: Props) => {
   function handleCloseContent() {
     setTaskModal({ open: false });
   }
-
-  useEffect(() => {
-    taskWorker = new Worker("notificationWorker.js");
-    taskWorker.onmessage = (event) => {
-      setBeingExpiryTasks(event.data as string);
-    };
-  }, []);
-
-  useEffect(() => {
-    taskWorker?.postMessage(JSON.stringify(list));
-  }, [list]);
-
-  useEffect(() => {
-    if (beingExpiryTasks !== "[]") {
-      const taskList = JSON.parse(beingExpiryTasks) as ITodo[];
-      taskList.forEach((_task) => {
-        notify(
-          "任務即將到期!",
-          `任務【${_task.title}】\n將於 ${format(new Date(_task.expiry!), "yyy/MM/dd")} 到期`,
-        );
-      });
-    }
-  }, [beingExpiryTasks]);
 
   return (
     <div

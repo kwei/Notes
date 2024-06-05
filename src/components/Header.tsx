@@ -33,53 +33,53 @@ export const Header = () => {
 
   return (
     <>
-      <header className="z-10 bg-gray-800 flex items-center justify-between px-4 py-4">
+      <header className="sticky left-0 right-0 top-0 z-50 flex items-center justify-between px-4 py-4 shadow-md backdrop-blur-sm">
         <div className="flex items-center gap-4">
-          <button className="lg:hidden size-6 group" onClick={handleOpenNav}>
-            <MdMenu className="w-full h-full group-hover:text-blue-5F-500 transition-all" />
+          <button className="group size-6 lg:hidden" onClick={handleOpenNav}>
+            <MdMenu className="h-full w-full transition-all group-hover:text-blue-5F-500" />
           </button>
           <MyInfo />
-          <nav className="max-lg:hidden flex items-center ml-4 pl-8 gap-6 border-l-2 border-solid border-gray-500">
+          <nav className="ml-4 flex items-center gap-6 border-l-2 border-solid border-gray-500 pl-8 max-lg:hidden">
             {Object.entries(ROUTES).map(([label, path]) => (
               <Link
                 key={label}
                 href={path}
-                className={`no-underline text-gray-d0-500 transition-colors ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
+                className={`text-gray-d0-500 no-underline transition-colors ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
               >
                 {label}
               </Link>
             ))}
           </nav>
         </div>
-        <div className="lg:hidden flex-1 flex items-center justify-center">
+        <div className="flex flex-1 items-center justify-center lg:hidden">
           <Dropdown
             onChange={handleOnChangeRoute}
             value={route}
-            className="rounded-lg border border-solid border-gray-d0-500 text-center w-fit p-2 hover:border-green-50-500 hover:text-green-50-500"
+            className="w-fit rounded-lg border border-solid border-gray-d0-500 p-2 text-center hover:border-green-50-500 hover:text-green-50-500"
           >
             {Object.entries(ROUTES).map(([label]) => (
               <Dropdown.Option key={label} value={label} />
             ))}
           </Dropdown>
         </div>
-        <div className="max-lg:hidden flex items-center gap-4">
+        <div className="flex items-center gap-4 max-lg:hidden">
           <a
             href="https://github.com/kwei"
-            className="flex items-center hover:underline hover:text-blue-5F-500 transition-all"
+            className="flex items-center transition-all hover:text-blue-5F-500 hover:underline"
             target="_blank"
             rel="noreferrer noopener"
           >
             Github
-            <MdLaunch className="size-4 mx-1" />
+            <MdLaunch className="mx-1 size-4" />
           </a>
           <a
             href="https://www.linkedin.com/in/kaiwei-yeh-bios/"
-            className="flex items-center hover:underline hover:text-blue-5F-500 transition-all"
+            className="flex items-center transition-all hover:text-blue-5F-500 hover:underline"
             target="_blank"
             rel="noreferrer noopener"
           >
             LinkedIn
-            <MdLaunch className="size-4 mx-1" />
+            <MdLaunch className="mx-1 size-4" />
           </a>
         </div>
       </header>

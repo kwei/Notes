@@ -42,9 +42,10 @@ export const RecordModal = () => {
     <div
       className={`fixed bottom-0 left-0 right-0 top-0 z-40 flex flex-col items-center justify-end bg-transparent ${state.open ? "translate-y-0" : "translate-y-full delay-500"}`}
     >
+      <div className="absolute bottom-0 left-0 right-0 top-0 bg-black/50 backdrop-blur-sm"></div>
       <div
         ref={ref}
-        className="flex w-full translate-y-full flex-col gap-4 rounded-t-2xl bg-gray-800 p-8 transition-all duration-300 md:w-auto"
+        className="mb-[90px] flex w-full translate-y-full flex-col gap-4 rounded-t-2xl bg-gray-800 p-8 transition-all duration-300 md:w-auto"
         style={{
           minWidth: ref.current?.clientWidth,
           minHeight: ref.current?.clientHeight,
@@ -350,6 +351,7 @@ const CategorySelector = () => {
 const AddResult = ({ loading }: { loading: boolean }) => {
   const { useStore } = useRecordModalCtx();
   const [, setState] = useStore((state) => state);
+  const [onClose] = useStore((state) => state.onClose);
 
   const handleOnKeepInputNext = useCallback(() => {
     setState({
@@ -370,12 +372,20 @@ const AddResult = ({ loading }: { loading: boolean }) => {
             <IoCheckmarkCircleOutline className="size-8 text-green-500" />
             <span className="text-lg font-bold">完成</span>
           </div>
-          <button
-            className="flex w-full items-center justify-center rounded-md bg-blue-5F-500/80 px-4 py-2 transition-colors hover:bg-blue-5F-500"
-            onClick={handleOnKeepInputNext}
-          >
-            繼續輸入下一筆
-          </button>
+          <div className="flex w-full flex-col gap-2">
+            <button
+              className="flex w-full items-center justify-center rounded-md bg-blue-5F-500/80 px-4 py-2 font-bold text-gray-800 transition-colors hover:bg-blue-5F-500"
+              onClick={onClose}
+            >
+              結束輸入
+            </button>
+            <button
+              className="flex w-full items-center justify-center rounded-md bg-green-50-500/80 px-4 py-2 font-bold text-gray-800 transition-colors hover:bg-green-50-500"
+              onClick={handleOnKeepInputNext}
+            >
+              繼續輸入下一筆
+            </button>
+          </div>
         </div>
       )}
     </div>
