@@ -15,7 +15,11 @@ export const register = () => {
           await registration.periodicSync.register("periodic-notify", {
             minInterval: 1000,
           });
-          console.log("Periodic background sync registered!");
+          registration.periodicSync.getTags().then((tags) => {
+            if (tags.includes("periodic-notify")) {
+              console.log("Periodic background sync registered!");
+            }
+          });
         } catch (e) {
           console.error(`Periodic background sync failed:\nx${e}`);
         }
