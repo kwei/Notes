@@ -53,7 +53,7 @@ self.addEventListener("notificationclick", function (event) {
 });
 
 self.addEventListener("periodicsync", (event) => {
-  if (event.tag === "periodic-background-sync") {
+  if (event.tag === "periodic-notify") {
     console.log("periodic sync");
     event.waitUntil(notifyAgent.start());
   }
