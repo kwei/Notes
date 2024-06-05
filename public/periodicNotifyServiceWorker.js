@@ -43,7 +43,7 @@ self.addEventListener("sync", (event) => {
     clearInterval(timer);
     timer = setInterval(() => {
       notifyAgent.start().then();
-    }, 60 * 1000);
+    }, 60 * 60 * 1000);
   }
 });
 
