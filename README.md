@@ -1,5 +1,5 @@
 # Notes
-![SDK Version](https://img.shields.io/badge/npm-1.0.0-blue)
+![npm](https://img.shields.io/badge/npm-1.1.0-blue)
 > This is me using Notion as a database and integrating it into my own website. Currently, I plan to use Notion to store my research findings on various technologies. Later, I will also write my resume on Notion and integrate it as well.
 
 You can clone the project and do any adjustment you want. Just download the repository by 

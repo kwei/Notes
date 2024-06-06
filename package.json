@@ -10,7 +10,7 @@
     "npm-version:major": "npm version major",
     "npm-version:minor": "npm version minor",
     "npm-version:patch": "npm version patch",
-    "update-readme": "bash updateVersion.sh"
+    "postversion": "node update-readme-version.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
