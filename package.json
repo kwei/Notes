@@ -1,12 +1,16 @@
 {
   "name": "my-app",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "npm-version:major": "npm version major",
+    "npm-version:minor": "npm version minor",
+    "npm-version:patch": "npm version patch",
+    "postversion": "node update-readme-version.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
