@@ -6,7 +6,11 @@
     "dev": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "npm-version:major": "npm version major",
+    "npm-version:minor": "npm version minor",
+    "npm-version:patch": "npm version patch",
+    "update-readme": "bash updateVersion.sh"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
