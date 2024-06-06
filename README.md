@@ -1,5 +1,5 @@
 # Notes
-![npm](https://img.shields.io/badge/npm-1.1.0-blue)
+![npm](https://img.shields.io/badge/npm-1.1.1-blue)
 > This is the website that I use to try some interesting techniques.
 
 You can clone the project and do any adjustment you want. Just download the repository by 
