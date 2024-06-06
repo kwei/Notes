@@ -1,6 +1,5 @@
 "use client";
 import { useRecordHandlerCtx } from "@/app/spending/RecordContextProvider";
-import { RecordModal } from "@/app/spending/RecordModal";
 import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx } from "@/utils/externalStores";
@@ -87,13 +86,13 @@ export const Record = (props: Props) => {
               onClick={() => handleOpenRecordModal(item)}
             >
               <span
-                className="col-span-1"
+                className="col-span-1 text-left"
                 title={new Date(`${item.date}T${item.time}`).toLocaleString()}
               >
                 {formatLocalDate(item.date)}
               </span>
               <span
-                className="col-span-3 overflow-hidden text-ellipsis text-nowrap"
+                className="col-span-3 overflow-hidden text-ellipsis text-nowrap text-left"
                 title={item.desc}
               >
                 {item.desc}
