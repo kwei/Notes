@@ -17,7 +17,15 @@ export async function POST(req: Request) {
     const collections = db.collection("Subscription");
     const method = doc.method;
     if (method === "set") {
-      res = await insertData(collections, doc.data);
+      const old = await retrieveData(collections, doc.data.userAgent);
+      if (!old.status) {
+        res = await insertData(collections, doc.data);
+      } else {
+        res = {
+          status: false,
+          message: "Already Have",
+        };
+      }
     } else {
       res = {
         status: false,
@@ -34,6 +42,21 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json(res);
+}
+
+async function retrieveData(collections: Collection, userAgent: string) {
+  const res = await collections.find({ userAgent }).toArray();
+  if (res.length > 0) {
+    return {
+      status: true,
+      message: JSON.stringify(res),
+    };
+  } else {
+    return {
+      status: false,
+      message: "No data",
+    };
+  }
 }
 
 async function insertData(
