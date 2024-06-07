@@ -104,3 +104,9 @@ interface IRecordModal {
   addRecord: (record: IRecord) => void;
   onClose: () => void;
 }
+
+interface ISubscription {
+  endpoint: string;
+  p256dh: string;
+  auth: string;
+}

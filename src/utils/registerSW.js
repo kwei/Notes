@@ -1,5 +1,7 @@
 "use client";
-const applicationServerPublicKey = "BJD7INKx5OJF-WLVUa97uop53IaxgXnsBDABGjj_oGWvWOO2AClHOpRcaXvieX2o0HJinVzH1nTV-mjlyFjeLwo";
+
+const applicationServerPublicKey =
+  "BJD7INKx5OJF-WLVUa97uop53IaxgXnsBDABGjj_oGWvWOO2AClHOpRcaXvieX2o0HJinVzH1nTV-mjlyFjeLwo";
 
 export const register = () => {
   // currently no use
@@ -45,6 +47,17 @@ function subscribeUser(swRegistration) {
     .then((subscription) => {
       console.log("User is subscribed");
       console.log(JSON.stringify(subscription));
+      fetch("/api/mongo/spending/sub", {
+        method: "POST",
+        body: JSON.stringify({
+          method: "set",
+          data: {
+            endpoint: subscription.endpoint,
+            auth: subscription.keys.auth,
+            p256dh: subscription.keys.p256dh,
+          },
+        }),
+      }).then();
     })
     .catch((err) => {
       console.log("Failed to subscribe the user: ", err);
