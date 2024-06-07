@@ -10,10 +10,7 @@ export async function POST(req: Request) {
     subscription: ISubscription;
     userAgent: string;
   }>;
-  let res: IMongoQueryRes = {
-    status: true,
-    message: "",
-  };
+  let res: IMongoQueryRes;
   try {
     await MONGODB_SPENDING_CLIENT.connect();
     const db = MONGODB_SPENDING_CLIENT.db("Spending");

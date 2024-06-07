@@ -7,10 +7,7 @@ export async function POST(req: Request) {
   console.log("[POST] req url: ", req.url);
   const MONGODB_LINE_USER_CLIENT = new MongoClient(MONGODB_LINE_USER_URI);
   const doc = (await req.json()) as IMongoQuery<IUser>;
-  let res: IMongoQueryRes = {
-    status: true,
-    message: "",
-  };
+  let res: IMongoQueryRes;
   try {
     await MONGODB_LINE_USER_CLIENT.connect();
     const db = MONGODB_LINE_USER_CLIENT.db("LineUser");
