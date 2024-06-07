@@ -54,11 +54,14 @@ export async function POST(req: Request) {
       }),
     );
     subscriptions.forEach((subscription) => {
+      console.log("[Sub]", JSON.stringify(subscription));
       webPush.sendNotification(subscription, JSON.stringify(options)).then();
     });
   }
 
-  return NextResponse.json(res);
+  return NextResponse.json({
+    status: true,
+  });
 }
 
 async function retrieveData(
