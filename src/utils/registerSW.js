@@ -4,7 +4,6 @@ const applicationServerPublicKey =
   "BJD7INKx5OJF-WLVUa97uop53IaxgXnsBDABGjj_oGWvWOO2AClHOpRcaXvieX2o0HJinVzH1nTV-mjlyFjeLwo";
 
 export const register = () => {
-  // currently no use
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
       .register("/receiveNotificationSW.js", {
@@ -45,7 +44,7 @@ function subscribeUser(swRegistration) {
       applicationServerKey: applicationServerKey,
     })
     .then((subscription) => {
-      console.log("User is subscribed");
+      console.log("User is subscribed", subscription);
       fetch("/api/mongo/spending/sub", {
         method: "POST",
         body: JSON.stringify({

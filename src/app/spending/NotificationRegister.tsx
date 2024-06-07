@@ -5,9 +5,8 @@ import { useEffect } from "react";
 
 export const NotificationRegister = () => {
   useEffect(() => {
-    askNotificationPermission().then(() => {
-      register();
-    });
+    askNotificationPermission().then();
+    register();
   }, []);
 
   return <></>;
