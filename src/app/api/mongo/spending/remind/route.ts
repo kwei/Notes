@@ -43,6 +43,7 @@ export async function POST(req: Request) {
   }
 
   if (res.status && res.message) {
+    console.log("[Subs]", res.message);
     const subscriptions = (JSON.parse(res.message) as ISubscription[]).map(
       (d) => ({
         endpoint: d.endpoint,
@@ -54,7 +55,6 @@ export async function POST(req: Request) {
       }),
     );
     subscriptions.forEach((subscription) => {
-      console.log("[Sub]", JSON.stringify(subscription));
       webPush.sendNotification(subscription, JSON.stringify(options)).then();
     });
   }
