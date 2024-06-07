@@ -33,16 +33,12 @@ export async function POST() {
     const collections = db.collection("Subscription");
     const res = await retrieveData(collections, {});
     if (res.status && res.message) {
-      const data = JSON.parse(res.message) as ISubscription[];
+      const data = JSON.parse(res.message) as {
+        subscription: ISubscription;
+        userAgent: string;
+      }[];
       console.log("[Subscriptions] ", data.length);
-      const subscriptions = data.map((d) => ({
-        endpoint: d.endpoint,
-        expirationTime: null,
-        keys: {
-          p256dh: d.p256dh,
-          auth: d.auth,
-        },
-      }));
+      const subscriptions = data.map((d) => d.subscription);
       const promiseList: Promise<webPush.SendResult>[] = [];
       subscriptions.forEach((subscription) => {
         promiseList.push(

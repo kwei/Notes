@@ -107,6 +107,8 @@ interface IRecordModal {
 
 interface ISubscription {
   endpoint: string;
-  p256dh: string;
-  auth: string;
+  keys: {
+    p256dh: string;
+    auth: string;
+  };
 }
