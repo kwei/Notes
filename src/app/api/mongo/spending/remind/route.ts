@@ -1,5 +1,5 @@
 import { MONGODB_SPENDING_URI } from "@/app/api/mongo/constants";
-import { IMongoQueryRes, ISubscription } from "@/type";
+import { ISubscription } from "@/type";
 import { Collection, MongoClient } from "mongodb";
 import { NextResponse } from "next/server";
 import * as webPush from "web-push";
@@ -17,10 +17,6 @@ const options = {
 export async function POST(req: Request) {
   console.log("[POST] req url: ", req.url);
   const MONGODB_SPENDING_CLIENT = new MongoClient(MONGODB_SPENDING_URI);
-  let res: IMongoQueryRes = {
-    status: true,
-    message: "",
-  };
 
   if (vapidKeys.publicKey && vapidKeys.privateKey) {
     webPush.setVapidDetails(
@@ -34,39 +30,36 @@ export async function POST(req: Request) {
     await MONGODB_SPENDING_CLIENT.connect();
     const db = MONGODB_SPENDING_CLIENT.db("Spending");
     const collections = db.collection("Subscription");
-    res = await retrieveData(collections, {});
+    const res = await retrieveData(collections, {});
+    if (res.status && res.message) {
+      console.log("[Subs]", res.message);
+      const subscriptions = (JSON.parse(res.message) as ISubscription[]).map(
+        (d) => ({
+          endpoint: d.endpoint,
+          expirationTime: null,
+          keys: {
+            p256dh: d.p256dh,
+            auth: d.auth,
+          },
+        }),
+      );
+      const promiseList: Promise<webPush.SendResult>[] = [];
+      subscriptions.forEach((subscription) => {
+        promiseList.push(
+          webPush.sendNotification(subscription, JSON.stringify(options)),
+        );
+      });
+      await Promise.all(promiseList);
+      return NextResponse.json({
+        status: true,
+      });
+    }
   } catch (e) {
-    res = {
+    return NextResponse.json({
       status: false,
       message: JSON.stringify(e),
-    };
-  }
-
-  if (res.status && res.message) {
-    console.log("[Subs]", res.message);
-    const subscriptions = (JSON.parse(res.message) as ISubscription[]).map(
-      (d) => ({
-        endpoint: d.endpoint,
-        expirationTime: null,
-        keys: {
-          p256dh: d.p256dh,
-          auth: d.auth,
-        },
-      }),
-    );
-    const promiseList: Promise<webPush.SendResult>[] = [];
-    subscriptions.forEach((subscription) => {
-      promiseList.push(
-        webPush.sendNotification(subscription, JSON.stringify(options)),
-      );
-    });
-    await Promise.all(promiseList);
-    return NextResponse.json({
-      status: true,
     });
   }
-
-  return NextResponse.json(res);
 }
 
 async function retrieveData(
