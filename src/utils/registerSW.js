@@ -46,16 +46,11 @@ function subscribeUser(swRegistration) {
     })
     .then((subscription) => {
       console.log("User is subscribed");
-      console.log(subscription);
       fetch("/api/mongo/spending/sub", {
         method: "POST",
         body: JSON.stringify({
           method: "set",
-          data: {
-            endpoint: subscription.endpoint,
-            auth: subscription.keys.auth,
-            p256dh: subscription.keys.p256dh,
-          },
+          data: { subscription, userAgent: window.navigator.userAgent },
         }),
       }).then();
     })
