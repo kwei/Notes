@@ -2,9 +2,8 @@ import { NextResponse } from "next/server";
 import * as webPush from "web-push";
 
 const vapidKeys = {
-  publicKey:
-    "BJD7INKx5OJF-WLVUa97uop53IaxgXnsBDABGjj_oGWvWOO2AClHOpRcaXvieX2o0HJinVzH1nTV-mjlyFjeLwo",
-  privateKey: "SAf91F5x_btFMFWDuPidWXoowx9hrzkCzkLNNFpq_sE",
+  publicKey: process.env.VAPIDKEY_PUBLIC ?? "",
+  privateKey: process.env.VAPIDKEY_PRIVATE ?? "",
 };
 
 webPush.setVapidDetails(
@@ -33,9 +32,11 @@ export async function POST(req: Request) {
     },
   };
 
-  webPush.sendNotification(subscription, JSON.stringify(options)).then(res => {
-    console.log("Send Notification: ", res);
-  });
+  webPush
+    .sendNotification(subscription, JSON.stringify(options))
+    .then((res) => {
+      console.log("Send Notification: ", res);
+    });
 
   return NextResponse.json({
     status: true,
