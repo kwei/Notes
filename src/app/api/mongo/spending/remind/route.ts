@@ -1,5 +1,5 @@
 import { MONGODB_SPENDING_URI } from "@/app/api/mongo/constants";
-import { IMongoQuery, IMongoQueryRes, ISubscription } from "@/type";
+import { IMongoQueryRes, ISubscription } from "@/type";
 import { Collection, MongoClient } from "mongodb";
 import { NextResponse } from "next/server";
 import * as webPush from "web-push";
@@ -17,7 +17,6 @@ const options = {
 export async function POST(req: Request) {
   console.log("[POST] req url: ", req.url);
   const MONGODB_SPENDING_CLIENT = new MongoClient(MONGODB_SPENDING_URI);
-  const doc = (await req.json()) as IMongoQuery<ISubscription>;
   let res: IMongoQueryRes = {
     status: true,
     message: "",
@@ -35,15 +34,7 @@ export async function POST(req: Request) {
     await MONGODB_SPENDING_CLIENT.connect();
     const db = MONGODB_SPENDING_CLIENT.db("Spending");
     const collections = db.collection("Subscription");
-    const method = doc.method;
-    if (method === "get") {
-      res = await retrieveData(collections, {});
-    } else {
-      res = {
-        status: false,
-        message: "Method mismatch",
-      };
-    }
+    res = await retrieveData(collections, {});
   } catch (e) {
     res = {
       status: false,
@@ -51,7 +42,6 @@ export async function POST(req: Request) {
     };
   }
 
-  console.log(res);
   if (res.status && res.message) {
     const subscriptions = (JSON.parse(res.message) as ISubscription[]).map(
       (d) => ({
