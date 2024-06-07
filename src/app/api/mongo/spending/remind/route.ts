@@ -51,7 +51,8 @@ export async function POST(req: Request) {
     };
   }
 
-  if (res.status) {
+  console.log(res);
+  if (res.status && res.message) {
     const subscriptions = (JSON.parse(res.message) as ISubscription[]).map(
       (d) => ({
         endpoint: d.endpoint,
