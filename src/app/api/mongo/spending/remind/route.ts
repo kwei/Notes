@@ -14,11 +14,12 @@ const options = {
   body: "提醒你，記得記帳喔!",
 };
 
-export async function POST(req: Request) {
-  console.log("[POST] req url: ", req.url);
+export async function POST() {
+  console.log("Remind to take spending record.");
   const MONGODB_SPENDING_CLIENT = new MongoClient(MONGODB_SPENDING_URI);
 
   if (vapidKeys.publicKey && vapidKeys.privateKey) {
+    console.log("web-push set vapid details.");
     webPush.setVapidDetails(
       "mailto:a0979597291@gmail.com",
       vapidKeys.publicKey,
@@ -32,17 +33,16 @@ export async function POST(req: Request) {
     const collections = db.collection("Subscription");
     const res = await retrieveData(collections, {});
     if (res.status && res.message) {
-      console.log("[Subs]", res.message);
-      const subscriptions = (JSON.parse(res.message) as ISubscription[]).map(
-        (d) => ({
-          endpoint: d.endpoint,
-          expirationTime: null,
-          keys: {
-            p256dh: d.p256dh,
-            auth: d.auth,
-          },
-        }),
-      );
+      const data = JSON.parse(res.message) as ISubscription[];
+      console.log("[Subscriptions] ", data.length);
+      const subscriptions = data.map((d) => ({
+        endpoint: d.endpoint,
+        expirationTime: null,
+        keys: {
+          p256dh: d.p256dh,
+          auth: d.auth,
+        },
+      }));
       const promiseList: Promise<webPush.SendResult>[] = [];
       subscriptions.forEach((subscription) => {
         promiseList.push(
