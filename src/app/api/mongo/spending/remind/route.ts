@@ -54,14 +54,19 @@ export async function POST(req: Request) {
         },
       }),
     );
+    const promiseList: Promise<webPush.SendResult>[] = [];
     subscriptions.forEach((subscription) => {
-      webPush.sendNotification(subscription, JSON.stringify(options)).then();
+      promiseList.push(
+        webPush.sendNotification(subscription, JSON.stringify(options)),
+      );
+    });
+    await Promise.all(promiseList);
+    return NextResponse.json({
+      status: true,
     });
   }
 
-  return NextResponse.json({
-    status: true,
-  });
+  return NextResponse.json(res);
 }
 
 async function retrieveData(
