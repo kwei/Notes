@@ -1,29 +1,29 @@
 export const ROUTES: Record<string, string> = {
   // "My Notes": "/",
-  "My Spending": "/spending",
+  "消費分析": "/spending",
   // "My Profile": "/profile",
-  "Task Manager": "/task",
+  "任務規劃": "/task",
 };
 
 export const ROUTE_TABLE: Record<string, string> = {
   // "/": "My Notes",
-  "/spending": "My Spending",
+  "/spending": "消費分析",
   // "/profile": "My Profile",
-  "/task": "Task Manager",
+  "/task": "任務規劃",
 };
 
 export enum TASK_STATUS {
-  COMPLETE = "Complete",
-  IN_PROGRESS = "In Progress",
-  NEW_REQUEST = "New Request",
-  BACKLOG = "Backlog",
+  COMPLETE = "已完成",
+  IN_PROGRESS = "進行中",
+  NEW_REQUEST = "新任務",
+  BACKLOG = "暫緩中",
 }
 
 export const TASK_TABLE: Record<string, TASK_STATUS> = {
-  Backlog: TASK_STATUS.BACKLOG,
-  "New Request": TASK_STATUS.NEW_REQUEST,
-  "In Progress": TASK_STATUS.IN_PROGRESS,
-  Complete: TASK_STATUS.COMPLETE,
+  "暫緩中": TASK_STATUS.BACKLOG,
+  "新任務": TASK_STATUS.NEW_REQUEST,
+  "進行中": TASK_STATUS.IN_PROGRESS,
+  "已完成": TASK_STATUS.COMPLETE,
 };
 
 export enum TASK_COLOR {
@@ -109,6 +109,7 @@ export const DEFAULT_CATEGORIES = [
   "醫療",
   "代墊",
   "薪水",
+  "獎金",
   "投資",
   "還款",
   "其他",

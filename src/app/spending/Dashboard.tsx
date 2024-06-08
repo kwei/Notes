@@ -8,7 +8,7 @@ import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx } from "@/utils/externalStores";
 import { setSpendingRecord } from "@/utils/setSpendingRecord";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 const WEEKDAY = ["日", "一", "二", "三", "四", "五", "六"];
 
@@ -31,7 +31,8 @@ export const Dashboard = () => {
   if (loading) {
     return (
       <div className="m-auto">
-        <div className="loader-square"></div>
+        {/*<div className="loader-square"></div>*/}
+        <span className='text-2xl font-bold'>載入中...</span>
       </div>
     );
   }
@@ -85,9 +86,9 @@ const AddRecordBtn = ({
   const addRecord = useCallback(
     (record: IRecord) => {
       handleLoading(true);
-      setSpendingRecord(record).then(({ status }) => {
+      setSpendingRecord(record).then(async ({ status }) => {
         updateList(INPUT_RECORD_TYPE.ADD, record);
-        reFetch();
+        await reFetch();
         if (!status) console.error("Setting Spending Record Failed.");
         handleLoading(false);
       });

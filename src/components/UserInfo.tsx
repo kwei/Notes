@@ -37,13 +37,13 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
   return (
     <div className="flex w-full items-center justify-end p-4">
       {user && (
-        <div className="group relative flex items-center gap-3">
+        <div className="group relative flex items-center gap-3 py-1">
           <span>{user.name}</span>
           <button
             className="invisible absolute right-full top-0 mr-2 whitespace-nowrap rounded-full border border-solid border-gray-d0-500 px-3 py-1 transition-all hover:bg-gray-d0-500 hover:text-black group-hover:visible"
             onClick={handleSignOut}
           >
-            Log Out
+            登出
           </button>
         </div>
       )}
@@ -57,44 +57,74 @@ const LoginPopup = ({
 }: {
   setLoading: (status: boolean) => void;
 }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
   const handleSignInLine = useCallback(() => {
     setLoading(true);
-    signIn("line").finally();
+    signIn("line").then();
   }, [setLoading]);
 
   const handleSignInEmail = useCallback(() => {
     setLoading(true);
     signIn("credentials", {
-      email: "test@gmail.com",
-      name: "Test Account",
+      email: email || "test@gmail.com",
+      name: name || "Test Account",
       callbackUrl: `${BASE_URL}/spending`,
-    }).then(res => {
-      console.log(res);
-    });
-  }, [setLoading]);
+    }).then();
+  }, [email, name, setLoading]);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center">
-      <div className="flex w-5/6 flex-col rounded-2xl border-b border-solid border-green-50-500 bg-gray-800 p-6 md:w-[400px]">
-        <span className="w-full text-center text-2xl font-bold">
-          Please Login First
-        </span>
-        <span className="w-full p-6 text-center text-sm">
+      <div className="flex w-5/6 flex-col rounded-2xl bg-gray-800 p-6 shadow-lg shadow-white/50 md:w-[400px]">
+        <span className="w-full text-center text-2xl font-bold">請先登入</span>
+        <span className="w-full p-6 text-left text-sm">
+          我們透過 next-auth provider 來實現 LINE
+          登入機制，你的個人資訊僅會用作登入驗證。
+          詳細來說，我們主要會透過您的電子信箱作為判斷依據，一切資料將與您的電子信箱做綁定。
+          <br />
+          <br />
           We use LINE Login powered by next-auth provider. Your information is
-          collected only for identification.
+          collected only for identification. More details, we only take your
+          email for binding data.
         </span>
-        <div className="flex w-full flex-col items-center justify-center gap-4 px-6">
+        <div className="flex w-full flex-col items-center justify-center px-6">
           <button
             onClick={handleSignInLine}
             className="w-full rounded-md border border-solid border-green-600 p-2 text-green-600 transition-colors hover:bg-green-600 hover:text-white"
           >
-            Login with LINE
+            透過 LINE 登入
           </button>
+        </div>
+        <div className="mx-6 my-3 bg-gray-500 pt-px"></div>
+        <div className="flex w-full flex-col gap-4 px-6">
+          <span className="w-full text-center text-xl font-semibold">
+            快速登入資訊
+          </span>
+          <fieldset className="rounded-md border border-solid border-gray-500 px-2 pb-2">
+            <legend className="px-1">名字</legend>
+            <input
+              type="text"
+              className="w-full bg-transparent focus:outline-none"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </fieldset>
+          <fieldset className="rounded-md border border-solid border-gray-500 px-2 pb-2">
+            <legend className="px-1">信箱</legend>
+            <input
+              type="email"
+              className="w-full bg-transparent focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </fieldset>
+
           <button
             onClick={handleSignInEmail}
             className="w-full rounded-md border border-solid border-gray-d0-500 p-2 text-gray-d0-500 transition-colors hover:bg-gray-d0-500/50 hover:text-white"
           >
-            Login with Test Account
+            快速登入
           </button>
         </div>
       </div>

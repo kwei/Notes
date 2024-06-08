@@ -22,7 +22,7 @@ export const RecordEditor = ({ loading }: { loading: boolean }) => {
       loading: true,
     });
     await deleteSpendingRecord(record);
-    reFetch();
+    await reFetch();
     setState({
       loading: false,
     });
@@ -30,7 +30,7 @@ export const RecordEditor = ({ loading }: { loading: boolean }) => {
   }, [record, setState, reFetch, state]);
 
   const handleOnSubmitChange = useCallback(
-    (event: FormEvent) => {
+    async (event: FormEvent) => {
       if (!record) return;
       const data = new FormData(event.target as HTMLFormElement);
       state.addRecord({
@@ -40,8 +40,9 @@ export const RecordEditor = ({ loading }: { loading: boolean }) => {
         date: data.get("date") as string,
         desc: data.get("desc") as string,
       });
+      await reFetch();
     },
-    [state, category, record],
+    [record, state, category, reFetch],
   );
 
   if (!record || loading)
@@ -71,7 +72,7 @@ export const RecordEditor = ({ loading }: { loading: boolean }) => {
 
         <fieldset className="py-2">
           <Dropdown
-            value={record.category}
+            value={category}
             onChange={setCategory}
             placeHolder="選擇類型"
             className="w-full rounded-md border border-solid border-gray-d0-500 p-1 pr-4"

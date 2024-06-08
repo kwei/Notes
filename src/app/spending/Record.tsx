@@ -3,7 +3,7 @@ import { useRecordHandlerCtx } from "@/app/spending/RecordContextProvider";
 import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx } from "@/utils/externalStores";
-import { setSpendingRecord } from "@/utils/setSpendingRecord";
+import { updateSpendingRecord } from "@/utils/updateSpendingRecord";
 import { useCallback, useMemo, useState } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 
@@ -20,7 +20,7 @@ export const Record = (props: Props) => {
   const [open, setOpen] = useState(false);
 
   const total = useMemo(
-    () => list.reduce((sum = 0, d) => sum + d.price, 0),
+    () => list.reduce((sum, d) => sum + d.price, 0),
     [list],
   );
 
@@ -33,13 +33,13 @@ export const Record = (props: Props) => {
   }, [setState]);
 
   const updateRecord = useCallback(
-    (record: IRecord) => {
+    (record: IRecord, newRecord: IRecord) => {
       setState({
         loading: true,
       });
-      setSpendingRecord(record).then(({ status }) => {
+      updateSpendingRecord(record, newRecord).then(async ({ status }) => {
         updateList(INPUT_RECORD_TYPE.UPDATE, record);
-        reFetch();
+        await reFetch();
         if (!status) console.error("Setting Spending Record Failed.");
         handleCloseRecordModal();
       });
@@ -55,7 +55,7 @@ export const Record = (props: Props) => {
         step: RecordModalType.Step_4,
         onClose: handleCloseRecordModal,
         addCategory: () => {},
-        addRecord: updateRecord,
+        addRecord: (newRecord) => updateRecord(record, newRecord),
       });
     },
     [setState, handleCloseRecordModal, updateRecord],

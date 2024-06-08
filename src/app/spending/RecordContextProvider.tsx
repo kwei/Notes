@@ -73,11 +73,11 @@ export const RecordContextProvider = ({
   const [state, dispatch] = useReducer(reducer, initState);
   const [loading, setLoading] = useState(initState.loading);
 
-  const fetch = useCallback(() => {
+  const fetch = useCallback(async () => {
     if (email === "") return;
-    getSpendingRecord({ email }).then(({ status, message }) => {
+    await getSpendingRecord({email}).then(({status, message}) => {
       if (status) {
-        dispatch({ type: INPUT_RECORD_TYPE.CLEAR });
+        dispatch({type: INPUT_RECORD_TYPE.CLEAR});
         (JSON.parse(message) as IRecord[]).forEach((item) => {
           dispatch({
             type: INPUT_RECORD_TYPE.ADD,
@@ -136,7 +136,7 @@ export const RecordContextProvider = ({
   );
 
   useEffect(() => {
-    fetch();
+    fetch().then();
   }, [fetch]);
 
   return (
@@ -153,7 +153,7 @@ const RecordCtx = createContext<RecordCtxValue>({
 
 const RecordHandlerCtx = createContext({
   updateList: (type: INPUT_RECORD_TYPE, record: IRecord) => {},
-  reFetch: () => {},
+  reFetch: async () => {},
   filterByMonth: (date?: string) => ({
     total: 0,
     income: 0,
