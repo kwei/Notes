@@ -41,9 +41,11 @@ export async function POST() {
       const subscriptions = data.map((d) => d.subscription);
       const promiseList: Promise<webPush.SendResult>[] = [];
       subscriptions.forEach((subscription) => {
-        promiseList.push(
-          webPush.sendNotification(subscription, JSON.stringify(options)),
-        );
+        if (subscription) {
+          promiseList.push(
+            webPush.sendNotification(subscription, JSON.stringify(options)),
+          );
+        }
       });
       await Promise.all(promiseList);
       return NextResponse.json({

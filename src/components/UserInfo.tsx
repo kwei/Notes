@@ -56,6 +56,9 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
         .then((res) => {
           setHasSub(res.status);
           setLoadingSub(false);
+          new Notification("成功訂閱", {
+            body: "我們將會定時提醒您要記得記帳!",
+          });
         });
     }
   }, [hasSub, subscription]);
