@@ -40,7 +40,7 @@ export const RecordModal = () => {
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 top-0 z-40 flex flex-col items-center justify-end bg-transparent ${state.open ? "translate-y-0" : "translate-y-full delay-500"}`}
+      className={`fixed bottom-0 left-0 right-0 top-0 z-50 flex flex-col items-center justify-end bg-transparent ${state.open ? "translate-y-0" : "translate-y-full delay-500"}`}
     >
       <div className="absolute bottom-0 left-0 right-0 top-0 bg-black/50 backdrop-blur-sm"></div>
       <div

@@ -76,7 +76,7 @@ export const Dropdown = (props: Props) => {
         ref={btnRef}
         onClick={handleTriggerMenu}
         type="button"
-        className={`flex items-center gap-3 transition-all ${className}`}
+        className={`flex items-center gap-3 transition-all relative ${className}`}
       >
         {option?.showValue && (
           <span className="flex-1 pr-5 pl-2 whitespace-nowrap overflow-hidden text-ellipsis text-left">

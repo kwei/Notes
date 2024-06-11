@@ -2,9 +2,11 @@
 
 import { Loading } from "@/components/Loading";
 import { IMongoQueryRes, IUser } from "@/type";
+import { askNotificationPermission } from "@/utils/askNotificationPermission";
 import { BASE_URL } from "@/utils/constants";
 import { useUserStoreCtx } from "@/utils/externalStores";
 import { getUserData } from "@/utils/getUserData";
+import { register } from "@/utils/registerSW";
 import { setUserData } from "@/utils/setUserData";
 import { signIn, signOut } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
@@ -13,12 +15,73 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
   const [loading, setLoading] = useState(false);
   const { useStore: useUserStore } = useUserStoreCtx();
   const [, setUser] = useUserStore((state) => state);
+  const [subscription, setSubscription] = useState<PushSubscription | null>(
+    null,
+  );
+  const [hasSub, setHasSub] = useState(false);
+  const [loadingSub, setLoadingSub] = useState(true);
 
   function handleSignOut() {
     signOut({
       callbackUrl: `${BASE_URL}/`,
     }).finally();
   }
+
+  const handleOnSubscription = useCallback(async () => {
+    setLoadingSub(true);
+    if (hasSub) {
+      fetch("/api/mongo/spending/sub", {
+        method: "POST",
+        body: JSON.stringify({
+          method: "delete",
+          data: { userAgent: window.navigator.userAgent },
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setHasSub(!res.status);
+          setLoadingSub(false);
+        });
+    } else {
+      const notificationRes = await askNotificationPermission();
+      console.log("Request Notification: ", notificationRes);
+      await fetch("/api/mongo/spending/sub", {
+        method: "POST",
+        body: JSON.stringify({
+          method: "set",
+          data: { subscription, userAgent: window.navigator.userAgent },
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          setHasSub(res.status);
+          setLoadingSub(false);
+        });
+    }
+  }, [hasSub, subscription]);
+
+  useEffect(() => {
+    setLoadingSub(true);
+    register().then((res) => {
+      console.log("Register Service Worker: ", res);
+      setSubscription(res.data);
+      fetch("/api/mongo/spending/sub", {
+        method: "POST",
+        body: JSON.stringify({
+          method: "get",
+          data: {
+            subscription: res.data,
+            userAgent: window.navigator.userAgent,
+          },
+        }),
+      })
+        .then((checkSubRes) => checkSubRes.json())
+        .then((checkSubRes) => {
+          setHasSub(checkSubRes.status);
+          setLoadingSub(false);
+        });
+    });
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -35,17 +98,25 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
   if (loading && !user) return <Loading />;
 
   return (
-    <div className="flex w-full items-center justify-end p-4">
+    <div className="relative flex w-full items-center justify-between p-4">
       {user && (
-        <div className="group relative flex items-center gap-3 py-1">
-          <span>{user.name}</span>
+        <>
           <button
-            className="invisible absolute right-full top-0 mr-2 whitespace-nowrap rounded-full border border-solid border-gray-d0-500 px-3 py-1 transition-all hover:bg-gray-d0-500 hover:text-black group-hover:visible"
-            onClick={handleSignOut}
+            className={`border border-solid border-gray-d0-500 px-2 py-1 font-bold transition-all ${hasSub ? "hover:border-red-ff-300 hover:text-red-ff-300" : "hover:border-green-50-500 hover:text-green-50-500"}`}
+            onClick={loadingSub ? undefined : handleOnSubscription}
           >
-            登出
+            {loadingSub ? "確認中..." : hasSub ? "取消通知" : "開啟通知"}
           </button>
-        </div>
+          <div className="group relative flex items-center gap-3 py-1">
+            <span>{user.name}</span>
+            <button
+              className="invisible absolute right-full top-0 mr-2 whitespace-nowrap rounded-full border border-solid border-gray-d0-500 px-3 py-1 transition-all hover:bg-gray-d0-500 hover:text-black group-hover:visible"
+              onClick={handleSignOut}
+            >
+              登出
+            </button>
+          </div>
+        </>
       )}
       {!user && <LoginPopup setLoading={setLoading} />}
     </div>

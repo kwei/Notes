@@ -26,6 +26,10 @@ export async function POST(req: Request) {
           message: "Already Have",
         };
       }
+    } else if (method === "get") {
+      res = await retrieveData(collections, doc.data.userAgent);
+    } else if (method === "delete") {
+      res = await deleteData(collections, doc.data.userAgent);
     } else {
       res = {
         status: false,
@@ -67,6 +71,14 @@ async function insertData(
   },
 ) {
   const res = await collections.insertOne(data);
+  return {
+    status: res.acknowledged,
+    message: JSON.stringify(res),
+  };
+}
+
+async function deleteData(collections: Collection, userAgent: string) {
+  const res = await collections.deleteOne({ userAgent });
   return {
     status: res.acknowledged,
     message: JSON.stringify(res),

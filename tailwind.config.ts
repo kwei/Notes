@@ -14,8 +14,9 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       boxShadow: {
-        "neon-cyan": "box-shadow: rgba(255, 255, 255, 0.56) 0px 22px 70px 4px;",
+        "neon-cyan": "0px 22px 70px 4px rgba(255, 255, 255, 0.56)",
         "down-side": "0px 10px 10px -10px rgba(0, 0, 0, 0.3)",
+        "magic-btn": "rgba(80, 235, 203, 0.4) 5px 5px, rgba(80, 235, 203, 0.3) 10px 10px, rgba(80, 235, 203, 0.2) 15px 15px, rgba(80, 235, 203, 0.1) 20px 20px, rgba(80, 235, 203, 0.05) 25px 25px"
       },
       colors: {
         red: {

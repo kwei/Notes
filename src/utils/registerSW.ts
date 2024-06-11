@@ -3,25 +3,33 @@
 const applicationServerPublicKey =
   "BJD7INKx5OJF-WLVUa97uop53IaxgXnsBDABGjj_oGWvWOO2AClHOpRcaXvieX2o0HJinVzH1nTV-mjlyFjeLwo";
 
-export const register = () => {
+export const register = async () => {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
+    return navigator.serviceWorker
       .register("/receiveNotificationSW.js", {
         scope: "/",
       })
       .then((reg) => {
-        subscribeUser(reg);
         console.log("[OK] Registered Service Worker.");
+        return subscribeUser(reg);
       })
       .catch((e) => {
         console.error("[FAIL] Registered Service Worker.", e);
+        return {
+          status: false,
+          data: null,
+        };
       });
   } else {
     console.log("[NOT-SUPPORT] Service Worker.");
+    return {
+      status: false,
+      data: null,
+    };
   }
 };
 
-function urlB64ToUint8Array(base64String) {
+function urlB64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
     .replace(/\-/g, "+")
@@ -36,24 +44,33 @@ function urlB64ToUint8Array(base64String) {
   return outputArray;
 }
 
-function subscribeUser(swRegistration) {
+async function subscribeUser(swRegistration: ServiceWorkerRegistration) {
   const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-  swRegistration.pushManager
+  let res: {
+    status: boolean;
+    data: PushSubscription | null;
+  } = {
+    status: false,
+    data: null,
+  };
+  await swRegistration.pushManager
     .subscribe({
       userVisibleOnly: true,
       applicationServerKey: applicationServerKey,
     })
-    .then((subscription) => {
+    .then(async (subscription) => {
       console.log("User is subscribed", subscription);
-      fetch("/api/mongo/spending/sub", {
-        method: "POST",
-        body: JSON.stringify({
-          method: "set",
-          data: { subscription, userAgent: window.navigator.userAgent },
-        }),
-      }).then();
+      res = {
+        status: true,
+        data: subscription,
+      };
     })
     .catch((err) => {
       console.log("Failed to subscribe the user: ", err);
+      res = {
+        status: false,
+        data: null,
+      };
     });
+  return res;
 }

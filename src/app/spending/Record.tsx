@@ -76,7 +76,7 @@ export const Record = (props: Props) => {
       </button>
 
       <div
-        className={`grid w-full overflow-hidden transition-all ${open ? "grid-rows-1" : "grid-rows-0"}`}
+        className={`grid w-full overflow-hidden transition-all duration-400 ${open ? "grid-rows-1" : "grid-rows-0"}`}
       >
         <div className="row-span-1 flex flex-col divide-y divide-stone-500 px-4 py-2">
           {list.map((item) => (
