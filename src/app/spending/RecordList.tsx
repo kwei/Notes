@@ -11,19 +11,19 @@ import { PieChart } from "@mui/x-charts/PieChart";
 
 export const RecordList = () => {
   const { list, loading } = useRecordCtx();
-  const [currentMonth, setCurrentMonth] = useState("");
+  const [currentDate, setCurrentDate] = useState("");
   const [chartType, setChartType] = useState(true);
   const { filterByMonth } = useRecordHandlerCtx();
-  const { outcome, income } = filterByMonth();
+  const { outcome, income } = filterByMonth(currentDate);
 
   const filteredList = useMemo(
     () =>
       list.filter(
         (data) =>
-          currentMonth === "" ||
-          currentMonth === data.date.split("-").slice(0, 2).join("-"),
+          currentDate === "" ||
+          currentDate === data.date.split("-").slice(0, 2).join("-"),
       ),
-    [currentMonth, list],
+    [currentDate, list],
   );
 
   const outcomeRecordMap = useMemo(() => {
@@ -62,18 +62,19 @@ export const RecordList = () => {
       value: number;
       label: string;
     }[] = [];
-    Object.entries(recordMap).forEach(([label, list], id) => {
-      const value = list.reduce((sum = 0, item) => sum + item.price, 0);
-      if (value < 0) {
-        res.push({
-          id,
-          value: -value,
-          label,
-        });
-      }
+    Object.keys(outcomeRecordMap).forEach((label, id) => {
+      const value = outcomeRecordMap[label].reduce(
+        (sum = 0, item) => sum + item.price,
+        0,
+      );
+      res.push({
+        id,
+        value: -value,
+        label,
+      });
     });
     return res;
-  }, [recordMap]);
+  }, [outcomeRecordMap]);
 
   const totalIncomeByCategory = useMemo(() => {
     const res: {
@@ -81,18 +82,19 @@ export const RecordList = () => {
       value: number;
       label: string;
     }[] = [];
-    Object.entries(recordMap).forEach(([label, list], id) => {
-      const value = list.reduce((sum = 0, item) => sum + item.price, 0);
-      if (value >= 0) {
-        res.push({
-          id,
-          value: value,
-          label,
-        });
-      }
+    Object.keys(incomeRecordMap).forEach((label, id) => {
+      const value = incomeRecordMap[label].reduce(
+        (sum = 0, item) => sum + item.price,
+        0,
+      );
+      res.push({
+        id,
+        value: value,
+        label,
+      });
     });
     return res;
-  }, [recordMap]);
+  }, [incomeRecordMap]);
 
   if (loading) {
     return (
@@ -113,7 +115,7 @@ export const RecordList = () => {
       <div className="mb-8 flex w-full items-center justify-center border-b-2 border-solid border-stone-500">
         <span className="pb-4 text-2xl font-bold">月度回顧</span>
       </div>
-      <MonthSelector onChange={setCurrentMonth} />
+      <MonthSelector onChange={setCurrentDate} />
       <div className="flex w-full flex-col items-center gap-4 p-2">
         <div className="flex items-center gap-2">
           <button
@@ -129,7 +131,9 @@ export const RecordList = () => {
             收入
           </button>
         </div>
-        <div className="relative h-[150px]">
+        <div
+          className={`relative h-[150px] ${filteredList.length > 0 ? "block" : "hidden"}`}
+        >
           <PieChart
             series={[
               {
@@ -161,8 +165,8 @@ export const RecordList = () => {
         </div>
       </div>
       <div className="flex w-full flex-col items-center gap-2">
-        {Object.entries(recordMap).map(([key, value]) => (
-          <Record key={key} category={key} list={value} />
+        {Object.keys(recordMap).map((key) => (
+          <Record key={key} category={key} list={recordMap[key]} />
         ))}
       </div>
     </div>

@@ -26,10 +26,10 @@ export const Header = () => {
       <div className="flex items-center gap-4">
         <MyInfo />
         <nav className="ml-4 flex items-center gap-6 border-l-2 border-solid border-gray-500 pl-8 max-lg:hidden">
-          {Object.entries(ROUTES).map(([label, path]) => (
+          {Object.keys(ROUTES).map((label) => (
             <Link
               key={label}
-              href={path}
+              href={ROUTES[label]}
               className={`text-gray-d0-500 no-underline transition-colors ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
             >
               {label}
@@ -43,7 +43,7 @@ export const Header = () => {
           value={route}
           className="w-fit rounded-lg border border-solid border-gray-d0-500 p-2 text-center hover:border-green-50-500 hover:text-green-50-500"
         >
-          {Object.entries(ROUTES).map(([label]) => (
+          {Object.keys(ROUTES).map((label) => (
             <Dropdown.Option key={label} value={label} />
           ))}
         </Dropdown>
