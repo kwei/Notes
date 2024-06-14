@@ -10,7 +10,6 @@ export const register = async () => {
         scope: "/",
       })
       .then((reg) => {
-        console.log("[OK] Registered Service Worker.");
         return subscribeUser(reg);
       })
       .catch((e) => {
@@ -59,7 +58,6 @@ async function subscribeUser(swRegistration: ServiceWorkerRegistration) {
       applicationServerKey: applicationServerKey,
     })
     .then(async (subscription) => {
-      console.log("User is subscribed", subscription);
       res = {
         status: true,
         data: subscription,

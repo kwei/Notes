@@ -44,7 +44,6 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
         });
     } else {
       const notificationRes = await askNotificationPermission();
-      console.log("Request Notification: ", notificationRes);
       await fetch("/api/mongo/spending/sub", {
         method: "POST",
         body: JSON.stringify({
@@ -66,7 +65,6 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
   useEffect(() => {
     setLoadingSub(true);
     register().then((res) => {
-      console.log("Register Service Worker: ", res);
       setSubscription(res.data);
       fetch("/api/mongo/spending/sub", {
         method: "POST",
