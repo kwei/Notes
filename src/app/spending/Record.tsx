@@ -4,7 +4,7 @@ import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx } from "@/utils/externalStores";
 import { updateSpendingRecord } from "@/utils/updateSpendingRecord";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 
 interface Props {
@@ -18,6 +18,7 @@ export const Record = (props: Props) => {
   const { useStore } = useRecordModalCtx();
   const [, setState] = useStore((state) => state);
   const [open, setOpen] = useState(false);
+  const [sortedList, setSortedList] = useState<IRecord[]>([]);
 
   const total = useMemo(
     () => list.reduce((sum, d) => sum + d.price, 0),
@@ -61,6 +62,15 @@ export const Record = (props: Props) => {
     [setState, handleCloseRecordModal, updateRecord],
   );
 
+  useEffect(() => {
+    const worker = new Worker("sortRecordSW.js");
+    worker.onmessage = (event) => {
+      const { data } = event.data;
+      setSortedList(data);
+    };
+    worker.postMessage({ data: list });
+  }, [list]);
+
   return (
     <div className="flex w-full flex-col items-center rounded-lg bg-gray-800 shadow shadow-gray-900">
       <button
@@ -76,10 +86,10 @@ export const Record = (props: Props) => {
       </button>
 
       <div
-        className={`grid w-full overflow-hidden transition-all duration-400 ${open ? "grid-rows-1" : "grid-rows-0"}`}
+        className={`duration-400 grid w-full overflow-hidden transition-all ${open ? "grid-rows-1" : "grid-rows-0"}`}
       >
         <div className="row-span-1 flex flex-col divide-y divide-stone-500 px-4 py-2">
-          {list.map((item) => (
+          {sortedList.map((item) => (
             <button
               key={item.id}
               className="grid grid-cols-5 py-1 transition-colors hover:bg-stone-300/30"

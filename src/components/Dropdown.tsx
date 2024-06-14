@@ -76,28 +76,32 @@ export const Dropdown = (props: Props) => {
         ref={btnRef}
         onClick={handleTriggerMenu}
         type="button"
-        className={`flex items-center gap-3 transition-all relative ${className}`}
+        className={`relative flex items-center gap-3 transition-all ${className}`}
       >
         {option?.showValue && (
-          <span className="flex-1 pr-5 pl-2 whitespace-nowrap overflow-hidden text-ellipsis text-left">
+          <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap pl-2 pr-5 text-left">
             {value ?? placeHolder ?? "Select One"}
           </span>
         )}
         {option?.showTriangle && (
-          <div className="absolute top-0 bottom-0 right-0 flex items-center justify-center">
-            <IoTriangle className="size-3 rotate-180 mx-2.5" />
+          <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center">
+            <IoTriangle className="mx-2.5 size-3 rotate-180" />
           </div>
         )}
       </button>
       <DropdownContext.Provider value={contextValue}>
         <div
-          ref={menuRef}
-          className={`rounded-lg z-40 absolute top-full origin-top left-0 whitespace-nowrap flex flex-col gap-2.5 mt-2 bg-gray-800 overflow-x-hidden overflow-y-auto p-2.5 transition-all shadow-md border border-solid border-gray-900 ${open ? "scale-y-100" : "scale-y-0"}`}
-          style={{
-            minWidth: btnRef?.current?.getBoundingClientRect().width + "px",
-          }}
+          className={`absolute left-0 top-full z-40 mt-2 grid overflow-hidden transition-all ${open ? "grid-rows-1" : "grid-rows-0"}`}
         >
-          {children}
+          <div
+            ref={menuRef}
+            className="row-span-1 flex flex-col gap-2.5 overflow-y-auto overflow-x-hidden whitespace-nowrap rounded-lg border-2 border-solid border-black bg-gray-800 p-2.5"
+            style={{
+              minWidth: btnRef?.current?.getBoundingClientRect().width + "px",
+            }}
+          >
+            {children}
+          </div>
         </div>
       </DropdownContext.Provider>
     </div>
@@ -130,7 +134,7 @@ const Option = (props: OptionProps) => {
       {...legacy}
       onClick={handleOnClick}
       type="button"
-      className={`${className} flex items-center gap-3 py-2 px-2 rounded-md transition-all ${isSelected ? "text-green-50-500 bg-gray-600" : "hover:bg-gray-600 hover:text-green-50-500"}`}
+      className={`${className} flex items-center gap-3 rounded-md px-2 py-2 transition-all ${isSelected ? "bg-gray-600 text-green-50-500" : "hover:bg-gray-600 hover:text-green-50-500"}`}
     >
       {prefix}
       {label ?? value}

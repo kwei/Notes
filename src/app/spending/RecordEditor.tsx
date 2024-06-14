@@ -91,7 +91,7 @@ export const RecordEditor = ({ loading }: { loading: boolean }) => {
             value={category}
             onChange={setCategory}
             placeHolder="選擇類型"
-            className="rounded-md border border-solid border-gray-d0-500 p-1 py-2 pr-4"
+            className="rounded-md border border-solid border-gray-d0-500 p-1 py-2 pr-4 w-full"
           >
             {DEFAULT_CATEGORIES.map((category) => (
               <Dropdown.Option

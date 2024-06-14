@@ -156,11 +156,6 @@ const LoginPopup = ({
           我們透過 next-auth provider 來實現 LINE
           登入機制，你的個人資訊僅會用作登入驗證。
           詳細來說，我們主要會透過您的電子信箱作為判斷依據，一切資料將與您的電子信箱做綁定。
-          <br />
-          <br />
-          We use LINE Login powered by next-auth provider. Your information is
-          collected only for identification. More details, we only take your
-          email for binding data.
         </span>
         <div className="flex w-full flex-col items-center justify-center px-6">
           <button

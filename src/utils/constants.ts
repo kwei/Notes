@@ -90,9 +90,15 @@ export enum RecordModalType {
 }
 
 export enum SPENDING_PAGE_TAB {
-  DEFAULT = "主畫面",
-  CHART_BY_MONTH = "月度回顧",
-  ANNUAL_REVIEW = "年度回顧",
+  DEFAULT = "",
+  CHART_BY_MONTH = "monthly",
+  ANNUAL_REVIEW = "annually",
+}
+
+export const SPENDING_PAGE_TAB_LABEL = {
+  [SPENDING_PAGE_TAB.DEFAULT]: "主畫面",
+  [SPENDING_PAGE_TAB.CHART_BY_MONTH]: "月度回顧",
+  [SPENDING_PAGE_TAB.ANNUAL_REVIEW]: "年度回顧",
 }
 
 export const SPENDING_PAGE_TABS = [

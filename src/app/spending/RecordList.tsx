@@ -1,15 +1,20 @@
 "use client";
 import { MonthSelector } from "@/app/spending/MonthSelector";
 import { Record } from "@/app/spending/Record";
-import { useRecordCtx } from "@/app/spending/RecordContextProvider";
+import {
+  useRecordCtx,
+  useRecordHandlerCtx,
+} from "@/app/spending/RecordContextProvider";
 import { IRecord } from "@/type";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 
 export const RecordList = () => {
   const { list, loading } = useRecordCtx();
   const [currentMonth, setCurrentMonth] = useState("");
   const [chartType, setChartType] = useState(true);
+  const { filterByMonth } = useRecordHandlerCtx();
+  const { outcome, income } = filterByMonth();
 
   const filteredList = useMemo(
     () =>
@@ -21,18 +26,37 @@ export const RecordList = () => {
     [currentMonth, list],
   );
 
-  const recordMap = useMemo(() => {
+  const outcomeRecordMap = useMemo(() => {
     const res: Record<string, IRecord[]> = {};
     filteredList.forEach((data) => {
-      if (!res[data.category]) {
-        res[data.category] = [];
+      if (data.price < 0) {
+        if (!res[data.category]) {
+          res[data.category] = [];
+        }
+        res[data.category].push(data);
       }
-      res[data.category].push(data);
     });
     return res;
   }, [filteredList]);
 
-  const getTotalByCategory = useCallback(() => {
+  const incomeRecordMap = useMemo(() => {
+    const res: Record<string, IRecord[]> = {};
+    filteredList.forEach((data) => {
+      if (data.price >= 0) {
+        if (!res[data.category]) {
+          res[data.category] = [];
+        }
+        res[data.category].push(data);
+      }
+    });
+    return res;
+  }, [filteredList]);
+
+  const recordMap = useMemo(() => {
+    return chartType ? outcomeRecordMap : incomeRecordMap;
+  }, [chartType, incomeRecordMap, outcomeRecordMap]);
+
+  const totalOutcomeByCategory = useMemo(() => {
     const res: {
       id: number;
       value: number;
@@ -40,13 +64,26 @@ export const RecordList = () => {
     }[] = [];
     Object.entries(recordMap).forEach(([label, list], id) => {
       const value = list.reduce((sum = 0, item) => sum + item.price, 0);
-      if (chartType && value < 0) {
+      if (value < 0) {
         res.push({
           id,
           value: -value,
           label,
         });
-      } else if (!chartType && value >= 0) {
+      }
+    });
+    return res;
+  }, [recordMap]);
+
+  const totalIncomeByCategory = useMemo(() => {
+    const res: {
+      id: number;
+      value: number;
+      label: string;
+    }[] = [];
+    Object.entries(recordMap).forEach(([label, list], id) => {
+      const value = list.reduce((sum = 0, item) => sum + item.price, 0);
+      if (value >= 0) {
         res.push({
           id,
           value: value,
@@ -55,7 +92,7 @@ export const RecordList = () => {
       }
     });
     return res;
-  }, [chartType, recordMap]);
+  }, [recordMap]);
 
   if (loading) {
     return (
@@ -74,7 +111,7 @@ export const RecordList = () => {
   return (
     <div className="flex w-full flex-1 flex-col gap-1">
       <div className="mb-8 flex w-full items-center justify-center border-b-2 border-solid border-stone-500">
-        <span className="text-2xl font-bold">月度回顧</span>
+        <span className="pb-4 text-2xl font-bold">月度回顧</span>
       </div>
       <MonthSelector onChange={setCurrentMonth} />
       <div className="flex w-full flex-col items-center gap-4 p-2">
@@ -92,11 +129,13 @@ export const RecordList = () => {
             收入
           </button>
         </div>
-        <div className="h-[150px]">
+        <div className="relative h-[150px]">
           <PieChart
             series={[
               {
-                data: getTotalByCategory(),
+                data: chartType
+                  ? totalOutcomeByCategory
+                  : totalIncomeByCategory,
                 innerRadius: 40,
                 outerRadius: 60,
                 paddingAngle: 0,
@@ -114,6 +153,11 @@ export const RecordList = () => {
             width={350}
             height={150}
           />
+          <span className="absolute left-[90px] top-1/2 flex w-[75px] max-w-[75px] -translate-y-1/2 items-center justify-center">
+            <span className="text-sm font-bold">
+              $ {chartType ? -outcome : income}
+            </span>
+          </span>
         </div>
       </div>
       <div className="flex w-full flex-col items-center gap-2">
