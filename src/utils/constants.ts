@@ -13,17 +13,17 @@ export const ROUTE_TABLE: Record<string, string> = {
 };
 
 export enum TASK_STATUS {
-  COMPLETE = "已完成",
-  IN_PROGRESS = "進行中",
-  NEW_REQUEST = "新任務",
-  BACKLOG = "暫緩中",
+  COMPLETE = "Complete",
+  IN_PROGRESS = "In Progress",
+  NEW_REQUEST = "New Request",
+  BACKLOG = "Backlog",
 }
 
 export const TASK_TABLE: Record<string, TASK_STATUS> = {
-  "暫緩中": TASK_STATUS.BACKLOG,
-  "新任務": TASK_STATUS.NEW_REQUEST,
-  "進行中": TASK_STATUS.IN_PROGRESS,
-  "已完成": TASK_STATUS.COMPLETE,
+  "Backlog": TASK_STATUS.BACKLOG,
+  "New Request": TASK_STATUS.NEW_REQUEST,
+  "In Progress": TASK_STATUS.IN_PROGRESS,
+  "Complete": TASK_STATUS.COMPLETE,
 };
 
 export enum TASK_COLOR {
