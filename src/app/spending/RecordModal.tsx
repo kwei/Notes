@@ -312,7 +312,7 @@ const CategorySelector = () => {
         <input
           type="text"
           placeholder="ex: 麵包"
-          className="bg-transparent px-2 pb-2 focus:outline-none"
+          className="bg-transparent px-2 pb-2 w-full focus:outline-none"
           onChange={handleOnChangeDesc}
           onBlur={handleOnBlurDesc}
           defaultValue={state.record?.desc}
