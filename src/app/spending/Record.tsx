@@ -75,7 +75,7 @@ export const Record = (props: Props) => {
     <div className="relative flex w-full flex-col items-center rounded-lg bg-gray-800 pb-3 shadow shadow-gray-900">
       <Accordion
         label={
-          <span className="flex w-full cursor-pointer items-center justify-between">
+          <span className="flex w-full cursor-pointer select-none items-center justify-between">
             <span className="rounded-r-md bg-stone-400 py-1 pl-4 pr-3 font-bold text-gray-800">
               {category}
             </span>
@@ -110,7 +110,7 @@ const Item = ({
   }, [item, onClick]);
   return (
     <button
-      className="grid grid-cols-5 py-1 transition-colors hover:bg-stone-300/30"
+      className="grid select-none grid-cols-5 py-1 transition-colors hover:bg-stone-300/30"
       onClick={handleOnClick}
     >
       <span
