@@ -11,7 +11,12 @@ import { register } from "@/utils/registerSW";
 import { setUserData } from "@/utils/setUserData";
 import { signIn, signOut } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
-import { IoHelpCircleOutline } from "react-icons/io5";
+import {
+  IoHelpCircleOutline,
+  IoNotificationsCircleOutline,
+  IoNotificationsOffCircleOutline,
+  IoPersonCircleOutline,
+} from "react-icons/io5";
 
 export const UserInfo = ({ user }: { user: IUser | null }) => {
   const [loading, setLoading] = useState(false);
@@ -106,17 +111,35 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
         <>
           <div className="flex items-center gap-2">
             <button
-              className={`border border-solid border-gray-d0-500 px-2 py-1 font-bold transition-all ${hasSub ? "hover:border-red-ff-300 hover:text-red-ff-300" : "hover:border-green-50-500 hover:text-green-50-500"}`}
+              className={`flex items-center gap-2 rounded-md bg-gray-500/50 px-2 py-1 transition-all ${hasSub ? "hover:bg-red-500/50" : "hover:bg-gray-500"}`}
               onClick={loadingSub ? undefined : handleOnSubscription}
             >
-              {loadingSub ? "確認中..." : hasSub ? "取消通知" : "開啟通知"}
+              {loadingSub ? (
+                <span className="font-bold">確認中...</span>
+              ) : hasSub ? (
+                <span className="font-bold">取消通知</span>
+              ) : (
+                <span className="font-bold">開啟通知</span>
+              )}
+              {loadingSub ? (
+                <span className=" relative size-3 animate-spin rounded-full border-2 border-solid border-gray-d0-500 border-r-transparent">
+                  <span className="absolute bottom-1 left-1 right-1 top-1 rounded-full"></span>
+                </span>
+              ) : hasSub ? (
+                <IoNotificationsOffCircleOutline className="size-5" />
+              ) : (
+                <IoNotificationsCircleOutline className="size-5" />
+              )}
             </button>
             <LightBox label={<IoHelpCircleOutline className="size-5" />}>
               我們會按時提醒記帳，前提是需要授權通知並下載。網址列的右側有下載按鈕，手機使用者僅需將網頁加入主畫面即可。
             </LightBox>
           </div>
           <div className="group relative flex items-center gap-3 py-1">
-            <span>{user.name}</span>
+            <div className="flex items-center gap-2">
+              <IoPersonCircleOutline className="size-5" />
+              <span>{user.name}</span>
+            </div>
             <button
               className="invisible absolute right-full top-0 mr-2 whitespace-nowrap rounded-full border border-solid border-gray-d0-500 px-3 py-1 transition-all hover:bg-gray-d0-500 hover:text-black group-hover:visible"
               onClick={handleSignOut}
