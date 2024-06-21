@@ -8,10 +8,10 @@ export async function POST(req: Request) {
   const MONGODB_SPENDING_CLIENT = new MongoClient(MONGODB_SPENDING_URI);
   const doc = (await req.json()) as IMongoQuery<{
     subscription: ISubscription;
+    email: string;
     profile: {
       browser: string;
       device: string;
-      email: string;
     };
   }>;
   let res: IMongoQueryRes;
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     const collections = db.collection("Subscription");
     const method = doc.method;
     if (method === "set") {
-      const old = await retrieveData(collections, doc.data.profile);
+      const old = await retrieveData(collections, doc.data.email);
       if (!old.status) {
         res = await insertData(collections, doc.data);
       } else {
@@ -31,9 +31,9 @@ export async function POST(req: Request) {
         };
       }
     } else if (method === "get") {
-      res = await retrieveData(collections, doc.data.profile);
+      res = await retrieveData(collections, doc.data.email);
     } else if (method === "delete") {
-      res = await deleteData(collections, doc.data.profile);
+      res = await deleteData(collections, doc.data.email);
     } else {
       res = {
         status: false,
@@ -52,15 +52,8 @@ export async function POST(req: Request) {
   return NextResponse.json(res);
 }
 
-async function retrieveData(
-  collections: Collection,
-  filter: {
-    browser: string;
-    device: string;
-    email: string;
-  },
-) {
-  const res = await collections.find(filter).toArray();
+async function retrieveData(collections: Collection, email: string) {
+  const res = await collections.find({ email }).toArray();
   if (res.length > 0) {
     return {
       status: true,
@@ -78,10 +71,10 @@ async function insertData(
   collections: Collection,
   data: {
     subscription: ISubscription;
+    email: string;
     profile: {
       browser: string;
       device: string;
-      email: string;
     };
   },
 ) {
@@ -92,15 +85,8 @@ async function insertData(
   };
 }
 
-async function deleteData(
-  collections: Collection,
-  filter: {
-    browser: string;
-    device: string;
-    email: string;
-  },
-) {
-  const res = await collections.deleteOne(filter);
+async function deleteData(collections: Collection, email: string) {
+  const res = await collections.deleteOne({ email });
   return {
     status: res.acknowledged,
     message: JSON.stringify(res),

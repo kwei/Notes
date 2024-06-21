@@ -28,9 +28,6 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
   );
   const [hasSub, setHasSub] = useState(false);
   const [loadingSub, setLoadingSub] = useState(true);
-  const { browser, device } = new UAParser(
-    window.navigator.userAgent,
-  ).getResult();
 
   function handleSignOut() {
     signOut({
@@ -40,17 +37,16 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
 
   const handleOnSubscription = useCallback(async () => {
     setLoadingSub(true);
+    const { browser, device } = new UAParser(
+      window.navigator.userAgent,
+    ).getResult();
     if (hasSub) {
       fetch("/api/mongo/spending/sub", {
         method: "POST",
         body: JSON.stringify({
           method: "delete",
           data: {
-            profile: {
-              email: user?.email,
-              browser: `${browser.name}v${browser.version}`,
-              device: device.type ?? "desktop",
-            },
+            email: user?.email,
           },
         }),
       })
@@ -67,8 +63,8 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           method: "set",
           data: {
             subscription,
+            email: user?.email,
             profile: {
-              email: user?.email,
               browser: `${browser.name}v${browser.version}`,
               device: device.type ?? "desktop",
             },
@@ -84,10 +80,13 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           });
         });
     }
-  }, [hasSub, subscription]);
+  }, [hasSub, subscription, user?.email]);
 
   useEffect(() => {
     setLoadingSub(true);
+    const { browser, device } = new UAParser(
+      window.navigator.userAgent,
+    ).getResult();
     register().then((res) => {
       setSubscription(res.data);
       fetch("/api/mongo/spending/sub", {
@@ -96,8 +95,8 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           method: "get",
           data: {
             subscription: res.data,
+            email: user?.email,
             profile: {
-              email: user?.email,
               browser: `${browser.name}v${browser.version}`,
               device: device.type ?? "desktop",
             },
@@ -110,7 +109,7 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           setLoadingSub(false);
         });
     });
-  }, [browser.name, browser.version, device.type, user?.email]);
+  }, [user?.email]);
 
   useEffect(() => {
     if (user) {
