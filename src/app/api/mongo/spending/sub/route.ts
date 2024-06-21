@@ -8,7 +8,11 @@ export async function POST(req: Request) {
   const MONGODB_SPENDING_CLIENT = new MongoClient(MONGODB_SPENDING_URI);
   const doc = (await req.json()) as IMongoQuery<{
     subscription: ISubscription;
-    userAgent: string;
+    profile: {
+      browser: string;
+      device: string;
+      email: string;
+    };
   }>;
   let res: IMongoQueryRes;
   try {
@@ -17,7 +21,7 @@ export async function POST(req: Request) {
     const collections = db.collection("Subscription");
     const method = doc.method;
     if (method === "set") {
-      const old = await retrieveData(collections, doc.data.userAgent);
+      const old = await retrieveData(collections, doc.data.profile);
       if (!old.status) {
         res = await insertData(collections, doc.data);
       } else {
@@ -27,9 +31,9 @@ export async function POST(req: Request) {
         };
       }
     } else if (method === "get") {
-      res = await retrieveData(collections, doc.data.userAgent);
+      res = await retrieveData(collections, doc.data.profile);
     } else if (method === "delete") {
-      res = await deleteData(collections, doc.data.userAgent);
+      res = await deleteData(collections, doc.data.profile);
     } else {
       res = {
         status: false,
@@ -48,8 +52,15 @@ export async function POST(req: Request) {
   return NextResponse.json(res);
 }
 
-async function retrieveData(collections: Collection, userAgent: string) {
-  const res = await collections.find({ userAgent }).toArray();
+async function retrieveData(
+  collections: Collection,
+  filter: {
+    browser: string;
+    device: string;
+    email: string;
+  },
+) {
+  const res = await collections.find(filter).toArray();
   if (res.length > 0) {
     return {
       status: true,
@@ -67,7 +78,11 @@ async function insertData(
   collections: Collection,
   data: {
     subscription: ISubscription;
-    userAgent: string;
+    profile: {
+      browser: string;
+      device: string;
+      email: string;
+    };
   },
 ) {
   const res = await collections.insertOne(data);
@@ -77,8 +92,15 @@ async function insertData(
   };
 }
 
-async function deleteData(collections: Collection, userAgent: string) {
-  const res = await collections.deleteOne({ userAgent });
+async function deleteData(
+  collections: Collection,
+  filter: {
+    browser: string;
+    device: string;
+    email: string;
+  },
+) {
+  const res = await collections.deleteOne(filter);
   return {
     status: res.acknowledged,
     message: JSON.stringify(res),

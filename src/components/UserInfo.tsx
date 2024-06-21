@@ -17,6 +17,7 @@ import {
   IoNotificationsOffCircleOutline,
   IoPersonCircleOutline,
 } from "react-icons/io5";
+import { UAParser } from "ua-parser-js";
 
 export const UserInfo = ({ user }: { user: IUser | null }) => {
   const [loading, setLoading] = useState(false);
@@ -27,6 +28,9 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
   );
   const [hasSub, setHasSub] = useState(false);
   const [loadingSub, setLoadingSub] = useState(true);
+  const { browser, device } = new UAParser(
+    window.navigator.userAgent,
+  ).getResult();
 
   function handleSignOut() {
     signOut({
@@ -41,7 +45,13 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
         method: "POST",
         body: JSON.stringify({
           method: "delete",
-          data: { userAgent: window.navigator.userAgent },
+          data: {
+            profile: {
+              email: user?.email,
+              browser: `${browser.name}v${browser.version}`,
+              device: device.type ?? "desktop",
+            },
+          },
         }),
       })
         .then((res) => res.json())
@@ -55,7 +65,14 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
         method: "POST",
         body: JSON.stringify({
           method: "set",
-          data: { subscription, userAgent: window.navigator.userAgent },
+          data: {
+            subscription,
+            profile: {
+              email: user?.email,
+              browser: `${browser.name}v${browser.version}`,
+              device: device.type ?? "desktop",
+            },
+          },
         }),
       })
         .then((res) => res.json())
@@ -79,7 +96,11 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           method: "get",
           data: {
             subscription: res.data,
-            userAgent: window.navigator.userAgent,
+            profile: {
+              email: user?.email,
+              browser: `${browser.name}v${browser.version}`,
+              device: device.type ?? "desktop",
+            },
           },
         }),
       })
@@ -89,7 +110,7 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           setLoadingSub(false);
         });
     });
-  }, []);
+  }, [browser.name, browser.version, device.type, user?.email]);
 
   useEffect(() => {
     if (user) {

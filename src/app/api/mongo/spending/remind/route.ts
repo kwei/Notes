@@ -35,7 +35,11 @@ export async function POST() {
     if (res.status && res.message) {
       const data = JSON.parse(res.message) as {
         subscription: ISubscription;
-        userAgent: string;
+        profile: {
+          browser: string;
+          device: string;
+          email: string;
+        };
       }[];
       console.log("[Subscriptions] ", data.length);
       const subscriptions = data.map((d) => d.subscription);
