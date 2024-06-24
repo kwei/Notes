@@ -4,6 +4,7 @@ import { Accordion } from "@/components/Accordion";
 import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx } from "@/utils/externalStores";
+import { normalizeNumber } from "@/utils/normalizeNumber";
 import { updateSpendingRecord } from "@/utils/updateSpendingRecord";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
@@ -79,7 +80,7 @@ export const Record = (props: Props) => {
             <span className="rounded-r-md bg-stone-400 py-1 pl-4 pr-3 font-bold text-gray-800">
               {category}
             </span>
-            <span>${total}</span>
+            <span>${normalizeNumber(total)}</span>
 
             <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center">
               <IoChevronDownOutline className="size-3 text-stone-500 group-open/accordion:rotate-180" />

@@ -6,6 +6,7 @@ import {
   useRecordHandlerCtx,
 } from "@/app/spending/RecordContextProvider";
 import { IRecord } from "@/type";
+import { normalizeNumber } from "@/utils/normalizeNumber";
 import { useMemo, useState } from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 
@@ -154,7 +155,7 @@ export const RecordList = () => {
           />
           <span className="absolute left-[90px] top-1/2 flex w-[75px] max-w-[75px] -translate-y-1/2 items-center justify-center">
             <span className="text-sm font-bold">
-              $ {chartType ? -outcome : income}
+              ${normalizeNumber(chartType ? -outcome : income)}
             </span>
           </span>
         </div>
