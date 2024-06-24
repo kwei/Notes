@@ -9,10 +9,8 @@ export async function POST(req: Request) {
   const doc = (await req.json()) as IMongoQuery<{
     subscription: ISubscription;
     email: string;
-    profile: {
-      browser: string;
-      device: string;
-    };
+    browser: string;
+    device: string;
   }>;
   let res: IMongoQueryRes;
   try {
@@ -20,8 +18,13 @@ export async function POST(req: Request) {
     const db = MONGODB_SPENDING_CLIENT.db("Spending");
     const collections = db.collection("Subscription");
     const method = doc.method;
+    const filter = {
+      email: doc.data.email,
+      device: doc.data.device,
+      browser: doc.data.browser,
+    };
     if (method === "set") {
-      const old = await retrieveData(collections, doc.data.email);
+      const old = await retrieveData(collections, filter);
       if (!old.status) {
         res = await insertData(collections, doc.data);
       } else {
@@ -31,9 +34,9 @@ export async function POST(req: Request) {
         };
       }
     } else if (method === "get") {
-      res = await retrieveData(collections, doc.data.email);
+      res = await retrieveData(collections, filter);
     } else if (method === "delete") {
-      res = await deleteData(collections, doc.data.email);
+      res = await deleteData(collections, filter);
     } else {
       res = {
         status: false,
@@ -52,8 +55,15 @@ export async function POST(req: Request) {
   return NextResponse.json(res);
 }
 
-async function retrieveData(collections: Collection, email: string) {
-  const res = await collections.find({ email }).toArray();
+async function retrieveData(
+  collections: Collection,
+  data: {
+    email: string;
+    browser: string;
+    device: string;
+  },
+) {
+  const res = await collections.find({ ...data }).toArray();
   if (res.length > 0) {
     return {
       status: true,
@@ -72,10 +82,8 @@ async function insertData(
   data: {
     subscription: ISubscription;
     email: string;
-    profile: {
-      browser: string;
-      device: string;
-    };
+    browser: string;
+    device: string;
   },
 ) {
   const res = await collections.insertOne(data);
@@ -85,8 +93,15 @@ async function insertData(
   };
 }
 
-async function deleteData(collections: Collection, email: string) {
-  const res = await collections.deleteOne({ email });
+async function deleteData(
+  collections: Collection,
+  data: {
+    email: string;
+    browser: string;
+    device: string;
+  },
+) {
+  const res = await collections.deleteOne({ ...data });
   return {
     status: res.acknowledged,
     message: JSON.stringify(res),

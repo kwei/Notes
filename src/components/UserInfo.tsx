@@ -47,6 +47,8 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           method: "delete",
           data: {
             email: user?.email,
+            browser: `${browser.name}v${browser.version}`,
+            device: device.type ?? "desktop",
           },
         }),
       })
@@ -64,10 +66,8 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           data: {
             subscription,
             email: user?.email,
-            profile: {
-              browser: `${browser.name}v${browser.version}`,
-              device: device.type ?? "desktop",
-            },
+            browser: `${browser.name}v${browser.version}`,
+            device: device.type ?? "desktop",
           },
         }),
       })
@@ -96,10 +96,8 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
           data: {
             subscription: res.data,
             email: user?.email,
-            profile: {
-              browser: `${browser.name}v${browser.version}`,
-              device: device.type ?? "desktop",
-            },
+            browser: `${browser.name}v${browser.version}`,
+            device: device.type ?? "desktop",
           },
         }),
       })
