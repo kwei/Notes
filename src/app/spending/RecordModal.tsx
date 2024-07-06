@@ -72,7 +72,9 @@ const Calculator = () => {
   const [, setState] = useStore((state) => state);
   const [record] = useStore((state) => state.record);
   const [sign, setSign] = useState(record?.price ? record?.price > 0 : false);
-  const [total, setTotal] = useState(record?.price?.toString() ?? "");
+  const [total, setTotal] = useState(
+    record?.price ? Math.abs(record.price).toString() : "",
+  );
   const [temp, setTemp] = useState<string[]>([]);
 
   const handleOnEnterNumber = useCallback((val: string) => {
@@ -312,7 +314,7 @@ const CategorySelector = () => {
         <input
           type="text"
           placeholder="ex: 麵包"
-          className="bg-transparent px-2 pb-2 focus:outline-none"
+          className="w-full bg-transparent px-2 pb-2 focus:outline-none"
           onChange={handleOnChangeDesc}
           onBlur={handleOnBlurDesc}
           defaultValue={state.record?.desc}

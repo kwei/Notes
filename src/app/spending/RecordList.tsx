@@ -6,6 +6,7 @@ import {
   useRecordHandlerCtx,
 } from "@/app/spending/RecordContextProvider";
 import { IRecord } from "@/type";
+import { normalizeNumber } from "@/utils/normalizeNumber";
 import { useMemo, useState } from "react";
 import { PieChart } from "@mui/x-charts/PieChart";
 
@@ -98,13 +99,7 @@ export const RecordList = () => {
     return res;
   }, [incomeRecordMap]);
 
-  if (loading) {
-    return (
-      <div className="m-auto">
-        <div className="loader-square"></div>
-      </div>
-    );
-  } else if (list.length === 0) {
+  if (!loading && list.length === 0) {
     return (
       <div className="flex w-full items-center justify-center">
         <span className="text-xl">查無資料</span>
@@ -158,10 +153,11 @@ export const RecordList = () => {
             }}
             width={350}
             height={150}
+            loading={loading}
           />
           <span className="absolute left-[90px] top-1/2 flex w-[75px] max-w-[75px] -translate-y-1/2 items-center justify-center">
             <span className="text-sm font-bold">
-              $ {chartType ? -outcome : income}
+              ${normalizeNumber(chartType ? -outcome : income)}
             </span>
           </span>
         </div>

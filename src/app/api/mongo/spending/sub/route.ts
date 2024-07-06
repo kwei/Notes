@@ -8,7 +8,9 @@ export async function POST(req: Request) {
   const MONGODB_SPENDING_CLIENT = new MongoClient(MONGODB_SPENDING_URI);
   const doc = (await req.json()) as IMongoQuery<{
     subscription: ISubscription;
-    userAgent: string;
+    email: string;
+    browser: string;
+    device: string;
   }>;
   let res: IMongoQueryRes;
   try {
@@ -16,8 +18,13 @@ export async function POST(req: Request) {
     const db = MONGODB_SPENDING_CLIENT.db("Spending");
     const collections = db.collection("Subscription");
     const method = doc.method;
+    const filter = {
+      email: doc.data.email,
+      device: doc.data.device,
+      browser: doc.data.browser,
+    };
     if (method === "set") {
-      const old = await retrieveData(collections, doc.data.userAgent);
+      const old = await retrieveData(collections, filter);
       if (!old.status) {
         res = await insertData(collections, doc.data);
       } else {
@@ -27,9 +34,9 @@ export async function POST(req: Request) {
         };
       }
     } else if (method === "get") {
-      res = await retrieveData(collections, doc.data.userAgent);
+      res = await retrieveData(collections, filter);
     } else if (method === "delete") {
-      res = await deleteData(collections, doc.data.userAgent);
+      res = await deleteData(collections, filter);
     } else {
       res = {
         status: false,
@@ -48,8 +55,15 @@ export async function POST(req: Request) {
   return NextResponse.json(res);
 }
 
-async function retrieveData(collections: Collection, userAgent: string) {
-  const res = await collections.find({ userAgent }).toArray();
+async function retrieveData(
+  collections: Collection,
+  data: {
+    email: string;
+    browser: string;
+    device: string;
+  },
+) {
+  const res = await collections.find({ ...data }).toArray();
   if (res.length > 0) {
     return {
       status: true,
@@ -67,7 +81,9 @@ async function insertData(
   collections: Collection,
   data: {
     subscription: ISubscription;
-    userAgent: string;
+    email: string;
+    browser: string;
+    device: string;
   },
 ) {
   const res = await collections.insertOne(data);
@@ -77,8 +93,15 @@ async function insertData(
   };
 }
 
-async function deleteData(collections: Collection, userAgent: string) {
-  const res = await collections.deleteOne({ userAgent });
+async function deleteData(
+  collections: Collection,
+  data: {
+    email: string;
+    browser: string;
+    device: string;
+  },
+) {
+  const res = await collections.deleteOne({ ...data });
   return {
     status: res.acknowledged,
     message: JSON.stringify(res),

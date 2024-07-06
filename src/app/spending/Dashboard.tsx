@@ -7,6 +7,7 @@ import {
 import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx } from "@/utils/externalStores";
+import { normalizeNumber } from "@/utils/normalizeNumber";
 import { setSpendingRecord } from "@/utils/setSpendingRecord";
 import { useCallback } from "react";
 
@@ -32,7 +33,7 @@ export const Dashboard = () => {
     return (
       <div className="m-auto">
         {/*<div className="loader-square"></div>*/}
-        <span className='text-2xl font-bold'>載入中...</span>
+        <span className="text-2xl font-bold">載入中...</span>
       </div>
     );
   }
@@ -52,18 +53,18 @@ export const Dashboard = () => {
         <span
           className={`text-xl font-bold ${total < 0 ? "text-red-500/80" : "text-green-500/80"}`}
         >
-          ${total}
+          ${normalizeNumber(total)}
         </span>
       </div>
 
       <div className="grid w-full grid-cols-2 gap-2">
         <div className="col-span-1 flex items-center justify-between gap-4 rounded-lg bg-green-300/50 p-2">
           <span className="text-lg">收入</span>
-          <span className="text-lg">${income}</span>
+          <span className="text-lg">${normalizeNumber(income)}</span>
         </div>
         <div className="col-span-1 flex items-center justify-between gap-4 rounded-lg bg-red-300/50 p-2">
           <span className="text-lg">支出</span>
-          <span className="text-lg">${outcome}</span>
+          <span className="text-lg">${normalizeNumber(outcome)}</span>
         </div>
       </div>
 

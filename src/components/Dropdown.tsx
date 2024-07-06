@@ -7,6 +7,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -69,6 +70,23 @@ export const Dropdown = (props: Props) => {
     [handleOnChange, value],
   );
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+    if (timer) clearTimeout(timer);
+    if (open) {
+      timer = setTimeout(() => {
+        menuRef.current?.classList.remove("overflow-y-hidden");
+        menuRef.current?.classList.add("overflow-y-auto");
+      }, 200);
+    } else {
+      menuRef.current?.classList.remove("overflow-y-auto");
+      menuRef.current?.classList.add("overflow-y-hidden");
+    }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [open]);
+
   return (
     <div ref={ref} className="relative">
       <button
@@ -95,7 +113,7 @@ export const Dropdown = (props: Props) => {
         >
           <div
             ref={menuRef}
-            className="row-span-1 flex flex-col gap-2.5 overflow-y-auto overflow-x-hidden whitespace-nowrap rounded-lg border-2 border-solid border-black bg-gray-800 p-2.5"
+            className="row-span-1 flex flex-col gap-2.5 overflow-x-hidden overflow-y-hidden whitespace-nowrap rounded-lg border-2 border-solid border-black bg-gray-800 p-2.5"
             style={{
               minWidth: btnRef?.current?.getBoundingClientRect().width + "px",
             }}
