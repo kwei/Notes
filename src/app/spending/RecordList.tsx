@@ -11,7 +11,9 @@ import { PieChart } from "@mui/x-charts/PieChart";
 
 export const RecordList = () => {
   const { list, loading } = useRecordCtx();
-  const [currentDate, setCurrentDate] = useState("");
+  const [currentDate, setCurrentDate] = useState(
+    `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, "0")}`,
+  );
   const [chartType, setChartType] = useState(true);
   const { filterByMonth } = useRecordHandlerCtx();
   const { outcome, income } = filterByMonth(currentDate);
