@@ -80,7 +80,7 @@ export const Record = (props: Props) => {
             <span className="rounded-r-md bg-stone-400 py-1 pl-4 pr-3 font-bold text-gray-800">
               {category}
             </span>
-            <span>${normalizeNumber(total)}</span>
+            <span>${normalizeNumber(Math.abs(total))}</span>
 
             <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center">
               <IoChevronDownOutline className="size-3 text-stone-500 group-open/accordion:rotate-180" />
