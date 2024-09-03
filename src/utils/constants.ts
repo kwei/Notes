@@ -9,7 +9,7 @@ export const ROUTE_TABLE: Record<string, string> = {
   // "/": "My Notes",
   "/spending": "消費分析",
   // "/profile": "My Profile",
-  "/task": "任務規劃",
+  // "/task": "任務規劃",
 };
 
 export enum TASK_STATUS {

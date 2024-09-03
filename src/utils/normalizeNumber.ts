@@ -4,7 +4,9 @@ export const normalizeNumber = (num: number) => {
   let count = 0;
   digitList.forEach((digit) => {
     if (count !== 0 && count % 3 === 0) {
-      res.push(",");
+      if (Number.isInteger(digitList[count + 1])) {
+        res.push(",");
+      }
     }
     res.push(digit);
     count++;
