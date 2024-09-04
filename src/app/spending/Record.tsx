@@ -127,7 +127,7 @@ const Item = ({
         {item.desc}
       </span>
       <span className="col-span-1 flex items-center justify-end">
-        <span>${item.price}</span>
+        <span>${normalizeNumber(item.price)}</span>
       </span>
     </button>
   );
