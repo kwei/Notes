@@ -53,7 +53,7 @@ const TaskModel = ({ task }: { task?: ITodo }) => {
   const [loading, setLoading] = useState(false);
 
   const deleteTask = useCallback(() => {
-    if (!task) return;
+    if (!task || task.title.trim() === "") return;
     setLoading(true);
     deleteTodo(task).then((res: IMongoQueryRes) => {
       console.log("Delete Task: ", res.status, JSON.parse(res.message));
@@ -66,10 +66,12 @@ const TaskModel = ({ task }: { task?: ITodo }) => {
 
   const saveTask = useCallback(
     (event: FormEvent) => {
+      event.preventDefault();
       if (!task) return;
       setLoading(true);
       const formData = new FormData(event.target as HTMLFormElement);
       const newTaskTitle = formData.get("task-title") as string;
+      if (newTaskTitle.trim() === "") return;
       const newTaskStatus = formData.get(
         "task-status",
       ) as string as TASK_STATUS;
@@ -128,7 +130,7 @@ const TaskModel = ({ task }: { task?: ITodo }) => {
         className={`${isOpen ? "scale-100" : "scale-0"} bg-gray-40-300 relative flex h-full w-full flex-col overflow-y-auto p-4 transition-transform md:h-auto md:w-[800px] md:rounded-xl md:p-6`}
       >
         {task && (
-          <form className="flex flex-col" onSubmit={saveTask}>
+          <form className="flex h-full flex-col md:h-auto" onSubmit={saveTask}>
             <TitleEditor text={task.title} />
             <div className="flex w-full flex-col divide-y divide-gray-500 rounded-sm border border-solid border-gray-500">
               <StatusSelector status={task.status.name} />
@@ -141,23 +143,40 @@ const TaskModel = ({ task }: { task?: ITodo }) => {
               <button
                 type="button"
                 onClick={deleteTask}
-                className="flex items-center justify-center rounded border border-solid border-red-ff-500 bg-red-ff-500 px-2 py-1 text-red-100 transition-colors hover:border-red-ff-300 hover:bg-red-ff-300 hover:text-red-900"
+                disabled={loading}
+                className="relative flex items-center justify-center rounded border border-solid border-red-ff-500 bg-red-ff-500 px-2 py-1 text-red-100 transition-colors hover:border-red-ff-300 hover:bg-red-ff-300 hover:text-red-900"
               >
-                Delete
+                <span
+                  className={`transition-opacity ${loading ? "opacity-0" : "opacity-100"}`}
+                >
+                  Delete
+                </span>
+                {loading && (
+                  <span className="absolute size-3 animate-spin rounded-full border-2 border-solid border-gray-d0-500 border-l-transparent"></span>
+                )}
               </button>
               <div className="flex items-center gap-4">
                 <button
                   type="button"
                   onClick={close}
+                  disabled={loading}
                   className="flex items-center justify-center rounded border border-solid border-red-ff-500 px-2 py-1 text-red-ff-500 transition-colors hover:border-red-ff-300 hover:bg-red-ff-300 hover:text-red-900"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
+                  disabled={loading}
                   className="flex items-center justify-center rounded border border-solid border-green-50-500 bg-green-50-500 px-2 py-1 text-green-900 transition-colors hover:border-green-50-300 hover:bg-green-50-300"
                 >
-                  Save Task
+                  <span
+                    className={`transition-opacity ${loading ? "opacity-0" : "opacity-100"}`}
+                  >
+                    Save Task
+                  </span>
+                  {loading && (
+                    <span className="absolute size-3 animate-spin rounded-full border-2 border-solid border-gray-700 border-l-transparent"></span>
+                  )}
                 </button>
               </div>
             </div>

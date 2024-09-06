@@ -77,7 +77,7 @@ export const Record = (props: Props) => {
       <Accordion
         label={
           <span className="flex w-full cursor-pointer select-none items-center justify-between">
-            <span className="rounded-r-md bg-stone-400 py-1 pl-4 pr-3 font-bold text-gray-800">
+            <span className="rounded-r-md bg-gray-d0-500 py-1 pl-4 pr-3 font-bold text-gray-800">
               {category}
             </span>
             <span>${normalizeNumber(Math.abs(total))}</span>

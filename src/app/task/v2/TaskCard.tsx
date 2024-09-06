@@ -16,11 +16,13 @@ export const TaskCard = ({ task }: { task: ITodo }) => {
       <span className="text-xs text-gray-500">
         {formatPeriod(task.iat, task.expiry)}
       </span>
-      <div className="flex flex-wrap items-center gap-1 pt-3 text-xs">
-        {task.tags.map((tag, i) => (
-          <Tag key={`${tag.name}-${i.toString()}`} tag={tag} />
-        ))}
-      </div>
+      {task.tags.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1 pt-3 text-xs">
+          {task.tags.map((tag, i) => (
+            <Tag key={`${tag.name}-${i.toString()}`} tag={tag} />
+          ))}
+        </div>
+      )}
     </button>
   );
 };

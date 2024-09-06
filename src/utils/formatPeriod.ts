@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 
 export function formatPeriod(iat?: Date, expiry?: Date) {
+  if (!iat && !expiry) return "static";
   let startDate = "";
   let endDate = "";
   if (iat) startDate = format(new Date(iat), "yyyy/MM/dd");

@@ -1,21 +1,15 @@
 "use client";
 
-import { Dropdown } from "@/components/Dropdown";
 import { MyInfo } from "@/components/MyInfo";
 import { ROUTE_TABLE, ROUTES } from "@/utils/constants";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdLaunch } from "react-icons/md";
 
 export const Header = () => {
-  const router = useRouter();
   const pathname = usePathname();
   const [route, setRoute] = useState(Object.values(ROUTE_TABLE)[0]);
-
-  function handleOnChangeRoute(_route: string) {
-    router.push(ROUTES[_route]);
-  }
 
   useEffect(() => {
     setRoute(ROUTE_TABLE[pathname]);
@@ -25,7 +19,7 @@ export const Header = () => {
     <header className="sticky left-0 right-0 top-0 z-50 flex items-center justify-between px-4 py-4 shadow-md backdrop-blur-sm">
       <div className="flex items-center gap-4">
         <MyInfo />
-        <nav className="ml-4 flex items-center gap-6 border-l-2 border-solid border-gray-500 pl-8 max-lg:hidden">
+        <nav className="ml-4 flex items-center gap-6 border-l-2 border-solid border-gray-500 pl-8">
           {Object.keys(ROUTES).map((label) => (
             <Link
               key={label}
@@ -36,17 +30,6 @@ export const Header = () => {
             </Link>
           ))}
         </nav>
-      </div>
-      <div className="flex flex-1 items-center justify-center lg:hidden">
-        <Dropdown
-          onChange={handleOnChangeRoute}
-          value={route}
-          className="w-fit rounded-lg border border-solid border-gray-d0-500 p-2 text-center hover:border-green-50-500 hover:text-green-50-500"
-        >
-          {Object.keys(ROUTES).map((label) => (
-            <Dropdown.Option key={label} value={label} />
-          ))}
-        </Dropdown>
       </div>
       <div className="flex items-center gap-4 max-lg:hidden">
         <a

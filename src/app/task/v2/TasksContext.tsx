@@ -1,6 +1,6 @@
 "use client";
 
-import { IMongoQueryRes, ITodo } from "@/type";
+import { IMongoQueryRes, ITodo, IUser } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
 import { useUserStoreCtx } from "@/utils/externalStores";
 import { getTodoList } from "@/utils/getTodoList";
@@ -36,6 +36,10 @@ export const TasksContext = ({
     });
     return _taskTable;
   };
+  
+  const getUser = useCallback(() => {
+    return user;
+  }, [user])
 
   const reFetch = useCallback(async () => {
     return getTodoList({ userEmail: user.email })
@@ -52,8 +56,9 @@ export const TasksContext = ({
         sortTask(tasks.filter((task) => task.userEmail === user.email)),
       ),
       reFetch,
+      getUser,
     }),
-    [tasks, user.email, reFetch],
+    [tasks, user.email, reFetch, getUser],
   );
 
   return <Ctx.Provider value={ctxVal}>{children}</Ctx.Provider>;
@@ -62,6 +67,7 @@ export const TasksContext = ({
 const Ctx = createContext<{
   tasks: Record<TASK_STATUS, ITodo[]>;
   reFetch: () => Promise<void>;
+  getUser: () => IUser;
 }>({
   tasks: {
     [TASK_STATUS.BACKLOG]: [],
@@ -70,6 +76,11 @@ const Ctx = createContext<{
     [TASK_STATUS.IN_PROGRESS]: [],
   },
   reFetch: async () => {},
+  getUser: () => ({
+    name: "",
+    email: "",
+    image: "",
+  }),
 });
 
 export const useTaskContext = () => useContext(Ctx);

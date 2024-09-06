@@ -1,7 +1,9 @@
 "use client";
 
 import { TaskCard } from "@/app/task/v2/TaskCard";
+import { useTaskModalContext } from "@/app/task/v2/TaskModalContext";
 import { useTaskContext } from "@/app/task/v2/TasksContext";
+import { ITodo } from "@/type";
 import { TASK_STATUS } from "@/utils/constants";
 import { useMemo } from "react";
 import { IoIosAdd } from "react-icons/io";
@@ -27,7 +29,7 @@ export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
         {taskList.map((task, i) => (
           <TaskCard key={`${task.id}-${i.toString()}`} task={task} />
         ))}
-        <AddNewTaskCardButton />
+        <AddNewTaskCardButton type={type} />
       </div>
     </div>
   );
@@ -52,10 +54,24 @@ const TaskListLabel = ({
   );
 };
 
-const AddNewTaskCardButton = () => {
+const AddNewTaskCardButton = ({ type }: { type: TASK_STATUS }) => {
+  const { setTask } = useTaskModalContext();
+  const { getUser } = useTaskContext();
+
+  const defaultTask: ITodo = {
+    title: "",
+    status: {
+      name: type,
+    },
+    tags: [],
+    detail: "",
+    userEmail: getUser().email,
+  };
+
   return (
     <button
       type="button"
+      onClick={() => setTask(defaultTask)}
       className="flex items-center justify-center rounded-md border border-dashed border-gray-500/30 p-2 text-gray-500 opacity-0 transition-all hover:border-solid hover:bg-gray-500/30 hover:text-gray-400 group-hover/task-list:opacity-100"
     >
       <IoIosAdd className="size-6" />
