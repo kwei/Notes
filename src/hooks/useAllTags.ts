@@ -1,11 +1,11 @@
 "use client";
 
-import { useTaskCtx } from "@/app/task/CtxTask";
+import { useTaskContext } from "@/app/task/v2/TasksContext";
 import { ITag } from "@/type";
 import { useMemo } from "react";
 
 export const useAllTags = () => {
-  const { list } = useTaskCtx();
+  const { tasks: list } = useTaskContext();
 
   const allTagStringify = useMemo(() => {
     const res = new Set<string>([]);

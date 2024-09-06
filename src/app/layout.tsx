@@ -47,7 +47,7 @@ export default async function RootLayout({
         className={`relative h-dvh w-full overflow-hidden ${inter.className}`}
       >
         <Suspense>
-          <div className="flex h-full w-full flex-col overflow-y-auto">
+          <div className="flex h-full w-full flex-col">
             <Header />
             <UserProvider>
               <UserInfo user={userInfo} />

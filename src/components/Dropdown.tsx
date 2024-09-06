@@ -88,13 +88,13 @@ export const Dropdown = (props: Props) => {
   }, [open]);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className={`relative ${className}`}>
       <button
         {...legacy}
         ref={btnRef}
         onClick={handleTriggerMenu}
         type="button"
-        className={`relative flex items-center gap-3 transition-all ${className}`}
+        className="relative flex h-full w-full items-center gap-3 transition-all"
       >
         {option?.showValue && (
           <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap pl-2 pr-5 text-left">
@@ -109,11 +109,11 @@ export const Dropdown = (props: Props) => {
       </button>
       <DropdownContext.Provider value={contextValue}>
         <div
-          className={`absolute left-0 top-full z-40 mt-2 grid overflow-hidden transition-all ${open ? "grid-rows-1" : "grid-rows-0"}`}
+          className={`absolute left-0 top-full z-40 mt-2 grid w-fit overflow-hidden transition-all ${open ? "grid-rows-1" : "grid-rows-0"}`}
         >
           <div
             ref={menuRef}
-            className="row-span-1 flex flex-col gap-2.5 overflow-x-hidden overflow-y-hidden whitespace-nowrap rounded-lg border-2 border-solid border-black bg-gray-800 p-2.5"
+            className="bg-gray-40-500 row-span-1 flex w-fit flex-col gap-2.5 overflow-x-hidden overflow-y-hidden whitespace-nowrap rounded-lg border border-solid border-gray-500 p-2.5"
             style={{
               minWidth: btnRef?.current?.getBoundingClientRect().width + "px",
             }}
@@ -152,7 +152,7 @@ const Option = (props: OptionProps) => {
       {...legacy}
       onClick={handleOnClick}
       type="button"
-      className={`${className} flex items-center gap-3 rounded-md px-2 py-2 transition-all ${isSelected ? "bg-gray-600 text-green-50-500" : "hover:bg-gray-600 hover:text-green-50-500"}`}
+      className={`${className} flex items-center gap-3 rounded-md px-2 py-2 transition-all ${isSelected ? "bg-gray-40-300 text-green-50-500" : "hover:bg-gray-40-300 hover:text-green-50-500"}`}
     >
       {prefix}
       {label ?? value}

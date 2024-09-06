@@ -3,9 +3,7 @@
 @tailwind utilities;
 
 body {
-    color: #D0D0D0;
-    background: linear-gradient(to bottom, #403F44, #1E1B32);
-    @apply text-base max-lg:text-sm break-words
+    @apply text-base max-lg:text-sm break-words bg-gray-40-500 text-gray-d0-500
 }
 
 .scrollbar::-webkit-scrollbar {
