@@ -4,7 +4,7 @@ export const normalizeNumber = (num: number) => {
   let count = 0;
   digitList.forEach((digit) => {
     if (count !== 0 && count % 3 === 0) {
-      if (Number.isInteger(digitList[count + 1])) {
+      if (isNumber(digitList[count + 1])) {
         res.push(",");
       }
     }
@@ -13,3 +13,7 @@ export const normalizeNumber = (num: number) => {
   });
   return res.toReversed().join("");
 };
+
+function isNumber(val: unknown): val is number {
+  return typeof val === "number";
+}
