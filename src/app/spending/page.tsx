@@ -9,12 +9,12 @@ export default function Home() {
     <main className="flex w-full flex-1 flex-col items-center">
       <div className="flex w-full flex-1 flex-col justify-between p-5 md:w-2/3 lg:w-1/3">
         <RecordContextProvider>
-            <RecordModalProvider>
-              <TabSelector />
-              <FunctionTab />
+          <RecordModalProvider>
+            <TabSelector />
+            <FunctionTab />
 
-              <RecordModal />
-            </RecordModalProvider>
+            <RecordModal />
+          </RecordModalProvider>
         </RecordContextProvider>
       </div>
     </main>

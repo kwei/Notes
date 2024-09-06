@@ -73,7 +73,7 @@ export const Record = (props: Props) => {
   }, [list]);
 
   return (
-    <div className="relative flex w-full flex-col items-center rounded-lg bg-gray-800 pb-3 shadow shadow-gray-900">
+    <div className="bg-gray-40-300 relative flex w-full flex-col items-center rounded-lg pb-3">
       <Accordion
         label={
           <span className="flex w-full cursor-pointer select-none items-center justify-between">
@@ -87,7 +87,7 @@ export const Record = (props: Props) => {
             </div>
           </span>
         }
-        className="flex w-full flex-col rounded-lg bg-gray-800 py-2 pr-4"
+        className="bg-gray-40-300 flex w-full flex-col rounded-lg py-2 pr-4"
       >
         <div className="row-span-1 flex flex-col divide-y divide-stone-500 px-4 py-2">
           {sortedList.map((item) => (
