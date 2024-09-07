@@ -1,12 +1,12 @@
 "use client";
 
-import { DragEvent, useRef } from "react";
+import { DragEvent, useState } from "react";
 
 export const useDrag = <T, D>() => {
-  const draggedItemRef = useRef<D | null>(null);
+  const [draggedItem, setDraggedItem] = useState<D | null>(null);
 
   const handleDragStart = (event: DragEvent<T>, data: D) => {
-    draggedItemRef.current = data;
+    setDraggedItem(data);
     event.dataTransfer.effectAllowed = "move";
   };
 
@@ -17,18 +17,18 @@ export const useDrag = <T, D>() => {
 
   const handleDrop = (event: DragEvent<T>, cb: (data: D) => void) => {
     event.preventDefault();
-    if (draggedItemRef.current) {
-      cb(draggedItemRef.current);
+    if (draggedItem) {
+      cb(draggedItem);
     }
-    draggedItemRef.current = null;
+    setDraggedItem(null);
   };
 
   const handleDragEnd = () => {
-    draggedItemRef.current = null;
+    setDraggedItem(null);
   };
 
   return {
-    draggedItemRef,
+    draggedItem,
     handleDragStart,
     handleDragEnd,
     handleDragOver,

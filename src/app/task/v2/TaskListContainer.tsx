@@ -1,15 +1,21 @@
 "use client";
 
+import { useDraggableContext } from "@/app/task/v2/DraggableContext";
+import { Tag } from "@/app/task/v2/Tag";
 import { TaskCard } from "@/app/task/v2/TaskCard";
 import { useTaskModalContext } from "@/app/task/v2/TaskModalContext";
 import { useTaskContext } from "@/app/task/v2/TasksContext";
 import { ITodo } from "@/type";
-import { TASK_STATUS } from "@/utils/constants";
-import { useMemo } from "react";
+import { TASK_COLOR, TASK_STATUS } from "@/utils/constants";
+import { updateTodo } from "@/utils/updateTodo";
+import { useCallback, useMemo, DragEvent, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 
 export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
-  const { tasks } = useTaskContext();
+  const { tasks, reFetch, loading } = useTaskContext();
+  const { draggedItem, handleDragOver, handleDrop } = useDraggableContext();
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const taskList = useMemo(() => tasks[type], [tasks, type]);
 
@@ -18,18 +24,101 @@ export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
     [taskList],
   );
 
+  const onDragOver = useCallback(
+    (event: DragEvent<HTMLDivElement>) => {
+      handleDragOver(event);
+      if (draggedItem && draggedItem.status.name !== type) {
+        setIsDragOver(true);
+      }
+    },
+    [draggedItem, handleDragOver, type],
+  );
+
+  const onDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const onDrop = useCallback(
+    (event: DragEvent<HTMLDivElement>) => {
+      handleDrop(event, (data) => {
+        if (data.status.name === type) return;
+        setUpdating(true);
+        updateTodo(data, {
+          ...data,
+          status: { name: type },
+        }).then(() => {
+          reFetch().finally();
+          setUpdating(false);
+        });
+      });
+    },
+    [handleDrop, reFetch, type],
+  );
+
+  const droppedElementProps = useMemo(
+    () => ({
+      onDragOver,
+      onDrop,
+      onDragLeave,
+    }),
+    [onDragOver, onDrop],
+  );
+
   return (
-    <div className="bg-gray-40-300 mx-1 flex h-full w-[260px] shrink-0 flex-col rounded-xl">
+    <div
+      {...droppedElementProps}
+      className="mx-1 flex h-full w-[260px] shrink-0 flex-col rounded-xl bg-gray-40-300"
+    >
       <TaskListLabel
         title={type}
         completeAmount={completeAmount}
         totalAmount={taskList.length}
       />
       <div className="scrollbar group/task-list flex h-0 w-full flex-auto flex-col gap-2 overflow-y-auto p-2">
-        {taskList.map((task, i) => (
-          <TaskCard key={`${task.id}-${i.toString()}`} task={task} />
-        ))}
-        <AddNewTaskCardButton type={type} />
+        {loading ? (
+          <>
+            <LoadingCard hasTag />
+            <LoadingCard />
+            <LoadingCard />
+          </>
+        ) : (
+          <>
+            {taskList.map((task, i) => (
+              <TaskCard
+                key={`${task.id}-${i.toString()}`}
+                task={task}
+                updating={updating}
+              />
+            ))}
+            {updating ? (
+              <LoadingCard hasTag />
+            ) : (
+              isDragOver && draggedItem && <TaskCard task={draggedItem} />
+            )}
+            <AddNewTaskCardButton type={type} />
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const LoadingCard = ({ hasTag = false }: { hasTag?: boolean }) => {
+  return (
+    <div className="animate-pulse rounded bg-gray-40-500 px-2 py-3">
+      <div className="invisible flex flex-col">
+        <span className="text-start text-sm">title</span>
+        <span className="text-xs text-gray-500">xxxx/xx/xx ~ xxxx/xx/xx</span>
+        {hasTag && (
+          <div className="flex flex-wrap items-center gap-1 pt-3 text-xs">
+            <Tag
+              tag={{
+                name: "tag",
+                color: TASK_COLOR.Gray,
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
