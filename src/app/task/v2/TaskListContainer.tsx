@@ -86,7 +86,6 @@ export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
               <TaskCard
                 key={`${task.id}-${i.toString()}`}
                 task={task}
-                updating={updating}
               />
             ))}
             {updating ? (
