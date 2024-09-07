@@ -24,9 +24,12 @@ export const Header = () => {
             <Link
               key={label}
               href={ROUTES[label]}
-              className={`text-gray-d0-500 no-underline transition-colors ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
+              className={`relative text-gray-d0-500 no-underline transition-colors ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
             >
               {label}
+              {route === label && (
+                <span className="absolute left-0 right-0 top-full mt-4 bg-green-50-500 pt-px"></span>
+              )}
             </Link>
           ))}
         </nav>
