@@ -10,22 +10,24 @@ export const DraggableContext = ({ children }: { children: ReactNode }) => {
 };
 
 const Ctx = createContext<{
+  loading: boolean;
   draggedItem: ITodo | null;
   handleDragStart: (_event: DragEvent<HTMLElement>, data: ITodo) => void;
   handleDragEnd: () => void;
   handleDragOver: (_event: DragEvent<HTMLElement>) => void;
   handleDrop: (
     _event: DragEvent<HTMLElement>,
-    _cb: (data: ITodo) => void,
+    _cb: (data: ITodo) => Promise<void>,
   ) => void;
 }>({
+  loading: false,
   draggedItem: null,
   handleDragStart: (_event: DragEvent<HTMLElement>, _data: ITodo) => {},
   handleDragEnd: () => {},
   handleDragOver: (_event: DragEvent<HTMLElement>) => {},
   handleDrop: (
     _event: DragEvent<HTMLElement>,
-    _cb: (data: ITodo) => void,
+    _cb: (data: ITodo) => Promise<void>,
   ) => {},
 });
 

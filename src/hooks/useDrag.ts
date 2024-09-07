@@ -4,6 +4,7 @@ import { DragEvent, useState } from "react";
 
 export const useDrag = <T, D>() => {
   const [draggedItem, setDraggedItem] = useState<D | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleDragStart = (event: DragEvent<T>, data: D) => {
     setDraggedItem(data);
@@ -15,10 +16,13 @@ export const useDrag = <T, D>() => {
     event.dataTransfer.dropEffect = "move";
   };
 
-  const handleDrop = (event: DragEvent<T>, cb: (data: D) => void) => {
+  const handleDrop = (event: DragEvent<T>, cb: (data: D) => Promise<void>) => {
     event.preventDefault();
     if (draggedItem) {
-      cb(draggedItem);
+      setLoading(true);
+      cb(draggedItem).then(() => {
+        setLoading(false);
+      });
     }
     setDraggedItem(null);
   };
@@ -28,6 +32,7 @@ export const useDrag = <T, D>() => {
   };
 
   return {
+    loading,
     draggedItem,
     handleDragStart,
     handleDragEnd,

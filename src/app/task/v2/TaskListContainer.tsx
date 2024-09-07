@@ -40,16 +40,15 @@ export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
 
   const onDrop = useCallback(
     (event: DragEvent<HTMLDivElement>) => {
-      handleDrop(event, (data) => {
+      handleDrop(event, async (data) => {
         if (data.status.name === type) return;
         setUpdating(true);
-        updateTodo(data, {
+        await updateTodo(data, {
           ...data,
           status: { name: type },
-        }).then(() => {
-          reFetch().finally();
-          setUpdating(false);
         });
+        reFetch().finally();
+        setUpdating(false);
       });
     },
     [handleDrop, reFetch, type],

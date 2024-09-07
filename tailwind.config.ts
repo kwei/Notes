@@ -16,7 +16,8 @@ const config: Config = {
       boxShadow: {
         "neon-cyan": "0px 22px 70px 4px rgba(255, 255, 255, 0.56)",
         "down-side": "0px 10px 10px -10px rgba(0, 0, 0, 0.3)",
-        "magic-btn": "rgba(80, 235, 203, 0.4) 5px 5px, rgba(80, 235, 203, 0.3) 10px 10px, rgba(80, 235, 203, 0.2) 15px 15px, rgba(80, 235, 203, 0.1) 20px 20px, rgba(80, 235, 203, 0.05) 25px 25px"
+        "magic-btn":
+          "rgba(80, 235, 203, 0.4) 5px 5px, rgba(80, 235, 203, 0.3) 10px 10px, rgba(80, 235, 203, 0.2) 15px 15px, rgba(80, 235, 203, 0.1) 20px 20px, rgba(80, 235, 203, 0.05) 25px 25px",
       },
       colors: {
         red: {
@@ -36,7 +37,7 @@ const config: Config = {
           "2c-500": "#2C3F50",
           "1e-500": "#1E1B32",
           "40-300": "#4e4e50",
-          "40-500": "#403F44"
+          "40-500": "#403F44",
         },
         blue: {
           "7d-500": "#7DF9FF",

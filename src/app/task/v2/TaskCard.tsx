@@ -5,13 +5,7 @@ import { ITodo } from "@/type";
 import { formatPeriod } from "@/utils/formatPeriod";
 import { useCallback, DragEvent } from "react";
 
-export const TaskCard = ({
-  task,
-  updating = false,
-}: {
-  task: ITodo;
-  updating?: boolean;
-}) => {
+export const TaskCard = ({ task }: { task: ITodo }) => {
   const { setTask } = useTaskModalContext();
   const { handleDragEnd, handleDragStart } = useDraggableContext();
 
@@ -34,9 +28,13 @@ export const TaskCard = ({
       draggable
       className="relative overflow-hidden rounded p-px hover:cursor-pointer"
     >
-      <span
-        className={`${updating ? "scale-150 animate-spin bg-gradient-conic from-blue-90-500 via-green-50-500 to-red-ff-300" : "scale-100 bg-gray-500"} absolute bottom-0 left-0 right-0 top-0 z-0 rounded`}
-      ></span>
+      <div
+        className={`absolute bottom-0 left-0 right-0 top-0 z-0 block ${false ? "scale-[100]" : "scale-100"} rounded`}
+      >
+        <span
+          className={`relative block h-full w-full ${false ? "animate-spin bg-gradient-conic from-blue-90-500 via-green-50-500 to-red-ff-300" : "bg-gray-500"}`}
+        ></span>
+      </div>
       <div className="relative z-10 flex flex-col rounded bg-gray-40-500 px-2 py-3 transition-colors hover:bg-gray-40-500/50">
         <span className="text-start text-sm">{task.title}</span>
         <span className="text-start text-xs text-gray-500">
