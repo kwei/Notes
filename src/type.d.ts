@@ -1,30 +1,8 @@
-import {
-  RecordModalType,
-  TASK_COLOR,
-  TASK_STATUS,
-  TOAST_TYPE,
-} from "@/utils/constants";
-
-interface ArticleList {
-  category: string;
-  topic: string;
-  name: string;
-  id: string;
-}
-
-type ArticleTable = Record<string, ArticleTopics>;
-type ArticleTopics = Record<string, Article[]>;
-type Article = { name: string; id: string };
-
-interface ITaskContextValue {
-  list: Record<TASK_STATUS, ITodo[]>;
-  loading: boolean;
-  reFetch: () => Promise<void>;
-}
+import { RecordModalType, TASK_STATUS } from "@/utils/constants";
 
 type ITag = {
   name: string;
-  color: TASK_COLOR;
+  color: string;
 };
 
 type IMsgLog = {
@@ -65,20 +43,6 @@ interface IMongoQueryRes {
 }
 
 interface IMetaConfig {}
-
-interface IToast {
-  type: TOAST_TYPE;
-  show: boolean;
-  msg: string;
-}
-
-interface ITaskModal {
-  task: ITodo;
-  open: boolean;
-  action: "update" | "add";
-  onClose: () => void;
-  handleLoading: (status: boolean) => void;
-}
 
 interface IRecord {
   id: string;

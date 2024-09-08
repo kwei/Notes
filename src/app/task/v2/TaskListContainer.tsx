@@ -47,7 +47,7 @@ export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
           ...data,
           status: { name: type },
         });
-        reFetch().finally();
+        await reFetch();
         setUpdating(false);
       });
     },
@@ -83,13 +83,10 @@ export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
         ) : (
           <>
             {taskList.map((task, i) => (
-              <TaskCard
-                key={`${task.id}-${i.toString()}`}
-                task={task}
-              />
+              <TaskCard key={`${task.id}-${i.toString()}`} task={task} />
             ))}
             {updating ? (
-              <LoadingCard hasTag />
+              <LoadingCard />
             ) : (
               isDragOver && draggedItem && <TaskCard task={draggedItem} />
             )}
