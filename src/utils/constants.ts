@@ -1,11 +1,11 @@
 export const ROUTES: Record<string, string> = {
-  "消費分析": "/spending",
-  "任務規劃": "/task/v2",
+  "Consumption Analysis": "/spending",
+  "Task Planning": "/task/v2",
 };
 
 export const ROUTE_TABLE: Record<string, string> = {
-  "/spending": "消費分析",
-  "/task/v2": "任務規劃",
+  "/spending": "Consumption Analysis",
+  "/task/v2": "Task Planning",
 };
 
 export enum TASK_STATUS {
@@ -70,7 +70,7 @@ export const SPENDING_PAGE_TAB_LABEL = {
   [SPENDING_PAGE_TAB.DEFAULT]: "主畫面",
   [SPENDING_PAGE_TAB.CHART_BY_MONTH]: "月度回顧",
   [SPENDING_PAGE_TAB.ANNUAL_REVIEW]: "年度回顧",
-}
+};
 
 export const SPENDING_PAGE_TABS = [
   SPENDING_PAGE_TAB.DEFAULT,
