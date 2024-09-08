@@ -72,7 +72,10 @@ const TaskModel = ({ task }: { task?: ITodo }) => {
       setSaving(true);
       const formData = new FormData(event.target as HTMLFormElement);
       const newTaskTitle = formData.get("task-title") as string;
-      if (newTaskTitle.trim() === "") return;
+      if (newTaskTitle.trim() === "") {
+        setSaving(false);
+        return;
+      }
       const newTaskStatus = formData.get(
         "task-status",
       ) as string as TASK_STATUS;
