@@ -48,10 +48,13 @@ const TaskModel = ({ task }: { task?: ITodo }) => {
   const { setTask } = useContext(Ctx);
   const { reFetch } = useTaskContext();
   const isOpen = useMemo(() => !!task, [task]);
-  const close = useCallback(() => setTask(undefined), [setTask]);
   const ref = useFocusRef<HTMLDivElement>(() => close());
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const close = useCallback(() => {
+    setTask(undefined);
+    setSaving(false);
+  }, [setTask]);
 
   const deleteTask = useCallback(() => {
     if (!task || task.title.trim() === "") return;
