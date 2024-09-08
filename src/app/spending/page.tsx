@@ -1,7 +1,8 @@
-import { FunctionTab } from "@/app/spending/FunctionTab";
+import { TabMenu } from "@/app/spending/TabMenu";
 import { RecordContextProvider } from "@/app/spending/RecordContextProvider";
 import { RecordModal } from "@/app/spending/RecordModal";
 import { TabSelector } from "@/app/spending/TabSelector";
+import { SPENDING_PAGE_TAB_LABEL, SPENDING_PAGE_TABS } from "@/utils/constants";
 import { RecordModalProvider } from "@/utils/externalStores";
 
 export default function Home() {
@@ -11,8 +12,15 @@ export default function Home() {
         <RecordContextProvider>
           <RecordModalProvider>
             <TabSelector />
-            <FunctionTab />
-
+            <div className="mt-8 flex w-full items-center justify-center divide-x divide-gray-d0-500 border border-solid border-gray-d0-500">
+              {SPENDING_PAGE_TABS.map((_tab) => (
+                <TabMenu key={_tab} tab={_tab}>
+                  <span className="font-bold">
+                    {SPENDING_PAGE_TAB_LABEL[_tab]}
+                  </span>
+                </TabMenu>
+              ))}
+            </div>
             <RecordModal />
           </RecordModalProvider>
         </RecordContextProvider>
