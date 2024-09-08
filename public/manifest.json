@@ -1,10 +1,10 @@
 {
-  "name": "KW Page",
-  "short_name": "KW Page",
+  "name": "Life Helper",
+  "short_name": "LH",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "description": "A simple PWA.",
+  "description": "A helper for making your life better.",
   "icons": [
     {
       "src": "/manifest_icon_144.jpg",
