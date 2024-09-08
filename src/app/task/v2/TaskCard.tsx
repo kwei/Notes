@@ -40,7 +40,7 @@ export const TaskCard = ({ task }: { task: ITodo }) => {
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       draggable
-      className="relative overflow-hidden rounded p-px hover:cursor-pointer"
+      className="relative w-full shrink-0 overflow-hidden rounded p-px hover:cursor-pointer"
     >
       <div
         className={`absolute bottom-0 left-0 right-0 top-0 z-0 block ${isDragging ? "scale-[100]" : "scale-100"} rounded`}

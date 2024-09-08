@@ -9,7 +9,7 @@ import { MdLaunch } from "react-icons/md";
 
 export const Header = () => {
   const pathname = usePathname();
-  const [route, setRoute] = useState(Object.values(ROUTE_TABLE)[0]);
+  const [route, setRoute] = useState(ROUTE_TABLE[pathname]);
 
   useEffect(() => {
     setRoute(ROUTE_TABLE[pathname]);

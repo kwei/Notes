@@ -50,6 +50,7 @@ export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
         await reFetch();
         setUpdating(false);
       });
+      setIsDragOver(false);
     },
     [handleDrop, reFetch, type],
   );
@@ -88,7 +89,12 @@ export const TaskListContainer = ({ type }: { type: TASK_STATUS }) => {
             {updating ? (
               <LoadingCard />
             ) : (
-              isDragOver && draggedItem && <TaskCard task={draggedItem} />
+              isDragOver &&
+              draggedItem && (
+                <div className="pointer-events-none w-full">
+                  <TaskCard task={draggedItem} />
+                </div>
+              )
             )}
             <AddNewTaskCardButton type={type} />
           </>

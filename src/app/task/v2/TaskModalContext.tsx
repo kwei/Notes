@@ -54,6 +54,7 @@ const TaskModel = ({ task }: { task?: ITodo }) => {
   const close = useCallback(() => {
     setTask(undefined);
     setSaving(false);
+    setDeleting(false);
   }, [setTask]);
 
   const deleteTask = useCallback(() => {
@@ -330,30 +331,31 @@ const StatusSelector = ({ status }: { status: string }) => {
 
   return (
     <div className="grid w-full grid-cols-12 divide-x divide-gray-500 text-base">
-      <Dropdown
-        className="col-span-3 p-2"
-        placeHolder="Status"
-        onChange={onChange}
-      >
-        <Dropdown.Option
-          value={TASK_STATUS.BACKLOG}
-          label={TASK_STATUS.BACKLOG}
-        />
-        <Dropdown.Option
-          value={TASK_STATUS.NEW_REQUEST}
-          label={TASK_STATUS.NEW_REQUEST}
-        />
-        <Dropdown.Option
-          value={TASK_STATUS.IN_PROGRESS}
-          label={TASK_STATUS.IN_PROGRESS}
-        />
-        <Dropdown.Option
-          value={TASK_STATUS.COMPLETE}
-          label={TASK_STATUS.COMPLETE}
-        />
-      </Dropdown>
+      <span className="col-span-3 p-2 pl-4">Status</span>
       <div className="col-span-9 flex items-center p-2">
-        <span className="px-1 py-px">{updatedStatus}</span>
+        <Dropdown
+          className="w-full py-px"
+          placeHolder="Status"
+          value={updatedStatus}
+          onChange={onChange}
+        >
+          <Dropdown.Option
+            value={TASK_STATUS.BACKLOG}
+            label={TASK_STATUS.BACKLOG}
+          />
+          <Dropdown.Option
+            value={TASK_STATUS.NEW_REQUEST}
+            label={TASK_STATUS.NEW_REQUEST}
+          />
+          <Dropdown.Option
+            value={TASK_STATUS.IN_PROGRESS}
+            label={TASK_STATUS.IN_PROGRESS}
+          />
+          <Dropdown.Option
+            value={TASK_STATUS.COMPLETE}
+            label={TASK_STATUS.COMPLETE}
+          />
+        </Dropdown>
       </div>
       <input
         type="text"
