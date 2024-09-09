@@ -134,25 +134,17 @@ details summary::marker {
     display: none;
 }
 
-
 .loader {
-    width: 50px;
-    aspect-ratio: 1;
-    display: grid;
-    border: 4px solid #0000;
-    border-radius: 50%;
-    border-right-color: #25b09b;
-    animation: l15 1s infinite linear;
+    width: 120px;
+    height: 20px;
+    background: linear-gradient(120deg, #a1c4fd 0%, #a1c4fd 100%) left -25% top 0 /20% 100% no-repeat #49455e;
+    animation: l7 1s infinite steps(6);
 }
 
-.loader::before,
-.loader::after {
-    content: "";
-    grid-area: 1/1;
-    margin: 2px;
-    border: inherit;
-    border-radius: 50%;
-    animation: l15 2s infinite;
+@keyframes l7 {
+    100% {
+        background-position: right -25% top 0
+    }
 }
 
 .loader::after {
@@ -166,12 +158,6 @@ details summary::marker {
 
 .color-picker::-webkit-color-swatch {
     border: none;
-}
-
-@keyframes l15 {
-    100% {
-        transform: rotate(1turn)
-    }
 }
 
 @layer utilities {
@@ -190,7 +176,7 @@ details summary::marker {
 .loader-square {
     width: 40px;
     height: 40px;
-    --c: no-repeat linear-gradient(#50E3C2 0 0);
+    --c: no-repeat linear-gradient(120deg, #a1c4fd 0%, #a1c4fd 100%);
     background: var(--c), var(--c), var(--c), var(--c);
     background-size: 21px 21px;
     animation: loaderSquare 1.5s infinite cubic-bezier(0.3, 1, 0, 1);

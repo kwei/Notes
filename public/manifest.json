@@ -1,25 +1,19 @@
 {
   "name": "Life Helper",
   "short_name": "LH",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "description": "A helper for making your life better.",
   "icons": [
     {
-      "src": "/manifest_icon_144.jpg",
-      "type": "image/png",
-      "sizes": "144x144"
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "/manifest_icon_192.jpg",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/manifest_icon_512.jpg",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  ]
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
 }

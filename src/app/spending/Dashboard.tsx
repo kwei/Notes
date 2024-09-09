@@ -4,6 +4,7 @@ import {
   useRecordCtx,
   useRecordHandlerCtx,
 } from "@/app/spending/RecordContextProvider";
+import { Loading } from "@/components/Loading";
 import { IRecord } from "@/type";
 import { INPUT_RECORD_TYPE, RecordModalType } from "@/utils/constants";
 import { useRecordModalCtx } from "@/utils/externalStores";
@@ -29,14 +30,8 @@ export const Dashboard = () => {
     [setState],
   );
 
-  if (loading) {
-    return (
-      <div className="m-auto">
-        {/*<div className="loader-square"></div>*/}
-        <span className="text-2xl font-bold">載入中...</span>
-      </div>
-    );
-  }
+  if (loading) return <Loading />;
+
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex w-full items-center justify-center gap-1">
