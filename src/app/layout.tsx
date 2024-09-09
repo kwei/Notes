@@ -7,7 +7,6 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "./prism.css";
 import { ReactNode, Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
