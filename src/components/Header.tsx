@@ -19,12 +19,12 @@ export const Header = () => {
     <header className="sticky left-0 right-0 top-0 z-50 flex items-center justify-between px-4 py-4 shadow-md backdrop-blur-sm">
       <div className="flex items-center gap-4">
         <MyInfo />
-        <nav className="ml-4 flex items-center gap-6 border-l-2 border-solid border-gray-500 pl-8">
+        <nav className="flex items-center gap-6 border-l-2 border-solid border-gray-500 pl-4 md:ml-4 md:pl-8">
           {Object.keys(ROUTES).map((label) => (
             <Link
               key={label}
               href={ROUTES[label]}
-              className={`relative text-gray-d0-500 no-underline transition-colors ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
+              className={`relative text-sm text-gray-d0-500 no-underline transition-colors md:text-base ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
             >
               {label}
               {route === label && (
