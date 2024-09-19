@@ -7,6 +7,7 @@ import { useUserStoreCtx } from "@/utils/externalStores";
 import { getUserData } from "@/utils/getUserData";
 import { setUserData } from "@/utils/setUserData";
 import { signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa6";
 import { IoPersonCircleOutline } from "react-icons/io5";
@@ -21,8 +22,6 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
       callbackUrl: `${BASE_URL}/`,
     }).finally();
   }
-
-  function handleInvite() {}
 
   useEffect(() => {
     if (user) {
@@ -45,16 +44,20 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
       {user ? (
         <div className="group relative flex items-center gap-3 py-1">
           <div className="flex items-center gap-2">
-            <IoPersonCircleOutline className="size-5" />
+            {user.image && user.image !== "" ? (
+              <Image
+                className="m-0 size-6 rounded-full"
+                width={24}
+                height={24}
+                src={user.image}
+                alt="user image"
+              />
+            ) : (
+              <IoPersonCircleOutline className="size-6" />
+            )}
             <span>{user.name}</span>
           </div>
           <div className="invisible absolute right-full top-0 flex flex-row-reverse items-center gap-2 px-2 group-hover:visible">
-            <button
-              className="whitespace-nowrap rounded-full border border-solid border-gray-d0-500 px-3 py-1 transition-all hover:bg-gray-d0-500 hover:text-black"
-              onClick={handleInvite}
-            >
-              Invite
-            </button>
             <button
               className="whitespace-nowrap rounded-full border border-solid border-gray-d0-500 px-3 py-1 transition-all hover:bg-gray-d0-500 hover:text-black"
               onClick={handleSignOut}
