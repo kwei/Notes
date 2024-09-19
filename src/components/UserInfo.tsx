@@ -8,6 +8,7 @@ import { getUserData } from "@/utils/getUserData";
 import { setUserData } from "@/utils/setUserData";
 import { signIn, signOut } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
+import { FaGoogle } from "react-icons/fa6";
 import { IoPersonCircleOutline } from "react-icons/io5";
 
 export const UserInfo = ({ user }: { user: IUser | null }) => {
@@ -77,9 +78,9 @@ const LoginPopup = ({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  const handleSignInLine = useCallback(() => {
+  const handleSignIn = useCallback(() => {
     setLoading(true);
-    signIn("line").then();
+    signIn("google").then();
   }, [setLoading]);
 
   const handleSignInEmail = useCallback(() => {
@@ -97,18 +98,13 @@ const LoginPopup = ({
         <span className="w-full text-center text-2xl font-bold">
           Login First
         </span>
-        {/*<span className="w-full p-6 text-left text-sm">*/}
-        {/*  We implement LINE login through the NextAuth provider. Your personal*/}
-        {/*  information will be used solely for authentication purposes.*/}
-        {/*  Specifically, we primarily rely on your email address for*/}
-        {/*  identification, and all related data will be linked to your email.*/}
-        {/*</span>*/}
         <div className="flex w-full flex-col items-center justify-center p-6">
           <button
-            onClick={handleSignInLine}
-            className="w-full rounded-md border border-solid border-green-600 bg-green-600 p-2 text-white transition-all hover:brightness-110"
+            onClick={handleSignIn}
+            className="flex w-fit items-center rounded-md border border-solid border-blue-600 bg-blue-600 px-4 py-3 text-white transition-all hover:brightness-110"
           >
-            Login With LINE
+            <FaGoogle className="mr-4 size-6" />
+            Sign in with Google
           </button>
         </div>
         <div className="mx-6 my-3 w-full bg-gray-500 pt-px"></div>

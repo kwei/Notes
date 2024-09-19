@@ -2,17 +2,29 @@ import { MONGODB_LINE_USER_URI } from "@/app/api/mongo/constants";
 import { MongoClient } from "mongodb";
 import NextAuth, { User } from "next-auth";
 import { v4 as uuid } from "uuid";
-import LineProvider from "next-auth/providers/line";
+// import LineProvider from "next-auth/providers/line";
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const handler = NextAuth({
   providers: [
-    LineProvider({
-      clientId: process.env.LINE_CLIENT_ID ?? "",
-      clientSecret: process.env.LINE_CLIENT_SECRET ?? "",
-      authorization: { params: { scope: "profile openid email" } },
-      checks: ["state"],
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     }),
+    // LineProvider({
+    //   clientId: process.env.LINE_CLIENT_ID ?? "",
+    //   clientSecret: process.env.LINE_CLIENT_SECRET ?? "",
+    //   authorization: { params: { scope: "profile openid email" } },
+    //   checks: ["state"],
+    // }),
     CredentialsProvider({
       credentials: {
         email: { label: "Email", type: "email" },
