@@ -12,7 +12,11 @@ export const Header = () => {
   const [route, setRoute] = useState(ROUTE_TABLE[pathname]);
 
   useEffect(() => {
-    setRoute(ROUTE_TABLE[pathname]);
+    Object.keys(ROUTE_TABLE).forEach((routeUrl) => {
+      if (pathname.includes(routeUrl)) {
+        setRoute(ROUTE_TABLE[routeUrl]);
+      }
+    });
   }, [pathname]);
 
   return (
@@ -24,7 +28,7 @@ export const Header = () => {
             <Link
               key={label}
               href={ROUTES[label]}
-              className={`relative text-sm text-gray-d0-500 no-underline transition-colors md:text-base ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
+              className={`relative text-center text-sm text-gray-d0-500 no-underline transition-colors md:text-base ${route === label ? "text-green-50-500" : "hover:text-green-50-500"}`}
             >
               {label}
               {route === label && (

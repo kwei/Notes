@@ -25,11 +25,12 @@ export const UserInfo = ({ user }: { user: IUser | null }) => {
 
   useEffect(() => {
     if (user) {
-      setUser(user);
       setLoading(false);
-      getUserData(user).then((res1: IMongoQueryRes) => {
+      getUserData({ email: user.email }).then((res1: IMongoQueryRes) => {
         if (!res1.status) {
           setUserData(user).finally();
+        } else {
+          setUser(JSON.parse(res1.message) as IUser);
         }
       });
     }

@@ -17,7 +17,8 @@ import { IoTriangle } from "react-icons/io5";
 interface Props extends Omit<HTMLAttributes<HTMLButtonElement>, "onChange"> {
   value?: string;
   onChange: (option: string) => void;
-  placeHolder?: string;
+  placeHolder?: string | ReactNode;
+  label?: string | ReactNode;
   option?: {
     showTriangle?: boolean;
     showValue?: boolean;
@@ -31,6 +32,7 @@ export const Dropdown = (props: Props) => {
     value,
     onChange,
     placeHolder,
+    label,
     option = {
       showTriangle: true,
       showValue: true,
@@ -96,10 +98,12 @@ export const Dropdown = (props: Props) => {
         type="button"
         className="relative flex h-full w-full items-center gap-3 transition-all"
       >
-        {option?.showValue && (
+        {option?.showValue ? (
           <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap pl-2 pr-5 text-left">
             {value ?? placeHolder ?? "Select One"}
           </span>
+        ) : (
+          label
         )}
         {option?.showTriangle && (
           <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center">
@@ -113,7 +117,7 @@ export const Dropdown = (props: Props) => {
         >
           <div
             ref={menuRef}
-            className="bg-gray-40-500 row-span-1 flex w-fit flex-col gap-2.5 overflow-x-hidden overflow-y-hidden whitespace-nowrap rounded-lg border border-solid border-gray-500 p-2.5"
+            className="row-span-1 flex w-fit flex-col gap-2.5 overflow-x-hidden overflow-y-hidden whitespace-nowrap rounded-lg border border-solid border-gray-500 bg-gray-40-500 p-2.5"
             style={{
               minWidth: btnRef?.current?.getBoundingClientRect().width + "px",
             }}
@@ -132,10 +136,12 @@ interface OptionProps
   label?: string;
   prefix?: ReactNode;
   postfix?: ReactNode;
+  children?: ReactNode;
 }
 
 const Option = (props: OptionProps) => {
-  const { label, value, prefix, postfix, className, ...legacy } = props;
+  const { label, value, children, prefix, postfix, className, ...legacy } =
+    props;
   const { value: selected, onChange } = useContext(DropdownContext);
 
   const isSelected = useMemo(() => {
@@ -155,7 +161,7 @@ const Option = (props: OptionProps) => {
       className={`${className} flex items-center gap-3 rounded-md px-2 py-2 transition-all ${isSelected ? "bg-gray-40-300 text-green-50-500" : "hover:bg-gray-40-300 hover:text-green-50-500"}`}
     >
       {prefix}
-      {label ?? value}
+      {children ?? label ?? value}
       {postfix}
     </button>
   );

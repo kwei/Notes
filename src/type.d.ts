@@ -29,6 +29,14 @@ interface IUser {
   name: string;
   email: string;
   image: string;
+  groups?: string[];
+}
+
+interface IGroup {
+  groupId: string;
+  name: string;
+  owner: IUser;
+  members: IUser[];
 }
 
 interface IMongoQuery<D> {
@@ -54,6 +62,17 @@ interface IRecord {
   email: string;
 }
 
+interface IGroupRecord {
+  id: string;
+  groupId: string;
+  price: number;
+  desc: string;
+  category: string;
+  date: string;
+  payer: IUser;
+  sharedWith: IUser[];
+}
+
 interface RecordCtxValue {
   loading: boolean;
   list: IRecord[];
@@ -67,12 +86,4 @@ interface IRecordModal {
   addCategory: (category: string) => void;
   addRecord: (record: IRecord) => void;
   onClose: () => void;
-}
-
-interface ISubscription {
-  endpoint: string;
-  keys: {
-    p256dh: string;
-    auth: string;
-  };
 }

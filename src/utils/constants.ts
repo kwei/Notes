@@ -93,3 +93,5 @@ export const DEFAULT_CATEGORIES = [
   "還款",
   "其他",
 ];
+
+export const GROUP_CATEGORIES = ["飲食", "交通", "娛樂", "日常"];

@@ -331,11 +331,6 @@ const CategorySelector = () => {
             <span className="font-semibold text-gray-800">{_category}</span>
           </button>
         ))}
-        <div className="col-span-4 grid grid-cols-4 gap-2">
-          <button className="col-span-1 flex items-center justify-center rounded-md bg-stone-400 px-4 py-2 transition-colors hover:bg-stone-300">
-            <span className="font-semibold text-gray-800">+</span>
-          </button>
-        </div>
       </div>
 
       <div className="flex w-full flex-1 items-end pt-4">
