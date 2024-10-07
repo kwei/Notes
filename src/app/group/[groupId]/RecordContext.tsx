@@ -123,6 +123,8 @@ export const RecordContext = ({ children }: { children: ReactNode }) => {
         .then((res) => {
           if (res.status) {
             return JSON.parse(res.message) as IGroup;
+          } else {
+            router.push("/group");
           }
         })
         .then(setGroupInfo)

@@ -2,7 +2,6 @@
 
 import { Accordion } from "@/components/Accordion";
 import { IGroupRecord } from "@/type";
-import { formatDateString } from "@/utils/formatDateString";
 import { normalizeNumber } from "@/utils/normalizeNumber";
 import { useCallback, useMemo } from "react";
 

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     } else if (method === "update") {
       res = await updateData(collections, doc.filter, doc.data);
     } else if (method === "delete") {
-      res = await deleteData(collections, doc.data);
+      res = await deleteData(collections, doc.filter);
     } else {
       res = {
         status: false,

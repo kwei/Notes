@@ -50,8 +50,10 @@ export const GroupInfoContext = ({ children }: { children: ReactNode }) => {
     const res: Record<string, IGroup> = {};
     if (groupIds && groupIds.length > 0) {
       for (const id of groupIds) {
-        const { message } = await getGroupInfo(id);
-        res[id] = JSON.parse(message) as IGroup;
+        const { message, status } = await getGroupInfo(id);
+        if (status) {
+          res[id] = JSON.parse(message) as IGroup;
+        }
       }
     }
     return res;
@@ -59,18 +61,14 @@ export const GroupInfoContext = ({ children }: { children: ReactNode }) => {
 
   const newGroup = useCallback(
     async (data: IGroup) => {
-      const groupId = generateId();
       const originalGroups = user.groups ?? [];
       const newUserData = {
         ...user,
-        groups: [...originalGroups, groupId],
+        groups: [...originalGroups, data.groupId],
       };
       await updateUserData(user, newUserData);
       setUser(newUserData);
-      return setGroupInfo({
-        ...data,
-        groupId,
-      });
+      return setGroupInfo(data);
     },
     [setUser, user],
   );
@@ -113,14 +111,12 @@ export const GroupInfoContext = ({ children }: { children: ReactNode }) => {
   );
 
   useEffect(() => {
-    getAllGroups().then(setGroups);
+    getAllGroups()
+      .then(setGroups)
+      .then(() => {
+        setInitialing(false);
+      });
   }, [getAllGroups]);
-
-  useEffect(() => {
-    if (Object.keys(groups).length > 0) {
-      setInitialing(false);
-    }
-  }, [groups]);
 
   return <Ctx.Provider value={CtxValue}>{children}</Ctx.Provider>;
 };

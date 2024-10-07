@@ -4,22 +4,14 @@ import { InputRecord } from "@/app/group/[groupId]/InputRecord";
 import { RecordList } from "@/app/group/[groupId]/RecordList";
 import { useRecordContext } from "@/app/group/[groupId]/RecordContext";
 import { Accordion } from "@/components/Accordion";
-import { IUser } from "@/type";
-import { GROUP_CATEGORIES } from "@/utils/constants";
-import { useUserStoreCtx } from "@/utils/externalStores";
-import { setGroupSpend } from "@/utils/setGroupSpend";
-import Image from "next/image";
-import { redirect } from "next/navigation";
-import { FormEvent, useCallback, useState } from "react";
+import { useState } from "react";
 import { FaAngleUp } from "react-icons/fa6";
-import { v4 as uuidv4 } from "uuid";
 
 export const Report = () => {
   const { loading, groupInfo, spending } = useRecordContext();
   const [inputting, setInputting] = useState(false);
 
-  if (loading) return "loading...";
-  else if (!groupInfo) redirect("/group");
+  if (loading || !groupInfo) return "loading...";
 
   return (
     <div className="flex w-full flex-col">
