@@ -2,6 +2,7 @@
 
 import { IGroup, IGroupRecord } from "@/type";
 import { deleteGroupSpend } from "@/utils/deleteGroupSpend";
+import { useUserStoreCtx } from "@/utils/externalStores";
 import { getGroupInfo } from "@/utils/getGroupInfo";
 import { getGroupSpend } from "@/utils/getGroupSpend";
 import { setGroupSpend } from "@/utils/setGroupSpend";
@@ -47,6 +48,8 @@ const initContext: ContextValue = {
 
 export const RecordContext = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
+  const { useStore: useUserStore } = useUserStoreCtx();
+  const [user, setUser] = useUserStore((state) => state);
   const router = useRouter();
   const groupId = useMemo(() => pathname.split("/").pop(), [pathname]);
   const [loading, setLoading] = useState(true);
@@ -123,16 +126,24 @@ export const RecordContext = ({ children }: { children: ReactNode }) => {
         .then((res) => {
           if (res.status) {
             return JSON.parse(res.message) as IGroup;
-          } else {
-            router.push("/group");
           }
+        })
+        .then((_group) => {
+          if (!_group) return;
+          if (_group.owner.email !== user.email) {
+            setUser({
+              ...user,
+              groups: [...(user.groups ?? []), _group.groupId],
+            });
+          }
+          return _group;
         })
         .then(setGroupInfo)
         .then(() => setLoading(false));
     } else {
       router.push("/group");
     }
-  }, [groupId, router]);
+  }, [groupId, router, setUser, user]);
 
   return <Ctx.Provider value={ctxVal}>{children}</Ctx.Provider>;
 };
