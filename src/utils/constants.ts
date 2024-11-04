@@ -1,13 +1,11 @@
 export const ROUTES: Record<string, string> = {
   "Personal Spend": "/spending",
   "Task Board": "/task/v2",
-  "Group Spend": "/group",
 };
 
 export const ROUTE_TABLE: Record<string, string> = {
   "/spending": "Personal Spend",
   "/task/v2": "Task Board",
-  "/group": "Group Spend",
 };
 
 export enum TASK_STATUS {
